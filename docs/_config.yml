@@ -2,9 +2,13 @@
 # Please refer above link to know the available configurations
 
 title: ""
-remote_theme: cepdnaclk/eYY-project-theme
+# remote_theme: cepdnaclk/eYY-project-theme
+remote_theme: jekyll/minima
 description: ""
 markdown: kramdown
+
+minima:
+  skin: dark
 
 kramdown:
   parse_block_html: true
