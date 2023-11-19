@@ -44,39 +44,57 @@ owners
 ## Solution Architecture
 
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;">
+<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
 </center>
 <center>
 Work in Progress!
+<br>
+<br>
 </center>
+
 
 <!-- High level diagram + description -->
 
 ## Hardware and Software Designs
+
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;">
+<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
 </center>
 <center>
 Work in Progress!
+<br>
+<br>
 </center>
+
+
 <!-- Detailed designs with many sub-sections -->
 
 ## Testing
+
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;">
+<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
 </center>
 <center>
 Work in Progress!
+<br>
+<br>
 </center>
+
+
 <!-- Testing done on hardware and software, detailed + summarized results -->
 
 ## Detailed budget
+
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;">
+<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
 </center>
 <center>
 Work in Progress!
+<br>
+<br>
 </center>
+
+
 <!-- All items and costs
 
 | Item          | Quantity  | Unit Cost  | Total  |
@@ -85,7 +103,16 @@ Work in Progress!
 
 ## Conclusion
 
-TBD
+<center>
+<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
+</center>
+<center>
+Work in Progress!
+<br>
+<br>
+</center>
+
+
 <!-- What was achieved, future developments, commercialization plans -->
 
 ## Links
