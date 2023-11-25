@@ -1,0 +1,36 @@
+{
+    "team": [
+        {
+            "name": "W.A.S. Amanda",
+            "email": "e19017@eng.pdn.ac.lk",
+            "eNumber": "E/19/017"
+        },
+        {
+            "name": "C.O. Colombage",
+            "email": "e19057@eng.pdn.ac.lk",
+            "eNumber": "E/19/057"
+        },
+        {
+            "name": "R.P.J.R. Kumarasiri",
+            "email": "e19210@eng.pdn.ac.lk",
+            "eNumber": "E/19/210"
+        },
+        {
+            "name": "D.P. Udugamsooriya",
+            "email": "e19409@eng.pdn.ac.lk",
+            "eNumber": "E/19/409"
+        },
+        {
+            "name": "G.G.N. Viduranga",
+            "email": "e19413@eng.pdn.ac.lk",
+            "eNumber": "E/19/413"
+        }
+    ],
+    "supervisors": [
+        {
+            "name": "Dr. Isuru Navinne",
+            "email": "isurunawinne@eng.pdn.ac.lk"
+        }
+    ],
+    "tags": ["Web", "Embedded Systems", "IoT", "Indoor Navigation"]
+}
