@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise/login_screen.dart';
 import 'package:shopwise/startup.dart';
 
 void main() {
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const StartupPage(),
+      home: const LoginScreen(),
     );
   }
 }
