@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise/startup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shopwise',
       theme: ThemeData(
-
               // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               // useMaterial3: true,
               )
@@ -22,10 +22,15 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(1, 40, 185, 54)),
+            backgroundColor: Color.fromARGB(1, 40, 185, 54),
+          ),
+        ),
+        appBarTheme: AppBarTheme(
+          elevation: 4, // Add shadow to app bar
         ),
       ),
-      home: const MyHomePage(title: 'Shop Wise'),
+      // home: const MyHomePage(title: 'Shop Wise'),
+      home: const StartupPage(),
     );
   }
 }
@@ -57,6 +62,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: const Text('Shop Wise'),
+      ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -82,11 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
