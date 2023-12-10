@@ -14,7 +14,7 @@ title: Smart Supermarket Navigation System
 ---
 
 <center>
-<img src="./images/logo.png" alt="Image" style="width:367px;height:308px;  filter: invert(100%);">
+<img src="./images/logo.png" alt="Image" style="width:367px;height:308px;">
 </center>
 
 ## Team
@@ -48,7 +48,7 @@ owners
 ## Solution Architecture
 
 <center>
-<img src="./images/architecture.png" alt="Image" style="width:434px;height:275px;  filter: invert(100%);">
+<img src="./images/architecture.png" alt="Image" style="width:434px;height:275px;">
 </center>
 <center>
 The solution architecture of our smart indoor navigation system is designed to provide efficient navigation and real-time tracking for customers within a premises. It utilizes IR bases and IR receivers as the primary hardware components and relies on Firebase as the underlying technology, with the Firebase Realtime Database serving as the main database. The system caters to two main user groups: administrators and customers. Administrators have the ability to update map data, prices, and other relevant information, while customers can utilize the system to locate products on their shopping lists and receive real-time tracking updates. Additionally, the solution architecture utilizes the HTTP protocol for data transmission, ensuring secure communication between the different components.
@@ -67,7 +67,7 @@ Cart Design
 <br>
 </center>
 <center>
-<img src="./images/cart2.png" alt="Image" style="width:384px;height:216px;  filter: invert(100%);">
+<img src="./images/cart2.png" alt="Image" style="width:384px;height:216px;">
 </center>
 <center>
 <br>
@@ -81,14 +81,14 @@ Base Stations
 <br>
 <br>
 <center>
-<img src="./images/base_station.png" alt="Image" style="width:384px;height:216px;  filter: invert(100%);">
+<img src="./images/base_station.png" alt="Image" style="width:384px;height:216px;">
 </center>
 
 Cart Module
 <br>
 <br>
 <center>
-<img src="./images/cart_module.png" alt="Image" style="width:384px;height:216px;  filter: invert(100%);">
+<img src="./images/cart_module.png" alt="Image" style="width:384px;height:216px;">
 </center>
 
 
@@ -110,7 +110,7 @@ In the realm of Flutter testing, unit testing involves scrutinizing isolated fun
 ## Detailed budget
 
 <center>
-<img src="./images/budget.png" alt="Image" style="width:294px;height:278px;  filter: invert(100%);">
+<img src="./images/budget.png" alt="Image" style="width:294px;height:278px;">
 </center>
 
 
