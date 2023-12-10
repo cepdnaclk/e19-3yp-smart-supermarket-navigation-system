@@ -70,6 +70,8 @@ Cart Design
 <img src="./images/cart2.png" alt="Image" style="width:384px;height:216px;  filter: invert(100%);">
 </center>
 <center>
+<br>
+<br>
 Schematic Designs
 <br>
 <br>
