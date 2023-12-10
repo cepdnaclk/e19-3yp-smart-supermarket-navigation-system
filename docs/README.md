@@ -13,6 +13,10 @@ title: Smart Supermarket Navigation System
 
 ---
 
+<center>
+<img src="./images/logo.png" alt="Image" style="width:367px;height:308px;  filter: invert(100%);">
+</center>
+
 ## Team
 -  E/19/017, W.A.S. Amanda, [e19017@eng.pdn.ac.lk](mailto:e19017@eng.pdn.ac.lk)
 -  E/19/057, C.O. Colombage, [e19057@eng.pdn.ac.lk](mailto:e19057@eng.pdn.ac.lk)
@@ -44,10 +48,10 @@ owners
 ## Solution Architecture
 
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
+<img src="./images/architecture.png" alt="Image" style="width:434px;height:275px;  filter: invert(100%);">
 </center>
 <center>
-Work in Progress!
+The solution architecture of our smart indoor navigation system is designed to provide efficient navigation and real-time tracking for customers within a premises. It utilizes IR bases and IR receivers as the primary hardware components and relies on Firebase as the underlying technology, with the Firebase Realtime Database serving as the main database. The system caters to two main user groups: administrators and customers. Administrators have the ability to update map data, prices, and other relevant information, while customers can utilize the system to locate products on their shopping lists and receive real-time tracking updates. Additionally, the solution architecture utilizes the HTTP protocol for data transmission, ensuring secure communication between the different components.
 <br>
 <br>
 </center>
@@ -57,6 +61,11 @@ Work in Progress!
 
 ## Hardware and Software Designs
 
+<center>
+Cart Design
+<br>
+<br>
+</center>
 <center>
 <img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
 </center>
