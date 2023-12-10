@@ -67,13 +67,28 @@ Cart Design
 <br>
 </center>
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
+<img src="./images/cart2.png" alt="Image" style="width:192px;height:108px;  filter: invert(100%);">
 </center>
 <center>
-Work in Progress!
+Schematic Designs
 <br>
 <br>
 </center>
+
+Base Stations
+<br>
+<br>
+<center>
+<img src="./images/base_station.png" alt="Image" style="width:192px;height:108px;  filter: invert(100%);">
+</center>
+
+Cart Module
+<br>
+<br>
+<center>
+<img src="./images/cart_module.png" alt="Image" style="width:192px;height:108px;  filter: invert(100%);">
+</center>
+
 
 
 <!-- Detailed designs with many sub-sections -->
@@ -84,7 +99,7 @@ Work in Progress!
 <img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
 </center>
 <center>
-Work in Progress!
+In the realm of Flutter testing, unit testing involves scrutinizing isolated functions or methods to verify their correctness and functionality. As an example, we perform unit testing on the ShopWise app by meticulously testing the function responsible for adding items to the grocery list, ensuring accurate and reliable outcomes. Moving to widget testing, the focus shifts to examining the interaction and behavior of individual UI components. In the context of our ShopWise app, widget testing would involve assessing the seamless integration of a text input field and a button used to add a grocery item, ensuring a user-friendly and glitch-free experience. Lastly, integrated testing provides a holistic evaluation by scrutinizing the application as a whole, and simulating real-world scenarios. Taking our ShopWise app example, integrated testing could involve running the app on an emulator and systematically testing all related functionalities, from item addition to the overall user interface, to ensure a robust and cohesive user experience.
 <br>
 <br>
 </center>
@@ -110,16 +125,7 @@ Work in Progress!
 | ------------- |:---------:|:----------:|-------:|
 | Sample item   | 5         | 10 LKR     | 50 LKR | -->
 
-## Conclusion
 
-<center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
-</center>
-<center>
-Work in Progress!
-<br>
-<br>
-</center>
 
 
 <!-- What was achieved, future developments, commercialization plans -->
