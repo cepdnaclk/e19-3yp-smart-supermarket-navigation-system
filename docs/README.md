@@ -110,7 +110,7 @@ In the realm of Flutter testing, unit testing involves scrutinizing isolated fun
 ## Detailed budget
 
 <center>
-<img src="./images/budget.png" alt="Image" style="width:294px;height:278px;">
+<img src="./images/budget.png" alt="Image" style="width:441px;height:417px;">
 </center>
 
 
