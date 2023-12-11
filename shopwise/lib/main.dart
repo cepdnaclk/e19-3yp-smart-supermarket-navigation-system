@@ -1,8 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shopwise/login_screen.dart';
-import 'package:shopwise/startup.dart';
+import 'package:shopwise/pages/login_screen.dart';
+import 'package:shopwise/pages/register.dart';
+import 'package:shopwise/pages/startup.dart';
 
-void main() {
+// void main() async{
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//   runApp(const MyApp());
+// }
+
+void main(){
   runApp(const MyApp());
 }
 
@@ -19,19 +27,19 @@ class MyApp extends StatelessWidget {
               // useMaterial3: true,
               )
           .copyWith(
-        useMaterial3: true,
         primaryColor: Colors.white,
+      
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(1, 40, 185, 54),
           ),
         ),
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           elevation: 4, // Add shadow to app bar
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const LoginScreen(),
+      home: const RegisterScreen(),
     );
   }
 }
@@ -56,21 +64,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: const Text('Shop Wise'),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
