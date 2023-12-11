@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: AppColors.primaryColorDark,
-          ),
+          ),    
         ),
         appBarTheme: const AppBarTheme(
           elevation: 4, // Add shadow to app bar
