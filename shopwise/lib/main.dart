@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shopwise/pages/login_screen.dart';
 import 'package:shopwise/pages/register.dart';
 import 'package:shopwise/pages/startup.dart';
+import 'package:shopwise/utils/colors.dart';
 
 // void main() async{
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -10,7 +11,7 @@ import 'package:shopwise/pages/startup.dart';
 //   runApp(const MyApp());
 // }
 
-void main(){
+void main() {
   runApp(const MyApp());
 }
 
@@ -28,18 +29,22 @@ class MyApp extends StatelessWidget {
               )
           .copyWith(
         primaryColor: Colors.white,
-      
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(1, 40, 185, 54),
           ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.primaryColorDark,
+          ),    
         ),
         appBarTheme: const AppBarTheme(
           elevation: 4, // Add shadow to app bar
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const RegisterScreen(),
+      home: const LoginScreen(),
     );
   }
 }
@@ -68,21 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Shop Wise'),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(

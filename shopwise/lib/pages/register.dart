@@ -9,11 +9,6 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "ShopWise",
-        ),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -48,6 +43,17 @@ class RegisterScreen extends StatelessWidget {
               text: "Sign Up with Google",
               onPressed: () {},
             ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Already have an account?"),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text("Sign In"),
+                )
+              ],
+            )
           ],
         ),
       ),
