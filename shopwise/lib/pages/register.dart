@@ -48,6 +48,17 @@ class RegisterScreen extends StatelessWidget {
               text: "Sign Up with Google",
               onPressed: () {},
             ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Already have an account?"),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text("Sign In"),
+                )
+              ],
+            )
           ],
         ),
       ),
