@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const RegisterScreen(),
+      home: const LoginScreen(),
     );
   }
 }

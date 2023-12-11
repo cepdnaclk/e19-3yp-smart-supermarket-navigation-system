@@ -9,11 +9,6 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "ShopWise",
-        ),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +30,7 @@ class LoginScreen extends StatelessWidget {
             CustomButton(
               textColor: Colors.black,
               buttonColor: AppColors.secondaryColor,
-              text: "Sign In",
+              text: "Log In",
               onPressed: () {},
             ),
             const SizedBox(height: 30),
@@ -45,9 +40,20 @@ class LoginScreen extends StatelessWidget {
               textColor: Colors.black,
               buttonColor: AppColors.secondaryColor,
               icon: Icons.g_mobiledata,
-              text: "Sign Up with Google",
+              text: "Log In with Google",
               onPressed: () {},
             ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Don't have an account? "),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text("Register"),
+                )
+              ],
+            )
           ],
         ),
       ),
