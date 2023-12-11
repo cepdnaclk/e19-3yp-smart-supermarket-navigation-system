@@ -13,6 +13,10 @@ title: Smart Supermarket Navigation System
 
 ---
 
+<center>
+<img src="./images/logo.png" alt="Image" style="width:367px;height:308px;">
+</center>
+
 ## Team
 -  E/19/017, W.A.S. Amanda, [e19017@eng.pdn.ac.lk](mailto:e19017@eng.pdn.ac.lk)
 -  E/19/057, C.O. Colombage, [e19057@eng.pdn.ac.lk](mailto:e19057@eng.pdn.ac.lk)
@@ -44,10 +48,10 @@ owners
 ## Solution Architecture
 
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
+<img src="./images/architecture.png" alt="Image" style="width:434px;height:275px;">
 </center>
 <center>
-Work in Progress!
+The solution architecture of our smart indoor navigation system is designed to provide efficient navigation and real-time tracking for customers within a premises. It utilizes IR bases and IR receivers as the primary hardware components and relies on Firebase as the underlying technology, with the Firebase Realtime Database serving as the main database. The system caters to two main user groups: administrators and customers. Administrators have the ability to update map data, prices, and other relevant information, while customers can utilize the system to locate products on their shopping lists and receive real-time tracking updates. Additionally, the solution architecture utilizes the HTTP protocol for data transmission, ensuring secure communication between the different components.
 <br>
 <br>
 </center>
@@ -58,24 +62,44 @@ Work in Progress!
 ## Hardware and Software Designs
 
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
+Cart Design
+<br>
+<br>
 </center>
 <center>
-Work in Progress!
+<img src="./images/cart2.png" alt="Image" style="width:384px;height:216px;">
+</center>
+<center>
+<br>
+<br>
+Schematic Designs
 <br>
 <br>
 </center>
+
+Base Stations
+<br>
+<br>
+<center>
+<img src="./images/base_station.png" alt="Image" style="width:384px;height:216px;">
+</center>
+
+Cart Module
+<br>
+<br>
+<center>
+<img src="./images/cart_module.png" alt="Image" style="width:384px;height:216px;">
+</center>
+
 
 
 <!-- Detailed designs with many sub-sections -->
 
 ## Testing
 
+
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
-</center>
-<center>
-Work in Progress!
+In the realm of Flutter testing, unit testing involves scrutinizing isolated functions or methods to verify their correctness and functionality. As an example, we perform unit testing on the ShopWise app by meticulously testing the function responsible for adding items to the grocery list, ensuring accurate and reliable outcomes. Moving to widget testing, the focus shifts to examining the interaction and behavior of individual UI components. In the context of our ShopWise app, widget testing would involve assessing the seamless integration of a text input field and a button used to add a grocery item, ensuring a user-friendly and glitch-free experience. Lastly, integrated testing provides a holistic evaluation by scrutinizing the application as a whole, and simulating real-world scenarios. Taking our ShopWise app example, integrated testing could involve running the app on an emulator and systematically testing all related functionalities, from item addition to the overall user interface, to ensure a robust and cohesive user experience.
 <br>
 <br>
 </center>
@@ -86,13 +110,9 @@ Work in Progress!
 ## Detailed budget
 
 <center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
+<img src="./images/budget.png" alt="Image" style="width:441px;height:417px;">
 </center>
-<center>
-Work in Progress!
-<br>
-<br>
-</center>
+
 
 
 <!-- All items and costs
@@ -101,16 +121,7 @@ Work in Progress!
 | ------------- |:---------:|:----------:|-------:|
 | Sample item   | 5         | 10 LKR     | 50 LKR | -->
 
-## Conclusion
 
-<center>
-<img src="./images/WIP.png" alt="Image" style="width:200px;height:200px;  filter: invert(100%);">
-</center>
-<center>
-Work in Progress!
-<br>
-<br>
-</center>
 
 
 <!-- What was achieved, future developments, commercialization plans -->
