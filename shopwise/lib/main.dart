@@ -1,8 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shopwise/login_screen.dart';
-import 'package:shopwise/startup.dart';
+import 'package:shopwise/pages/login_screen.dart';
+import 'package:shopwise/pages/register.dart';
+import 'package:shopwise/pages/startup.dart';
 
-void main() {
+// void main() async{
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//   runApp(const MyApp());
+// }
+
+void main(){
   runApp(const MyApp());
 }
 
@@ -20,17 +28,18 @@ class MyApp extends StatelessWidget {
               )
           .copyWith(
         primaryColor: Colors.white,
+      
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(1, 40, 185, 54),
           ),
         ),
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           elevation: 4, // Add shadow to app bar
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const StartupPage(),
+      home: const RegisterScreen(),
     );
   }
 }
