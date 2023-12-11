@@ -6,10 +6,11 @@ class StartupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: Center(
-      child: Image(
-        image: AssetImage("assets/images/shopwise_logo.png"),
+      body: Center(
+        child: Image(
+          image: AssetImage("assets/images/shopwise_logo.png"),
+        ),
       ),
-    ));
+    );
   }
 }
