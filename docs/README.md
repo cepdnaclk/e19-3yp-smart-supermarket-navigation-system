@@ -41,6 +41,8 @@ title: Smart Supermarket Navigation System
 
 ## Introduction
 
+[![Watch the introduction video](ShopWise)](https://www.youtube.com/watch?v=upUBr0OQrU0)
+
 Welcome to a groundbreaking venture where innovation meets convenience! 🚀 In this exciting project, our goal is to pioneer the development of an indoor navigation system tailored specifically for supermarkets. Our vision is clear: revolutionize the shopping experience for customers while offering invaluable insights for shop owners.
 
 Imagine seamlessly navigating the aisles of a supermarket, effortlessly finding your desired products with a user-friendly interface. 🛒 Our mission is to transform this vision into reality by blending cutting-edge technology with a customer-centric approach. From enhancing convenience for shoppers to providing actionable data for shop owners, we are poised to create an indoor navigation system that transcends traditional boundaries.
