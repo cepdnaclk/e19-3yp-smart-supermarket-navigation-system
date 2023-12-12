@@ -50,10 +50,10 @@ Join us on this transformative journey as we embark on the mission to not just i
 ## Solution Architecture
 
 <center>
-<img src="./images/architecture.png" alt="Image" style="width:434px;height:275px;">
+<img src="./images/arch_new.png" alt="Image" style="width:434px;height:275px;">
 </center>
 <center>
-The solution architecture of our smart indoor navigation system is designed to provide efficient navigation and real-time tracking for customers within a premises. It utilizes IR bases and IR receivers as the primary hardware components and relies on Firebase as the underlying technology, with the Firebase Realtime Database serving as the main database. The system caters to two main user groups: administrators and customers. Administrators have the ability to update map data, prices, and other relevant information, while customers can utilize the system to locate products on their shopping lists and receive real-time tracking updates. Additionally, the solution architecture utilizes the HTTP protocol for data transmission, ensuring secure communication between the different components.
+The solution architecture of our smart indoor navigation system is designed to provide efficient navigation and real-time tracking for customers within a premises. It utilizes IR bases and IR receivers as the primary hardware components and relies on AWS Iot core as the underlying technology, with the Amazon DynamoDB Database serving as the main database. The system caters to two main user groups: administrators and customers. Administrators have the ability to update map data, prices, and other relevant information, while customers can utilize the system to locate products on their shopping lists and receive real-time tracking updates. Additionally, the solution architecture utilizes the MQTT protocol for data transmission, ensuring secure communication between the different components.
 <br>
 <br>
 </center>
