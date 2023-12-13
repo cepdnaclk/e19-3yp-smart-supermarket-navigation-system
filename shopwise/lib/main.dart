@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/login_screen.dart';
+import 'package:shopwise/pages/products_list_page.dart';
 import 'package:shopwise/pages/register.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/utils/colors.dart';
@@ -37,14 +38,14 @@ class MyApp extends StatelessWidget {
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: AppColors.primaryColorDark,
-          ),    
+          ),
         ),
         appBarTheme: const AppBarTheme(
           elevation: 4, // Add shadow to app bar
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const LoginScreen(),
+      home: const ProductsListPage(),
     );
   }
 }
