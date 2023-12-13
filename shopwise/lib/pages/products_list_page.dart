@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise/widgets/product_item.dart';
 
 class ProductsListPage extends StatefulWidget {
   const ProductsListPage({super.key});
@@ -11,13 +12,17 @@ class _ProductsListPageState extends State<ProductsListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Products List"),
-      ),
-      body: const Center(
-        child: Text("Products List"),
-      ),
-      
-    );
+        appBar: AppBar(
+          title: const Text("Products List"),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [ProductListItem()],
+              ),
+            )
+          ],
+        ));
   }
 }
