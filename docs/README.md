@@ -41,17 +41,21 @@ title: Smart Supermarket Navigation System
 
 ## Introduction
 
-In this project we hope to develop an indoor navigation system for supermarkets, 
-aimed at enhancing the shopping experience of customers while providing valuable insights for the shop 
-owners
+[![Watch the introduction video](https://img.youtube.com/vi/upUBr0OQrU0/0.jpg)](https://www.youtube.com/watch?v=upUBr0OQrU0)
+
+Welcome to a groundbreaking venture where innovation meets convenience! 🚀 In this exciting project, our goal is to pioneer the development of an indoor navigation system tailored specifically for supermarkets. Our vision is clear: revolutionize the shopping experience for customers while offering invaluable insights for shop owners.
+
+Imagine seamlessly navigating the aisles of a supermarket, effortlessly finding your desired products with a user-friendly interface. 🛒 Our mission is to transform this vision into reality by blending cutting-edge technology with a customer-centric approach. From enhancing convenience for shoppers to providing actionable data for shop owners, we are poised to create an indoor navigation system that transcends traditional boundaries.
+
+Join us on this transformative journey as we embark on the mission to not just improve, but redefine the supermarket shopping experience. Together, we are set to create a technological marvel that harmonizes the needs of both customers and shop owners, setting new standards in the world of retail innovation. 🌐🛍️ Get ready to navigate the future of supermarket shopping! 🌟🚶‍♂️🏬
 
 ## Solution Architecture
 
 <center>
-<img src="./images/architecture.png" alt="Image" style="width:434px;height:275px;">
+<img src="./images/arch_new.png" alt="Image" style="width:434px;height:275px;">
 </center>
 <center>
-The solution architecture of our smart indoor navigation system is designed to provide efficient navigation and real-time tracking for customers within a premises. It utilizes IR bases and IR receivers as the primary hardware components and relies on Firebase as the underlying technology, with the Firebase Realtime Database serving as the main database. The system caters to two main user groups: administrators and customers. Administrators have the ability to update map data, prices, and other relevant information, while customers can utilize the system to locate products on their shopping lists and receive real-time tracking updates. Additionally, the solution architecture utilizes the HTTP protocol for data transmission, ensuring secure communication between the different components.
+The solution architecture of our smart indoor navigation system is designed to provide efficient navigation and real-time tracking for customers within a premises. It utilizes IR bases and IR receivers as the primary hardware components and relies on AWS Iot core as the underlying technology, with the Amazon DynamoDB Database serving as the main database. The system caters to two main user groups: administrators and customers. Administrators have the ability to update map data, prices, and other relevant information, while customers can utilize the system to locate products on their shopping lists and receive real-time tracking updates. Additionally, the solution architecture utilizes the MQTT protocol for data transmission, ensuring secure communication between the different components.
 <br>
 <br>
 </center>
