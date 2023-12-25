@@ -1,7 +1,12 @@
 import 'package:navigation/pixel.dart';
 import 'package:flutter/material.dart';
+import 'package:navigation/player.dart';
 
 class HomePage extends StatefulWidget {
+  final Stream<String> directionStream;
+
+  HomePage({Key? key, required this.directionStream}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -9,6 +14,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static int numberInRow = 11;
   int numberOfSquares = numberInRow * 19;
+
+  //palyer position
+  int player = 181;
 
   List<int> barriers = [
     176,
@@ -84,40 +92,73 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.black,
-        body: Column(children: [
-          Expanded(
-            flex: 4,
-            child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: numberOfSquares,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: numberInRow),
-                itemBuilder: (BuildContext context, int index) {
-                  if (barriers.contains(index)) {
-                    return MyPixel(
-                      color: Colors.blue[700],
-                      child: Text(index.toString()),
-                    );
-                  } else {
-                    return MyPixel(
-                      color: Colors.black,
-                      child: Text(index.toString()),
-                    );
-                  }
-                }),
+    return StreamBuilder<String>(
+      stream: widget.directionStream,
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          // Update the class-level player variable directly
+          player = int.parse(snapshot.data ?? '0');
+          // You can call movePlayer here if you need additional logic
+        }
+
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: Column(
+            children: [
+              Expanded(
+                flex: 4,
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: numberOfSquares,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: numberInRow,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (player == index) {
+                      return Container(
+                        color: Colors
+                            .grey, // Replace with your desired background color
+                        child: MyPlayer(),
+                      );
+                    } else if (barriers.contains(index)) {
+                      return MyPixel(
+                        color: Colors.blue[700],
+                        child: Text(index.toString()),
+                      );
+                    } else {
+                      return MyPixel(
+                        color: Colors.grey,
+                        child: Text(index.toString()),
+                      );
+                    }
+                  },
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Bar code scanner",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            ),
+                          )
+                        ],
+                      ),
+                      Image.asset('assets/images/download.png'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-              child: Container(
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                "Bar code scanner",
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              )
-            ]),
-            color: Colors.pink,
-          )),
-        ]));
+        );
+      },
+    );
   }
 }
