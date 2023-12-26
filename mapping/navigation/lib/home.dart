@@ -2,6 +2,8 @@ import 'package:navigation/pixel.dart';
 import 'package:flutter/material.dart';
 import 'package:navigation/player.dart';
 
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
 class HomePage extends StatefulWidget {
   final Stream<String> directionStream;
 
@@ -90,6 +92,8 @@ class _HomePageState extends State<HomePage> {
     42
   ];
 
+  String _scanBarcodeResult = '';
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<String>(
@@ -102,7 +106,7 @@ class _HomePageState extends State<HomePage> {
         }
 
         return Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.white,
           body: Column(
             children: [
               Expanded(
@@ -134,23 +138,49 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
+
+/////////////////////////Mapping ends here!/////////////////////////
+
               Expanded(
                 child: Container(
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Bar code scanner",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: ElevatedButton(
+                                onPressed: scanBarcode,
+                                child: Text('Scan Item'),
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
                             ),
-                          )
-                        ],
+                            SizedBox(width: 20),
+                            SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                child: Text('Finish Shopping'),
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      Image.asset('assets/images/download.png'),
+                      Text("Barcode Result : $_scanBarcodeResult",
+                          style: TextStyle(fontSize: 20, color: Colors.black)),
                     ],
                   ),
                 ),
@@ -160,5 +190,18 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  void scanBarcode() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+    } on Exception {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+    setState(() {
+      _scanBarcodeResult = barcodeScanRes;
+    });
   }
 }
