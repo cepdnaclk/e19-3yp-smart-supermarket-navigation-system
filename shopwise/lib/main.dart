@@ -13,11 +13,11 @@ import 'package:shopwise/utils/colors.dart';
 // }
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  //const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Shopwise',
       theme: ThemeData(
               // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              // useMaterial3: true,
+              useMaterial3: true,
               )
           .copyWith(
         primaryColor: Colors.white,
@@ -45,7 +45,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const ProductsListPage(),
+      // home: const ProductsListPage(),
+      home: const LoginScreen(),
+
     );
   }
 }
@@ -78,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               "Shop wise",
             ),
           ],
