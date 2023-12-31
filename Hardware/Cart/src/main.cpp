@@ -1,6 +1,7 @@
 
 #include <Arduino.h>
 #include "PinDefinitionsAndMore.h"
+#include "SupermarketMapper.h"
 #include <IRremote.hpp>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
@@ -36,7 +37,8 @@ int currentStation = 0;
 #define DECODE_NEC     
 #define IR_RECEIVE_PIN  25
 
-
+//Map 
+ 
 
 //Get Accelerometer and Gyroscope data  from MPU6050
 int getMPUSensorReadings() {
@@ -217,13 +219,15 @@ void hallSensorInterrupt() {
     
 }
 
+SupermarketMapper supermarketMapper;
+
 void setup() {
     Serial.begin(115200);
 
-    attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, RISING);
         
     //AWS Connect
-    connectAWS();
+    //connectAWS();
 
     //Ir Receive Begin    
     IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
@@ -233,6 +237,7 @@ void setup() {
 
     //Get Sensor data
     pinMode(hallSensorPin, INPUT); 
+    pinMode(4, INPUT); 
 
   // Wire.begin(); // Start the I2C communication
   
@@ -262,7 +267,7 @@ void setup() {
 void loop() {
         int receivedCommand = IrData();
         //int direction = getMAGSensorReadings();
-        hallEffectSensor();
+        //hallEffectSensor();
         // int acceleration = getMPUSensorReadings();
         
         // int heading = 1;
@@ -271,11 +276,17 @@ void loop() {
         // }else{
         //     heading = -1;
         // }
+     int heading = 1;
+    int sensorValue = analogRead(4); 
+    sensorValue = map(sensorValue, 0, 4095, 0, 360);
+    Serial.print("Magnetometer Value: ");
+    Serial.println(sensorValue);
 
-        //sendDataToFirebase(currentStation, distance, direction, heading);
+      supermarketMapper.updateLocation(currentStation, sensorValue, distance, heading);
+      supermarketMapper.displayLocation();
         
-        publishMessage();
-        client.loop();
+        // publishMessage();
+        // client.loop();
 
         delay(1500);
 }
