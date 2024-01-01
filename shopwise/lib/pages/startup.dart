@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/login_screen.dart';
 
 class StartupPage extends StatelessWidget {
   const StartupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -21,6 +22,23 @@ class StartupPage extends StatelessWidget {
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              onPrimary: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: ((context) => LoginScreen())));
+            },
+            child: Text("Get Started"),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/widgets/customButton.dart';
 import 'package:shopwise/utils/colors.dart';
 import 'package:shopwise/widgets/custom_text_form_feild.dart';
@@ -31,7 +32,10 @@ class LoginScreen extends StatelessWidget {
               textColor: Colors.black,
               buttonColor: AppColors.secondaryColor,
               text: "Log In",
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: ((context) => Choose())));
+              },
             ),
             const SizedBox(height: 30),
             Text("OR"),
@@ -49,7 +53,10 @@ class LoginScreen extends StatelessWidget {
               children: [
                 const Text("Don't have an account? "),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: ((context) => Choose())));
+                  },
                   child: const Text("Register"),
                 )
               ],

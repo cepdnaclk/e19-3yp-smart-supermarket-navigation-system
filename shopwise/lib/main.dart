@@ -30,9 +30,10 @@ class MyApp extends StatelessWidget {
               )
           .copyWith(
         primaryColor: Colors.white,
+        secondaryHeaderColor: AppColors.primaryColor,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(1, 40, 185, 54),
+            backgroundColor: AppColors.primaryColorDark,
           ),
         ),
         textButtonTheme: TextButtonThemeData(
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const ProductsListPage(),
+      home: const StartupPage(),
     );
   }
 }
