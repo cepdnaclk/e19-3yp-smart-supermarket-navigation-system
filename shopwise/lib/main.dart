@@ -25,10 +25,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shopwise',
       theme: ThemeData(
-              // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              // useMaterial3: true,
-              )
-          .copyWith(
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ).copyWith(
         primaryColor: Colors.white,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -45,7 +44,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: const MyHomePage(title: 'Shop Wise'),
-      home: const ProductsListPage(),
+      // home: const ProductsListPage(),
+      home: const LoginScreen(),
     );
   }
 }
@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               "Shop wise",
             ),
           ],
