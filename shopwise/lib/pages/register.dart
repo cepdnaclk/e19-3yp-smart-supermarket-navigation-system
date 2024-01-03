@@ -41,7 +41,7 @@ class RegisterScreen extends StatelessWidget {
               CustomButton(
                 textColor: Colors.black,
                 buttonColor: AppColors.secondaryColor,
-                icon: Icons.g_mobiledata,
+                iconImage: Image.asset('assets/images/google_logo.png'),
                 text: "Sign Up with Google",
                 onPressed: () {},
               ),

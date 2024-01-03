@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/products_list_page.dart';
 import 'package:shopwise/pages/register.dart';
 import 'package:shopwise/widgets/customButton.dart';
 import 'package:shopwise/utils/colors.dart';
@@ -6,6 +7,8 @@ import 'package:shopwise/widgets/custom_text_form_feild.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
+  static const String routeName = '/login';
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +35,14 @@ class LoginScreen extends StatelessWidget {
               CustomButton(
                 textColor: Colors.black,
                 buttonColor: AppColors.secondaryColor,
-                text: "Log In",
-                onPressed: () {},
+                text: "Sign In",
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProductsListPage()),
+                    (route) => false,
+                  );
+                },
               ),
               const SizedBox(height: 15),
               const Text("OR"),
@@ -41,8 +50,8 @@ class LoginScreen extends StatelessWidget {
               CustomButton(
                 textColor: Colors.black,
                 buttonColor: AppColors.secondaryColor,
-                icon: Icons.g_mobiledata,
-                text: "Log In with Google",
+                iconImage: Image.asset('assets/images/google_logo.png'),
+                text: "Sign In with Google",
                 onPressed: () {},
               ),
               const SizedBox(height: 20),
@@ -52,10 +61,10 @@ class LoginScreen extends StatelessWidget {
                   const Text("Don't have an account? "),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RegisterScreen()),
+                            builder: (context) => const RegisterScreen()),
                       );
                     },
                     child: const Text("Register"),
