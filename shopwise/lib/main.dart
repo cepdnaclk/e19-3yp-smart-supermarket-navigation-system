@@ -30,8 +30,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ).copyWith(
         primaryColor: Colors.white,
+        secondaryHeaderColor: AppColors.primaryColor,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+
             backgroundColor: const Color.fromARGB(1, 40, 185, 54),
           ),
         ),
@@ -50,8 +52,8 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => const LoginScreen(),
       },
       // home: const MyHomePage(title: 'Shop Wise'),
-      // home: const ProductsListPage(),
-      // home: StartupPage(),
+
+      home: const StartupPage(),
     );
   }
 }
