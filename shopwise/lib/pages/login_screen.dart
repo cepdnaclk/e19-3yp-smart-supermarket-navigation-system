@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/chooseview.dart';
+
 import 'package:shopwise/widgets/customButton.dart';
 import 'package:shopwise/utils/colors.dart';
 import 'package:shopwise/widgets/custom_text_form_feild.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
+  static const String routeName = '/login';
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +65,7 @@ class LoginScreen extends StatelessWidget {
               ],
             )
           ],
+
         ),
       ),
     );

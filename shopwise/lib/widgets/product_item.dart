@@ -25,16 +25,12 @@ class ProductListItem extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SizedBox(
-              width: 70,
-            ),
+            const SizedBox(width: 70),
             Text(
               "Added",
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
-              width: 100,
-            ),
+            const SizedBox(width: 100),
             IconButton(onPressed: () {}, icon: Icon(Icons.delete_outline)),
             IconButton(onPressed: () {}, icon: Icon(Icons.remove)),
             Text("1"),

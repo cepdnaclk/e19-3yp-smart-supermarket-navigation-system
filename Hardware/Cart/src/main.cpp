@@ -1,39 +1,30 @@
 
 #include <Arduino.h>
 #include "PinDefinitionsAndMore.h"
+#include "SupermarketMapper.h"
 #include <IRremote.hpp>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h> 
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+#include "Secret.h"
+#include <WiFiClientSecure.h>
 #include <WiFi.h>
-#include <Firebase_ESP_Client.h>
-
-//Provide the token generation process info.
-#include "addons/TokenHelper.h"
-//Provide the RTDB payload printing info and other helper functions.
-#include "addons/RTDBHelper.h"
+#include <Wire.h>
 
 // Insert your network credentials
-#define WIFI_SSID "Dialog 4G 555"
-#define WIFI_PASSWORD "5d56C7D3"
+#define WIFI_SSID "Dialog 4G 500"
+#define WIFI_PASSWORD "775bECe1"
 
-//Firebase Login
-#define USER_EMAIL "nipulviduranga@gmail.com"
-#define USER_PASSWORD "12345678";
+#define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
+#define AWS_IOT_SUBSCRIBE_TOPIC "esp32/sub"
 
-// Insert Firebase project API Key
-#define API_KEY "AIzaSyAIpMMSWsgndPTYbhA1_Sr6PEwRBt74yZM"
+WiFiClientSecure net = WiFiClientSecure();
+PubSubClient client(net);
 
-// Insert RTDB URLefine the RTDB URL */
-#define DATABASE_URL "https://shopwise-5987f-default-rtdb.asia-southeast1.firebasedatabase.app/" 
-
-//Define Firebase Data object
-FirebaseData fbdo;
-
-FirebaseAuth auth;
-FirebaseConfig config;
 Adafruit_MPU6050 mpu;
-Adafruit_HMC5883_Unified mag;
+Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
 
 const int hallSensorPin = 34;
 
@@ -46,112 +37,10 @@ int currentStation = 0;
 #define DECODE_NEC     
 #define IR_RECEIVE_PIN  25
 
+//Map 
  
-void hallSensorInterrupt() {
-    
-    distance += 10; // Add 10cm to the distance if the sensor value is high
-    
-}
 
-void setup() {
-    Serial.begin(115200);
-
-    attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, CHANGE);
-    //Connect to Wifi
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    Serial.print("Connecting to Wi-Fi");
-    while (WiFi.status() != WL_CONNECTED){
-    Serial.print(".");
-    delay(300);
-    }
-    Serial.println();
-    Serial.print("Connected with IP: ");
-    Serial.println(WiFi.localIP());
-    Serial.println();
-
-    /* Assign the api key (required) */
-    config.api_key = API_KEY;
-
-    /* Assign the user sign in credentials */
-    auth.user.email = USER_EMAIL;
-    auth.user.password = USER_PASSWORD;
-    
-   
-    /* Assign the RTDB URL (required) */
-    config.database_url = DATABASE_URL;
-
-    /* Assign the callback function for the long running token generation task */
-     config.token_status_callback = tokenStatusCallback; //see addons/TokenHelper.h
-    // Comment or pass false value when WiFi reconnection will control by your code or third party library e.g. WiFiManager
-    Firebase.reconnectNetwork(true);
-    
-    // Since v4.4.x, BearSSL engine was used, the SSL buffer need to be set.
-    // Large data transmission may require larger RX buffer, otherwise connection issue or data read time out can be occurred.
-    fbdo.setBSSLBufferSize(4096 /* Rx buffer size in bytes from 512 - 16384 */, 1024 /* Tx buffer size in bytes from 512 - 16384 */);
-
-    // Limit the size of response payload to be collected in FirebaseData
-    fbdo.setResponseSize(2048);
-
-    Firebase.begin(&config, &auth);
-    Firebase.reconnectWiFi(true);
-
-    Firebase.setDoubleDigits(5);
-
-    config.timeout.serverResponse = 10 * 1000;
-    
-    //Ir Receive Begin    
-    IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
-    Serial.print(F("Ready to receive IR signals of protocols: "));
-    printActiveIRProtocols(&Serial);
-    Serial.println(F("at pin " STR(IR_RECEIVE_PIN)));
-
-    //Get Sensor data
-    pinMode(hallSensorPin, INPUT); 
-  Serial.begin(115200);
-
-  Wire.begin(); // Start the I2C communication
-  
-  // Initialize MPU6050
-  if (!mpu.begin()) {
-    Serial.println("Failed to find MPU6050 chip");
-    while (1) {
-      delay(10);
-    }
-  }
-
-  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
-  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
-  mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
-  
-  // Initialize HMC5883L
-  if (!mag.begin()) {
-    Serial.println("Failed to find Magnetometer chip");
-    while (1) {
-      delay(10);
-    }
-  }
-  
-  delay(20);
-}
-
-void loop() {
-        int receivedCommand = IrData();
-        int direction = getMAGSensorReadings();
-        int acceleration = getMPUSensorReadings();
-        
-        int heading = 1;
-        if(acceleration > 0){
-            heading = 1;
-        }else{
-            heading = -1;
-        }
-        
-
-        sendDataToFirebase(currentStation, distance, direction, heading);
-        
-}
-
-
+//Get Accelerometer and Gyroscope data  from MPU6050
 int getMPUSensorReadings() {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
@@ -172,13 +61,16 @@ int getMPUSensorReadings() {
 
   return a.acceleration.z;
 }
+
+//Get Hall Effect Sensor data
 int hallEffectSensor(){
   int sensorValue = analogRead(hallSensorPin); 
   Serial.print("Analog Sensor Value: ");
   Serial.println(sensorValue);
-  
+  return sensorValue;
   }
 
+//Get Magnetometer data from HMC5883L
 int getMAGSensorReadings() {
   sensors_event_t event;
   mag.getEvent(&event);
@@ -223,7 +115,7 @@ int getMAGSensorReadings() {
   return headingDegrees;
 }
 
-
+//Read IR sensor data
 int IrData(){
   int receivedCommand=0;
   if (IrReceiver.decode()) {
@@ -246,47 +138,157 @@ int IrData(){
     return receivedCommand;
   
   }
-void sendDataToFirebase(int data, float distance, int direction, int heading) {
-  if (Firebase.ready() && (millis() - sendDataPrevMillis > 2000 || sendDataPrevMillis == 0)) {
-    sendDataPrevMillis = millis();
-    
-    // Write unsigned long data to the database path test/data
-    if (Firebase.RTDB.setInt(&fbdo, "test/data", data)) {
-      Serial.println("INT PASSED");
-      Serial.println("PATH: " + fbdo.dataPath());
-      Serial.println("TYPE: " + fbdo.dataType());
-    } else {
-      Serial.println("Unsigned Long FAILED");
-      Serial.println("REASON: " + fbdo.errorReason());
-    }
 
-    // Write float data to the database path test/distance
-    if (Firebase.RTDB.setFloat(&fbdo, "test/distance", distance)) {
-      Serial.println("Float PASSED");
-      Serial.println("PATH: " + fbdo.dataPath());
-      Serial.println("TYPE: " + fbdo.dataType());
-    } else {
-      Serial.println("Float FAILED");
-      Serial.println("REASON: " + fbdo.errorReason());
-    }
-
-    // Write int data to the database path test/direction
-    if (Firebase.RTDB.setInt(&fbdo, "test/direction", direction)) {
-      Serial.println("Int PASSED");
-      Serial.println("PATH: " + fbdo.dataPath());
-      Serial.println("TYPE: " + fbdo.dataType());
-    } else {
-      Serial.println("Int FAILED");
-      Serial.println("REASON: " + fbdo.errorReason());
-    }
-    // Write int data to the database path test/direction
-    if (Firebase.RTDB.setInt(&fbdo, "test/heading", heading)) {
-      Serial.println("Int PASSED");
-      Serial.println("PATH: " + fbdo.dataPath());
-      Serial.println("TYPE: " + fbdo.dataType());
-    } else {
-      Serial.println("Int FAILED");
-      Serial.println("REASON: " + fbdo.errorReason());
-    }
-  }
+void messageHandler(char* topic, byte* payload, unsigned int length)
+{
+  Serial.print("incoming: ");
+  Serial.println(topic);
+ 
+  StaticJsonDocument<200> doc;
+  deserializeJson(doc, payload);
+  const char* message = doc["message"];
+  Serial.println(message);
 }
+
+
+void connectAWS()
+{
+    //Connect to Wifi
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    Serial.print("Connecting to Wi-Fi");
+    while (WiFi.status() != WL_CONNECTED){
+    Serial.print(".");
+    delay(300);
+    }
+    Serial.println();
+    Serial.print("Connected with IP: ");
+    Serial.println(WiFi.localIP());
+    Serial.println();
+ 
+  // Configure WiFiClientSecure to use the AWS IoT device credentials
+  net.setCACert(AWS_CERT_CA);
+  net.setCertificate(AWS_CERT_CRT);
+  net.setPrivateKey(AWS_CERT_PRIVATE);
+ 
+  // Connect to the MQTT broker on the AWS endpoint we defined earlier
+  client.setServer(AWS_IOT_ENDPOINT, 8883);
+ 
+  // Create a message handler
+  client.setCallback(messageHandler);
+ 
+  Serial.println("Connecting to AWS IOT");
+ 
+  while (!client.connect(THINGNAME))
+  {
+    Serial.print(".");
+    delay(100);
+  }
+ 
+  if (!client.connected())
+  {
+    Serial.println("AWS IoT Timeout!");
+    return;
+  }
+ 
+  // Subscribe to a topic
+  client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
+ 
+  Serial.println("AWS IoT Connected!");
+}
+ 
+void publishMessage()
+{
+  Serial.print("Distance:");
+  Serial.print(distance);
+  Serial.print(" Station:");
+  Serial.println(currentStation);
+  StaticJsonDocument<200> doc;
+  doc["distance"] = distance;
+  doc["current Location"] = currentStation;
+  char jsonBuffer[512];
+  serializeJson(doc, jsonBuffer); // print to client
+ 
+  client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+}
+ 
+//Interupt for hall sensor for get distance
+void hallSensorInterrupt() {
+    
+    distance += 10; // Add 10cm to the distance if the sensor value is high
+    
+}
+
+SupermarketMapper supermarketMapper;
+
+void setup() {
+    Serial.begin(115200);
+
+    attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, RISING);
+        
+    //AWS Connect
+    //connectAWS();
+
+    //Ir Receive Begin    
+    IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
+    //Serial.print(F("Ready to receive IR signals of protocols: "));
+    //printActiveIRProtocols(&Serial);
+    //Serial.println(F("at pin " STR(IR_RECEIVE_PIN)));
+
+    //Get Sensor data
+    pinMode(hallSensorPin, INPUT); 
+    pinMode(4, INPUT); 
+
+  // Wire.begin(); // Start the I2C communication
+  
+  // //Initialize MPU6050
+  // if (!mpu.begin()) {
+  //   Serial.println("Failed to find MPU6050 chip");
+  //   while (1) {
+  //     delay(10);
+  //   }
+  // }
+
+  // mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+  // mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+  // mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
+  
+  // // Initialize HMC5883L
+  // if (!mag.begin()) {
+  //   Serial.println("Failed to find Magnetometer chip");
+  //   while (1) {
+  //     delay(10);
+  //   }
+  // }
+  
+  delay(20);
+}
+
+void loop() {
+        int receivedCommand = IrData();
+        //int direction = getMAGSensorReadings();
+        //hallEffectSensor();
+        // int acceleration = getMPUSensorReadings();
+        
+        // int heading = 1;
+        // if(acceleration > 0){
+        //     heading = 1;
+        // }else{
+        //     heading = -1;
+        // }
+     int heading = 1;
+    int sensorValue = analogRead(4); 
+    sensorValue = map(sensorValue, 0, 4095, 0, 360);
+    Serial.print("Magnetometer Value: ");
+    Serial.println(sensorValue);
+
+      supermarketMapper.updateLocation(currentStation, sensorValue, distance, heading);
+      supermarketMapper.displayLocation();
+        
+        // publishMessage();
+        // client.loop();
+
+        delay(1500);
+}
+
+

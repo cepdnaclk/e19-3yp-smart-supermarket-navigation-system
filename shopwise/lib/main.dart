@@ -23,17 +23,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Shopwise',
       theme: ThemeData(
-              // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              // useMaterial3: true,
-              )
-          .copyWith(
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ).copyWith(
         primaryColor: Colors.white,
         secondaryHeaderColor: AppColors.primaryColor,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primaryColorDark,
+
+            backgroundColor: const Color.fromARGB(1, 40, 185, 54),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
@@ -45,7 +46,13 @@ class MyApp extends StatelessWidget {
           elevation: 4, // Add shadow to app bar
         ),
       ),
+      initialRoute: StartupPage.routeName, // Set the startup page as the initial route
+      routes: {
+        StartupPage.routeName: (context) => StartupPage(),
+        LoginScreen.routeName: (context) => const LoginScreen(),
+      },
       // home: const MyHomePage(title: 'Shop Wise'),
+
       home: const StartupPage(),
     );
   }
@@ -79,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               "Shop wise",
             ),
           ],

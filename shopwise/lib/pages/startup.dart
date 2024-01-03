@@ -1,11 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/login_screen.dart';
 
-class StartupPage extends StatelessWidget {
-  const StartupPage({super.key});
+class StartupPage extends StatefulWidget {
+  //const StartupPage({super.key});
+  static const String routeName = '/startup';
+
+  @override
+  State<StartupPage> createState() => _StartupPageState();
+}
+
+class _StartupPageState extends State<StartupPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Wait for 3 seconds and navigate to the login page
+    Timer(Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         body: Center(
       child: Column(
@@ -42,6 +58,7 @@ class StartupPage extends StatelessWidget {
           ),
         ],
       ),
+
     ));
   }
 }
