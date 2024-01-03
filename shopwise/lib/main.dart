@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Shopwise',
       theme: ThemeData(
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(1, 40, 185, 54),
+            backgroundColor: const Color.fromARGB(1, 40, 185, 54),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
@@ -43,9 +44,14 @@ class MyApp extends StatelessWidget {
           elevation: 4, // Add shadow to app bar
         ),
       ),
+      initialRoute: StartupPage.routeName, // Set the startup page as the initial route
+      routes: {
+        StartupPage.routeName: (context) => StartupPage(),
+        LoginScreen.routeName: (context) => const LoginScreen(),
+      },
       // home: const MyHomePage(title: 'Shop Wise'),
       // home: const ProductsListPage(),
-      home: const LoginScreen(),
+      // home: StartupPage(),
     );
   }
 }
