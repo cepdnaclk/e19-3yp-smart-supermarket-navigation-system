@@ -1,3 +1,4 @@
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
@@ -50,38 +51,42 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Shopwise',
-      theme: ThemeData(
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ).copyWith(
-        primaryColor: Colors.white,
-        secondaryHeaderColor: AppColors.primaryColor,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-
-            backgroundColor: const Color.fromARGB(1, 40, 185, 54),
+    return Authenticator(
+     
+      child: MaterialApp(
+        builder: Authenticator.builder(),
+        debugShowCheckedModeBanner: false,
+        title: 'Shopwise',
+        theme: ThemeData(
+          // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ).copyWith(
+          primaryColor: Colors.white,
+          secondaryHeaderColor: AppColors.primaryColor,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+    
+              backgroundColor: const Color.fromARGB(1, 40, 185, 54),
+            ),
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.primaryColorDark,
+            ),
+          ),
+          appBarTheme: const AppBarTheme(
+            elevation: 4, // Add shadow to app bar
           ),
         ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.primaryColorDark,
-          ),
-        ),
-        appBarTheme: const AppBarTheme(
-          elevation: 4, // Add shadow to app bar
-        ),
+        initialRoute: StartupPage.routeName, // Set the startup page as the initial route
+        routes: {
+          StartupPage.routeName: (context) => StartupPage(),
+          LoginScreen.routeName: (context) => const LoginScreen(),
+        },
+        // home: const MyHomePage(title: 'Shop Wise'),
+    
+        home: StartupPage(),
       ),
-      initialRoute: StartupPage.routeName, // Set the startup page as the initial route
-      routes: {
-        StartupPage.routeName: (context) => StartupPage(),
-        LoginScreen.routeName: (context) => const LoginScreen(),
-      },
-      // home: const MyHomePage(title: 'Shop Wise'),
-
-      home: StartupPage(),
     );
   }
 }

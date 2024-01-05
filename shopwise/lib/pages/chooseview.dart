@@ -1,9 +1,22 @@
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
+import 'package:shopwise/pages/login_screen.dart';
 
 class Choose extends StatelessWidget {
   const Choose({super.key});
+
+  Future<void> logoutStep(context) async {
+    try {
+      // Sign out
+      await Amplify.Auth.signOut();
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: ((context) => LoginScreen())));
+    } on AuthException catch (e) {
+      print(e.message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +49,10 @@ class Choose extends StatelessWidget {
                 },
                 child: Text("Navigate"),
               ),
+
+              TextButton(child: Text("Log out"), onPressed: ()=>{
+                logoutStep(context)
+              },)
             ],
           ),
         ),
