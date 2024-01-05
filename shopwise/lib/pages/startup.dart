@@ -10,14 +10,6 @@ class StartupPage extends StatefulWidget {
 }
 
 class _StartupPageState extends State<StartupPage> {
-  @override
-  void initState() {
-    super.initState();
-    // Wait for 3 seconds and navigate to the login page
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
