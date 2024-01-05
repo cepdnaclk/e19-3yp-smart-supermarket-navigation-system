@@ -105,42 +105,44 @@ class _HomePageState extends State<HomePage> {
           // You can call movePlayer here if you need additional logic
         }
 
-        return Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                flex: 4,
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: numberOfSquares,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: numberInRow,
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: numberOfSquares,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: numberInRow,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      if (player == index) {
+                        return Container(
+                          color: Colors
+                              .grey, // Replace with your desired background color
+                          child: MyPlayer(),
+                        );
+                      } else if (barriers.contains(index)) {
+                        return MyPixel(
+                          color: Colors.blue[700],
+                          child: Text(index.toString()),
+                        );
+                      } else {
+                        return MyPixel(
+                          color: Colors.grey,
+                          child: Text(index.toString()),
+                        );
+                      }
+                    },
                   ),
-                  itemBuilder: (BuildContext context, int index) {
-                    if (player == index) {
-                      return Container(
-                        color: Colors
-                            .grey, // Replace with your desired background color
-                        child: MyPlayer(),
-                      );
-                    } else if (barriers.contains(index)) {
-                      return MyPixel(
-                        color: Colors.blue[700],
-                        child: Text(index.toString()),
-                      );
-                    } else {
-                      return MyPixel(
-                        color: Colors.grey,
-                        child: Text(index.toString()),
-                      );
-                    }
-                  },
                 ),
-              ),
 
-              /////////////////////////Mapping ends here!/////////////////////////
+                /////////////////////////Mapping ends here!/////////////////////////
 
-              /* Expanded(
+                /* Expanded(
                   child: Container(
                     child: Column(
                       children: [
@@ -184,7 +186,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ), */
-            ],
+              ],
+            ),
           ),
         );
       },
