@@ -1,10 +1,14 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/login_screen.dart';
 import 'package:shopwise/pages/products_list_page.dart';
 import 'package:shopwise/pages/register.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/utils/colors.dart';
+
+import 'amplifyconfiguration.dart';
 
 // void main() async{
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -16,44 +20,73 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _configureAmplify();
+  }
+
+  Future<void> _configureAmplify() async {
+    try {
+      final auth = AmplifyAuthCognito();
+      await Amplify.addPlugin(auth);
+
+      // call Amplify.configure to use the initialized categories in your app
+      await Amplify.configure(amplifyconfig);
+    } on Exception catch (e) {
+      safePrint('An error occurred configuring Amplify: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Shopwise',
-      theme: ThemeData(
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ).copyWith(
-        primaryColor: Colors.white,
-        secondaryHeaderColor: AppColors.primaryColor,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-
-            backgroundColor: const Color.fromARGB(1, 40, 185, 54),
+    return Authenticator(
+     
+      child: MaterialApp(
+        builder: Authenticator.builder(),
+        debugShowCheckedModeBanner: false,
+        title: 'Shopwise',
+        theme: ThemeData(
+          // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ).copyWith(
+          primaryColor: Colors.white,
+          secondaryHeaderColor: AppColors.primaryColor,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+    
+              backgroundColor: const Color.fromARGB(1, 40, 185, 54),
+            ),
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.primaryColorDark,
+            ),
+          ),
+          appBarTheme: const AppBarTheme(
+            elevation: 4, // Add shadow to app bar
           ),
         ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.primaryColorDark,
-          ),
-        ),
-        appBarTheme: const AppBarTheme(
-          elevation: 4, // Add shadow to app bar
-        ),
+        initialRoute: StartupPage.routeName, // Set the startup page as the initial route
+        routes: {
+          StartupPage.routeName: (context) => StartupPage(),
+          LoginScreen.routeName: (context) => const LoginScreen(),
+        },
+        // home: const MyHomePage(title: 'Shop Wise'),
+    
+        home: StartupPage(),
       ),
-      initialRoute: StartupPage.routeName, // Set the startup page as the initial route
-      routes: {
-        StartupPage.routeName: (context) => StartupPage(),
-        LoginScreen.routeName: (context) => const LoginScreen(),
-      },
-      // home: const MyHomePage(title: 'Shop Wise'),
-
-      home: const StartupPage(),
     );
   }
 }
