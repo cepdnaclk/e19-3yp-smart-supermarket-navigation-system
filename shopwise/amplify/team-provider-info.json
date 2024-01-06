@@ -1,19 +1,19 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-shopwise-dev-134128-authRole",
-      "UnauthRoleArn": "arn:aws:iam::624047693570:role/amplify-shopwise-dev-134128-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::624047693570:role/amplify-shopwise-dev-134128-authRole",
-      "Region": "us-west-1",
-      "DeploymentBucketName": "amplify-shopwise-dev-134128-deployment",
-      "UnauthRoleName": "amplify-shopwise-dev-134128-unauthRole",
-      "StackName": "amplify-shopwise-dev-134128",
-      "StackId": "arn:aws:cloudformation:us-west-1:624047693570:stack/amplify-shopwise-dev-134128/3411e450-ac6b-11ee-8c3e-029cbb0245ad",
-      "AmplifyAppId": "dn5kihfmhc97w"
+      "AuthRoleName": "amplify-shopwise-dev-21055-authRole",
+      "UnauthRoleArn": "arn:aws:iam::624047693570:role/amplify-shopwise-dev-21055-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::624047693570:role/amplify-shopwise-dev-21055-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-shopwise-dev-21055-deployment",
+      "UnauthRoleName": "amplify-shopwise-dev-21055-unauthRole",
+      "StackName": "amplify-shopwise-dev-21055",
+      "StackId": "arn:aws:cloudformation:eu-north-1:624047693570:stack/amplify-shopwise-dev-21055/e5f798f0-acd3-11ee-abd6-0a7ac6d2cc92",
+      "AmplifyAppId": "d2m755psj36n10"
     },
     "categories": {
       "auth": {
-        "shopwisead6cad9a": {}
+        "shopwise2a51087c": {}
       }
     }
   }
