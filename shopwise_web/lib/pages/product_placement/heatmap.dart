@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class MapGrid extends StatefulWidget {
-  const MapGrid({Key? key}) : super(key: key);
+class HeatMapGrid extends StatefulWidget {
+  const HeatMapGrid({Key? key}) : super(key: key);
 
   @override
-  _MapGridState createState() => _MapGridState();
+  _HeatMapGridState createState() => _HeatMapGridState();
 }
 
 class GridCell {
@@ -18,7 +18,7 @@ class GridCell {
   }
 }
 
-class _MapGridState extends State<MapGrid> {
+class _HeatMapGridState extends State<HeatMapGrid> {
   TextEditingController _textFieldController1 = TextEditingController();
   TextEditingController _textFieldController2 = TextEditingController();
 
@@ -72,6 +72,8 @@ class _MapGridState extends State<MapGrid> {
       },
     );
   }
+
+  List<int> heat = [104, 154, 59, 60, 61, 152];
 
   List<int> barriers = [
     158,
@@ -159,11 +161,13 @@ class _MapGridState extends State<MapGrid> {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: barriers.contains(index)
-                    ? Colors.blue
-                    : (tappedCells[cell.id] == true
-                        ? Colors.green
-                        : Colors.white.withAlpha(0)),
+                color: heat.contains(index)
+                    ? Colors.red
+                    : (barriers.contains(index)
+                        ? Colors.blue
+                        : (tappedCells[cell.id] == true
+                            ? Colors.green
+                            : Colors.white.withAlpha(0))),
                 border:
                     Border.all(color: Colors.grey), // Border color of each cell
               ),
