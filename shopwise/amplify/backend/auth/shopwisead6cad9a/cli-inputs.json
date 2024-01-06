@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "shopwisema53d4be2_identitypool_a53d4be2",
+    "identityPoolName": "shopwisead6cad9a_identitypool_ad6cad9a",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "shopwia53d4be2",
-    "userPoolName": "shopwisema53d4be2_userpool_a53d4be2",
+    "resourceNameTruncated": "shopwiad6cad9a",
+    "userPoolName": "shopwisead6cad9a_userpool_ad6cad9a",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,10 +31,10 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "shopwia53d4be2_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "shopwiad6cad9a_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "a53d4be2",
-    "resourceName": "shopwisema53d4be2",
+    "sharedId": "ad6cad9a",
+    "resourceName": "shopwisead6cad9a",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
     "userPoolGroupList": [],

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/login_screen.dart';
 
+import 'package:flutter_animated_button/flutter_animated_button.dart';
+
 class StartupPage extends StatefulWidget {
   const StartupPage({Key? key}):super(key: key);
 
