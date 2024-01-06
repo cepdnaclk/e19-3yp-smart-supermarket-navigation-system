@@ -5,10 +5,6 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:shopwise/services/mqtt_service.dart';
 
 
-
-
-// import 'package:ndialog/ndialog.dart';
-
 class MQTTClientTest extends StatefulWidget {
   const MQTTClientTest({Key? key}) : super(key: key);
 
@@ -101,19 +97,6 @@ class _MQTTClientTestState extends State<MQTTClientTest> {
     //   progressDialog.dismiss();
     // }
   }
-
-
-  
-
- 
-
-  
-
-  
-
-  
-
- 
 
   @override
   Widget build(BuildContext context) {
