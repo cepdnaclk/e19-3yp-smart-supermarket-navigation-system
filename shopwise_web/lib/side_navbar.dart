@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shopwise_web/pages/dashboard.dart';
-import 'package:shopwise_web/pages/product_placement.dart';
+import 'package:shopwise_web/pages/dashboard/dashboard.dart';
+import 'package:shopwise_web/pages/login/login.dart';
+import 'package:shopwise_web/pages/product_placement/product_placement.dart';
 import 'package:shopwise_web/pages/product_types/products_home.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class SideNavBar extends StatefulWidget {
-  const SideNavBar({Key? key}) : super(key: key);
+  const SideNavBar({super.key});
 
   @override
   State<SideNavBar> createState() => _SideNavBarState();
@@ -56,24 +57,19 @@ class _SideNavBarState extends State<SideNavBar> {
                       switch (_controller.selectedIndex) {
                         case 0:
                           _key.currentState?.closeDrawer();
-                          return Dashboard();
+                          return const Dashboard();
                         case 1:
                           _key.currentState?.closeDrawer();
-                          return ProductsHome();
+                          return const ProductsHome();
                         case 2:
                           _key.currentState?.closeDrawer();
-                          return Placement();
+                          return const Placement();
                         case 3:
                           _key.currentState?.closeDrawer();
-                          return const Center(
-                            child: Text(
-                              'Theme',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 40),
-                            ),
-                          );
+                          //log out
+                          return const LoginPage();
                         default:
-                          return Dashboard();
+                          return const Dashboard();
                       }
                     },
                   ),
@@ -86,9 +82,8 @@ class _SideNavBarState extends State<SideNavBar> {
 }
 
 class SideBarXExample extends StatelessWidget {
-  const SideBarXExample({Key? key, required SidebarXController controller})
-      : _controller = controller,
-        super(key: key);
+  const SideBarXExample({super.key, required SidebarXController controller})
+      : _controller = controller;
   final SidebarXController _controller;
   @override
   Widget build(BuildContext context) {
