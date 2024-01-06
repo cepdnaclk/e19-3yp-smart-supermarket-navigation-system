@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:shopwise/pages/pixel.dart';
@@ -20,78 +19,21 @@ class _HomePageState extends State<HomePage> {
   int numberOfSquares = numberInRow * 19;
 
   //palyer position
-  int player = 181;
+  int player = 168;
 
   List<int> barriers = [
-    176,
-    177,
-    178,
-    179,
-    186,
-    185,
-    184,
-    183,
-    168,
-    157,
-    172,
-    161,
-    155,
-    144,
-    133,
-    122,
-    111,
-    100,
-    108,
-    119,
-    130,
-    141,
-    152,
-    163,
-    135,
+    158,
+    159,
+    147,
+    148,
     136,
     137,
-    138,
-    139,
-    124,
     125,
     126,
-    127,
-    128,
-    92,
-    81,
-    70,
-    59,
-    48,
-    37,
-    38,
-    49,
-    60,
-    71,
-    82,
-    93,
-    94,
-    83,
-    72,
-    61,
-    50,
-    39,
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    12,
-    23,
-    34,
-    20,
-    31,
-    42
+    114,
+    115,
+    103,
+    104
   ];
 
   String _scanBarcodeResult = '';
