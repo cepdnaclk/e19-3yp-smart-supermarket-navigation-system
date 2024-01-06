@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/select_items.dart';
 
 class ShoppingList extends StatefulWidget {
   static const String routeName = '/shoppingList';
@@ -29,13 +30,31 @@ class _ShoppingListState extends State<ShoppingList> {
                 },
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                final Future<Object?> item =
+                    Navigator.pushNamed(context, SelectItems.routeName);
+                item.then((result) {
+                  if (result != null && result is String) {
+                    String newItem = result;
+                    // Do something with the newItem string here
+                    setState(() {
+                      widget.shoppingList.add(newItem);
+                    });
+                    print(newItem);
+                  }
+                });
+                print(item);
+              },
+              child: Text("Add Item"),
+            )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final String? newItem =
-              await Navigator.pushNamed(context, '/addItem');
+              await Navigator.pushNamed(context, SelectItems.routeName);
           if (newItem != null) {
             setState(() {
               widget.shoppingList.add(newItem);
