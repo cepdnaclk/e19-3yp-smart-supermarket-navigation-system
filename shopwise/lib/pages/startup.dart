@@ -29,9 +29,9 @@ class _StartupPageState extends State<StartupPage> {
           const Text(
             "Let us make your day!",
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic),
           ),
           const SizedBox(
             height: 50,
