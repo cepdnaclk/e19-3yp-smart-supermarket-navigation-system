@@ -3,6 +3,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
 import 'package:shopwise/pages/login_screen.dart';
+import 'package:shopwise/pages/test.dart';
 
 class Choose extends StatelessWidget {
   const Choose({super.key});
@@ -43,7 +44,7 @@ class Choose extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => CustomMapView(),
+                      builder: (context) => MQTTClientTest(),
                     ),
                   );
                 },
