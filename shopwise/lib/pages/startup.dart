@@ -46,7 +46,7 @@ class _StartupPageState extends State<StartupPage> {
             },
             height: 50,
             width: 160,
-            text: "Get Started!",
+            text: "Get Started Now!",
             textStyle: TextStyle(color: Colors.black, fontSize: 20),
             isReverse: true,
             selectedTextColor: Colors.black,
