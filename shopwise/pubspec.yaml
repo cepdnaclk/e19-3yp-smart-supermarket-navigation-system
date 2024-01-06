@@ -40,6 +40,10 @@ dependencies:
   amplify_flutter: ^1.0.0
   amplify_auth_cognito: ^1.0.0
   amplify_authenticator: ^1.0.0
+  cupertino_icons: ^1.0.2
+  simple_barcode_scanner: ^0.0.8
+  mqtt_client: ^10.0.1
+  ndialog: ^4.3.1
 
 dev_dependencies:
   flutter_test:
