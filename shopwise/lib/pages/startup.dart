@@ -1,10 +1,11 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/pages/login_screen.dart';
 
 class StartupPage extends StatefulWidget {
   //const StartupPage({super.key});
-  static const String routeName = '/startup';
+  static const String routeName = '/';
 
   @override
   State<StartupPage> createState() => _StartupPageState();
@@ -46,8 +47,7 @@ class _StartupPageState extends State<StartupPage> {
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             ),
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: ((context) => LoginScreen())));
+             Navigator.pushReplacementNamed(context, Choose.routeName);
             },
             child: Text("Get Started"),
           ),

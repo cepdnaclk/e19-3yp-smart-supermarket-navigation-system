@@ -2,6 +2,7 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/pages/login_screen.dart';
 import 'package:shopwise/pages/products_list_page.dart';
 import 'package:shopwise/pages/register.dart';
@@ -52,9 +53,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Authenticator(
+      
      
       child: MaterialApp(
-        builder: Authenticator.builder(),
+        
+        // builder: Authenticator.builder(),
         debugShowCheckedModeBanner: false,
         title: 'Shopwise',
         theme: ThemeData(
@@ -81,11 +84,12 @@ class _MyAppState extends State<MyApp> {
         initialRoute: StartupPage.routeName, // Set the startup page as the initial route
         routes: {
           StartupPage.routeName: (context) => StartupPage(),
-          LoginScreen.routeName: (context) => const LoginScreen(),
+          Choose.routeName: (context) => AuthenticatedView(child: Choose()),
+          // LoginScreen.routeName: (context) => const LoginScreen(),
         },
         // home: const MyHomePage(title: 'Shop Wise'),
     
-        home: StartupPage(),
+        // home: StartupPage(),
       ),
     );
   }

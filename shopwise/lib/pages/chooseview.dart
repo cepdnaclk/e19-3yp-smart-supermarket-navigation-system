@@ -8,6 +8,8 @@ import 'package:shopwise/pages/test.dart';
 class Choose extends StatelessWidget {
   const Choose({super.key});
 
+  static const String routeName = '/choose';
+
   Future<void> logoutStep(context) async {
     try {
       // Sign out
