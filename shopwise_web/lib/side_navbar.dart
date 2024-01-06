@@ -115,8 +115,9 @@ class SideBarXExample extends StatelessWidget {
           label: 'Dashboard',
         ),
         SidebarXItem(icon: Icons.shopping_bag_outlined, label: 'Products'),
-        SidebarXItem(icon: Icons.shopping_cart, label: 'Product Placement'),
+        SidebarXItem(icon: Icons.shopping_cart, label: 'Layout Update'),
         SidebarXItem(icon: Icons.logout, label: 'Sign Out'),
+        //SidebarXItem(icon: Icons.settings, label: 'Settings'),
       ],
     );
   }
