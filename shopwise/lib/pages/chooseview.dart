@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
 import 'package:shopwise/pages/login_screen.dart';
 import 'package:shopwise/pages/startup.dart';
-import 'package:shopwise/pages/test.dart';
+import 'package:shopwise/pages/mqtt_client_test.dart';
 
 class Choose extends StatelessWidget {
   const Choose({super.key});
