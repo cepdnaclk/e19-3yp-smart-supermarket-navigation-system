@@ -1,4 +1,3 @@
-
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
@@ -26,36 +25,62 @@ class Choose extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).secondaryHeaderColor,
-        title: const Text("Choose"),
+        title: const Text("On your way!"),
       ),
       body: Center(
         child: Container(
-          height: 300,
+          height: 600,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              const SizedBox(height: 60),
               const Image(
                 image: AssetImage("assets/images/secondary.png"),
               ),
-              const SizedBox(height: 60),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text("Create the shopping list"),
+              const SizedBox(height: 300),
+              Container(
+                height: 50,
+                width: 300,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: () {},
+                  child: Text("Create the shopping list"),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MQTTClientTest(),
-                    ),
-                  );
-                },
-                child: Text("Navigate"),
+              SizedBox(height: 10),
+              Container(
+                height: 50,
+                width: 300,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MQTTClientTest(),
+                      ),
+                    );
+                  },
+                  child: Text("Start shopping!"),
+                ),
               ),
-
-              TextButton(child: Text("Log out"), onPressed: ()=>{
-                logoutStep(context)
-              },)
+              SizedBox(height: 10),
+              Container(
+                height: 50,
+                width: 300,
+                child: OutlinedButton(
+                  child: Text("Log out"),
+                  onPressed: () => {logoutStep(context)},
+                  style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.green,
+                      side: BorderSide(color: Colors.green)),
+                ),
+              )
             ],
           ),
         ),
