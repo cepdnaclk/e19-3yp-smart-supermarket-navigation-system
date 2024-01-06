@@ -126,7 +126,7 @@ class _MQTTClientTestState extends State<MQTTClientTest> {
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         content: AwesomeSnackbarContent(
-          title: 'Hey there!',
+          title: 'Congratulations!',
           message: 'You are online',
 
           /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
