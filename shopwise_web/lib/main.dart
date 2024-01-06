@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/login/login.dart';
-import 'package:shopwise_web/side_navbar.dart';
 
 void main() {
   runApp(const MyApp());
