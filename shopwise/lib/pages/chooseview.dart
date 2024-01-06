@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
 import 'package:shopwise/pages/login_screen.dart';
+import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/pages/mqtt_client_test.dart';
 
@@ -46,7 +47,7 @@ class Choose extends StatelessWidget {
                     backgroundColor: Theme.of(context).secondaryHeaderColor,
                     foregroundColor: Colors.black,
                   ),
-                  onPressed: () {},
+                  onPressed: () {Navigator.pushNamed(context, ShoppingList.routeName);},
                   child: Text("Create the shopping list"),
                 ),
               ),

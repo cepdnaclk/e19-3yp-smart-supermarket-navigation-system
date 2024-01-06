@@ -6,6 +6,7 @@ import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/pages/login_screen.dart';
 import 'package:shopwise/pages/products_list_page.dart';
 import 'package:shopwise/pages/register.dart';
+import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/utils/colors.dart';
 
@@ -85,6 +86,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           StartupPage.routeName: (context) => StartupPage(),
           Choose.routeName: (context) => AuthenticatedView(child: Choose()),
+          ShoppingList.routeName: (context) => AuthenticatedView(child: ShoppingList()),
           // LoginScreen.routeName: (context) => const LoginScreen(),
         },
         // home: const MyHomePage(title: 'Shop Wise'),
