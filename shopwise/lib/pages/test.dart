@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:shopwise/pages/home.dart';
+import 'package:shopwise/pages/the_map.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:shopwise/widgets/barcode_scanner.dart';
 
@@ -300,7 +300,7 @@ class _MQTTClientTestState extends State<MQTTClientTest> {
               //     : Container(),
               // Text(statusText),
               // Text(location),
-              HomePage(directionStream: streamController.stream),
+              TheMap(directionStream: streamController.stream),
               // BarcodeReader()
             ],
           ),

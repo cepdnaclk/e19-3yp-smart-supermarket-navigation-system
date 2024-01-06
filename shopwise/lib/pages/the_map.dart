@@ -5,16 +5,16 @@ import 'package:shopwise/pages/player.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-class HomePage extends StatefulWidget {
+class TheMap extends StatefulWidget {
   final Stream<String> directionStream;
 
-  HomePage({Key? key, required this.directionStream}) : super(key: key);
+  TheMap({Key? key, required this.directionStream}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _TheMapState createState() => _TheMapState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TheMapState extends State<TheMap> {
   static int numberInRow = 11;
   int numberOfSquares = numberInRow * 19;
 
