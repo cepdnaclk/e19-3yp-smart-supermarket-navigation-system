@@ -3,6 +3,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
 import 'package:shopwise/pages/login_screen.dart';
+import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/pages/test.dart';
 
 class Choose extends StatelessWidget {
@@ -14,8 +15,7 @@ class Choose extends StatelessWidget {
     try {
       // Sign out
       await Amplify.Auth.signOut();
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: ((context) => LoginScreen())));
+      Navigator.pushReplacementNamed(context, StartupPage.routeName);
     } on AuthException catch (e) {
       print(e.message);
     }
