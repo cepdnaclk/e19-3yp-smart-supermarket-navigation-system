@@ -18,13 +18,8 @@ class MQTTClientTest extends StatefulWidget {
 
 class _MQTTClientTestState extends State<MQTTClientTest> {
   
-  
   bool isConnectionChanged = false;
-  
-
   TextEditingController idTextController = TextEditingController();
-
-
 
   @override
   void initState() {
@@ -41,26 +36,7 @@ class _MQTTClientTestState extends State<MQTTClientTest> {
     super.dispose();
   }
 
-  
-
   _connect_auto() async {
-    // ProgressDialog pd = ProgressDialog(context: context);
-
-    // pd.show(msg: "Connecting");
-    // pd.show();
-    // ProgressDialog progressDialog = ProgressDialog(context,
-    //     blur: 0,
-    //     dialogTransitionType: DialogTransitionType.Shrink,
-    //     dismissable: true);
-    // progressDialog.setLoadingWidget(
-    //   CircularProgressIndicator(
-    //     valueColor: AlwaysStoppedAnimation(Colors.red),
-    //   ),
-    // );
-    // progressDialog.setMessage(Text("wait, connecting to core"));
-    // progressDialog.setTitle(Text("Connecting"));
-
-    // isConnected = await MQTT_Service.mqttConnect(idTextController.text.trim());
     
     MQTT_Service.isConnected = await MQTT_Service.mqttConnect(idTextController.text.trim());
 
@@ -106,28 +82,7 @@ class _MQTTClientTestState extends State<MQTTClientTest> {
         ..showSnackBar(snackBar);
     }
 
-    // await mqttConnect("someunique").then((value) {
-    //   if (value) {
-    //     progressDialog.dismiss();
-    //   }
-    //   progressDialog.setLoadingWidget(null);
-    //   progressDialog.setTitle(Text("Connected"));
-    //   progressDialog.dismiss();
-    // });
-
-    // if (isConnected) {
-    //   // progressDialog.setTitle(Text("Connected"));
-    //   // progressDialog.dismiss();
-    // }
-
-    // try {
-
-    //   print(isConnected);
-    // } catch (e) {
-    //   print('Error in mqttConnect: $e');
-    // }
-
-    // // isConnected = await mqttConnect(idTextController.text.trim());
+ 
     // // print(isConnected);
     // print("dismissing.................");
     // if (isConnected) {
@@ -147,31 +102,6 @@ class _MQTTClientTestState extends State<MQTTClientTest> {
     // }
   }
 
-  // _connect() async {
-  //   if (idTextController.text.trim().isNotEmpty) {
-  //     // final ProgressDialog pr = ProgressDialog(context);
-
-  //     // ProgressDialog progressDialog = ProgressDialog(context,
-  //     //     blur: 0,
-  //     //     dialogTransitionType: DialogTransitionType.Shrink,
-  //     //     dismissable: false);
-  //     // progressDialog.setLoadingWidget(CircularProgressIndicator(
-  //     //   valueColor: AlwaysStoppedAnimation(Colors.red),
-  //     // ));
-  //     // progressDialog.setMessage(Text("wait, connecting to core"));
-  //     // progressDialog.setTitle(Text("Connecting"));
-  //     // progressDialog.show();
-
-  //     // pr.show();
-
-  //     // isConnected = await mqttConnect(idTextController.text.trim());
-
-  //     // pr.hide().then((isHidden) {
-  //     //   print(isHidden);
-  //     // });
-  //     // progressDialog.dismiss();
-  //   }
-  // }
 
   
 

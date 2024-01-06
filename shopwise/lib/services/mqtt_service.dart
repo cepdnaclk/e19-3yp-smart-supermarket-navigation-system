@@ -77,19 +77,9 @@ static StreamController<String> streamController = StreamController<String>();
   }
 
   static void setStatus(String content) {
-    // Map<String, dynamic> jsonobj = getJson(statusText);
     getJson(content);
     statusText = content;
-    // setState(() {
-      
-    //   // location = obj['current_Location'] as String;
-    //   // location = jsonobj['current_Location'];
-    // });
-    /*  Map<String, dynamic> jsonobj = getJson(statusText);
-    setState(() {
-      location = jsonobj['current_Location'];
-    }); */
-    // print(jsonobj['current_Location']);
+
   }
   
   static void getJson(String message) {
@@ -102,9 +92,7 @@ static StreamController<String> streamController = StreamController<String>();
     
         location = json['current_Location'].toString();
      
-      // setState(() {
-      //   location = json['current_Location'].toString();
-      // });
+      
       print(json);
     } catch (e) {
       print("Occurredd............");
@@ -114,15 +102,11 @@ static StreamController<String> streamController = StreamController<String>();
 
   static void onConnected() {
     setStatus("Client connected");
-    // setState(() {
-    //   MQTT_Service.setStatus("Client connected");
-    // });
+ 
   }
 
   static void onDisconnected() {
-    // setState(() {
-    //   MQTT_Service.setStatus("Client disconnected");
-    // });
+
 
     setStatus("Client disconnected");
     isConnected = false;
