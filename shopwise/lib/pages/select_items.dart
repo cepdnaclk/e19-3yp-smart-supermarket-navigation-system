@@ -14,19 +14,26 @@ class SelectItems extends StatefulWidget {
         title: "Milk powder",
         image:
             "https://www.jungle.lk/wp-content/uploads/2021/07/Anchor-Full-Cream-Milk-Powder-400g.jpg",
-        price: "100",
-        description: "small one",
+        price: "3095",
+        description: "1kg",
         brand: "Anchor",
         id: "1"),
     Product(
         title: "Sugar",
         image:
             "https://5.imimg.com/data5/YD/DJ/MY-70422967/skyplus-sugar-500x500.jpg",
-        price: "100",
-        description: "small one",
+        price: "270",
+        description: "1kg",
         brand: "Shy Plus",
         id: "2"),
-        
+    Product(
+        title: "Asamodagam",
+        image:
+            "https://siddhalepa.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/a/s/asamodagam-spirit.png",
+        price: "195",
+        description: "385ml",
+        brand: "Siddhalepa",
+        id: "3"),
   ];
 
   @override
@@ -34,7 +41,6 @@ class SelectItems extends StatefulWidget {
 }
 
 class _SelectItemsState extends State<SelectItems> {
-
   void addItem(Product item) {
     setState(() {
       widget.addedItems.add(item);
@@ -43,7 +49,8 @@ class _SelectItemsState extends State<SelectItems> {
 
   @override
   Widget build(BuildContext context) {
-    final myArguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final myArguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     List<Product> myShoppingList = myArguments['shoppingList'];
 
@@ -53,16 +60,17 @@ class _SelectItemsState extends State<SelectItems> {
           title: const Text('Select Items'),
         ),
         body: Container(
-          height: 300,
+          height: 500,
           child: Column(
             children: [
               Expanded(
                 child: ListView.builder(
                   itemCount: widget.itemList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return ProductListItem(product: widget.itemList[index],
-                    theList:  myArguments['shoppingList'],
-                        );
+                    return ProductListItem(
+                      product: widget.itemList[index],
+                      theList: myArguments['shoppingList'],
+                    );
                     // return ListTile(
                     //   onTap: () => Navigator.pop(
                     //       context, widget.itemList[index].toString()),

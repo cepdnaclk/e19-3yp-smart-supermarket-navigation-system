@@ -11,15 +11,15 @@ class TheBill extends StatelessWidget {
         title: const Text("The Bill"),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center ,
         children: [
           Expanded(
             child: ListView(
-              children: [
-                Text("Hello"),
-              ],
+              children: [Image.asset('assets/images/bill.jpg')],
             ),
           )
         ],
-      ),);
+      ),
+    );
   }
 }

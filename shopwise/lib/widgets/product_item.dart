@@ -11,17 +11,17 @@ class ProductListItem extends StatefulWidget {
   // final String brand;
   // final String imageUrl;
   // Function? onTapAdd;
-   ProductListItem(
-      {super.key,
-      required this.product,
-      required this.theList,
-      // required this.title,
-      // required this.description,
-      // required this.price,
-      // required this.brand,
-      // // required this.onTapAdd,
-      // required this.imageUrl
-      });
+  ProductListItem({
+    super.key,
+    required this.product,
+    required this.theList,
+    // required this.title,
+    // required this.description,
+    // required this.price,
+    // required this.brand,
+    // // required this.onTapAdd,
+    // required this.imageUrl
+  });
 
   @override
   State<ProductListItem> createState() => _ProductListItemState();
@@ -41,11 +41,14 @@ class _ProductListItemState extends State<ProductListItem> {
             leading: Image.network(widget.product.image, fit: BoxFit.fitHeight),
             title: Text(widget.product.title),
             subtitle: Text(widget.product.description),
-            trailing: const SizedBox(
+            trailing: SizedBox(
               width: 100,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [Text("Rs.100.00"), Text("Anchor")]),
+                  children: [
+                    Text("Rs.${widget.product.price}.00"),
+                    Text(widget.product.brand)
+                  ]),
             ),
             onTap: () {},
           ),
@@ -66,22 +69,24 @@ class _ProductListItemState extends State<ProductListItem> {
             Container(
               width: MediaQuery.of(context).size.width * 0.3,
               child: ElevatedButton(
-                
-                onPressed: clicked  ?  (){}:() {
-                  widget.theList.add(widget.product);
-                 
-                  print(widget.theList.length);
-            
-                  setState(() {
-                    clicked = true;
-                  });
-                  // Navigator.pop(context, product);
-                },
+                onPressed: clicked
+                    ? () {}
+                    : () {
+                        widget.theList.add(widget.product);
+
+                        print(widget.theList.length);
+
+                        setState(() {
+                          clicked = true;
+                        });
+                        // Navigator.pop(context, product);
+                      },
                 child: clicked ? Text("Added") : Text("Add Item"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: clicked ? Colors.grey : Colors.green,
-                    foregroundColor:  Colors.black,
-                    side: BorderSide(color: clicked ? Colors.grey : Colors.green)),
+                    backgroundColor: clicked ? Colors.grey : Colors.green,
+                    foregroundColor: Colors.black,
+                    side: BorderSide(
+                        color: clicked ? Colors.grey : Colors.green)),
               ),
             ),
             // SizedBox(

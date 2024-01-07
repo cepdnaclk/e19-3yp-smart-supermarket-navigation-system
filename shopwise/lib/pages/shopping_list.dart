@@ -14,7 +14,6 @@ class ShoppingList extends StatefulWidget {
 }
 
 class _ShoppingListState extends State<ShoppingList> {
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -22,6 +21,7 @@ class _ShoppingListState extends State<ShoppingList> {
 
     // Implement list save to MONGO DB
   }
+
   void addItem(Product product) {
     widget.shoppingList.add(product);
   }
@@ -56,44 +56,47 @@ class _ShoppingListState extends State<ShoppingList> {
                 },
               ),
             ),
-            ElevatedButton(
-              key: ValueKey("Add item"),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, // background
-                  foregroundColor: Colors.white // foreground
-                  ),
-              onPressed: () {
-                final Future<dynamic?> item = Navigator.pushNamed(
-                    context, SelectItems.routeName,
-                    arguments: {'shoppingList': widget.shoppingList});
-                item.then((result) {
-                  if (result is Product) {
-                    Product theProduct = result;
-                    setState(() {
-                      widget.shoppingList.add(theProduct);
-                    });
-                    print(result != null ? result.title : "No result");
-                  } else {
-                    print("Not a product");
-                    print(widget.shoppingList.length);
-                    setState(() {});
-                  }
-                  MongoDB_Service.initiateConnection();
-                  MongoDB_Service.insertData("products", {"title": "test"});
-                  MongoDB_Service.closeConnection();
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: ElevatedButton(
+                key: ValueKey("Add item"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green, // background
+                    foregroundColor: Colors.white // foreground
+                    ),
+                onPressed: () {
+                  final Future<dynamic?> item = Navigator.pushNamed(
+                      context, SelectItems.routeName,
+                      arguments: {'shoppingList': widget.shoppingList});
+                  item.then((result) {
+                    if (result is Product) {
+                      Product theProduct = result;
+                      setState(() {
+                        widget.shoppingList.add(theProduct);
+                      });
+                      print(result != null ? result.title : "No result");
+                    } else {
+                      print("Not a product");
+                      print(widget.shoppingList.length);
+                      setState(() {});
+                    }
+                    MongoDB_Service.initiateConnection();
+                    MongoDB_Service.insertData("products", {"title": "test"});
+                    MongoDB_Service.closeConnection();
 
-                  // if (result != null && result is Product) {
-                  //   String newItem = result;
-                  //   // Do something with the newItem string here
-                  //   setState(() {
-                  //     widget.shoppingList.add(newItem);
-                  //   });
-                  //   print(newItem);
-                  // }
-                });
-                print(item);
-              },
-              child: Text("Add Item"),
+                    // if (result != null && result is Product) {
+                    //   String newItem = result;
+                    //   // Do something with the newItem string here
+                    //   setState(() {
+                    //     widget.shoppingList.add(newItem);
+                    //   });
+                    //   print(newItem);
+                    // }
+                  });
+                  print(item);
+                },
+                child: Text("Add Item"),
+              ),
             )
           ],
         ),
