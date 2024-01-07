@@ -13,7 +13,7 @@ class Product {
     required this.price,
     required this.description,
     required this.brand,
-
+   
     required this.id,
   });
 

@@ -17,7 +17,16 @@ class SelectItems extends StatefulWidget {
         price: "100",
         description: "small one",
         brand: "Anchor",
-        id: "1")
+        id: "1"),
+    Product(
+        title: "Sugar",
+        image:
+            "https://5.imimg.com/data5/YD/DJ/MY-70422967/skyplus-sugar-500x500.jpg",
+        price: "100",
+        description: "small one",
+        brand: "Shy Plus",
+        id: "2"),
+        
   ];
 
   @override

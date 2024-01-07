@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise/models/product.dart';
 
-class ProductListItem extends StatelessWidget {
+class ProductListItem extends StatefulWidget {
   final Product product;
   final List<Product> theList;
 
@@ -24,6 +24,13 @@ class ProductListItem extends StatelessWidget {
       });
 
   @override
+  State<ProductListItem> createState() => _ProductListItemState();
+}
+
+class _ProductListItemState extends State<ProductListItem> {
+  var color = Colors.green;
+  var clicked = false;
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 110,
@@ -31,9 +38,9 @@ class ProductListItem extends StatelessWidget {
         Expanded(
           child: ListTile(
             // leading: const Image(image: AssetImage("assets/images/coke.jpg")),
-            leading: Image.network(product.image, fit: BoxFit.fitHeight),
-            title: Text(product.title),
-            subtitle: Text(product.description),
+            leading: Image.network(widget.product.image, fit: BoxFit.fitHeight),
+            title: Text(widget.product.title),
+            subtitle: Text(widget.product.description),
             trailing: const SizedBox(
               width: 100,
               child: Column(
@@ -48,21 +55,34 @@ class ProductListItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(
-              "Available",
-              style:
-                  TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Text(
+                "Available",
+                style:
+                    TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+              ),
             ),
-            OutlinedButton(
-              onPressed: () {
-                theList.add(product);
-                print(theList.length);
-                // Navigator.pop(context, product);
-              },
-              child: const Text("Add Item"),
-              style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.green,
-                  side: BorderSide(color: Colors.green)),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: ElevatedButton(
+                
+                onPressed: clicked  ?  (){}:() {
+                  widget.theList.add(widget.product);
+                 
+                  print(widget.theList.length);
+            
+                  setState(() {
+                    clicked = true;
+                  });
+                  // Navigator.pop(context, product);
+                },
+                child: clicked ? Text("Added") : Text("Add Item"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: clicked ? Colors.grey : Colors.green,
+                    foregroundColor:  Colors.black,
+                    side: BorderSide(color: clicked ? Colors.grey : Colors.green)),
+              ),
             ),
             // SizedBox(
             //   width: 2
