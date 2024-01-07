@@ -12,19 +12,21 @@
 #include <WiFiClientSecure.h>
 #include <WiFi.h>
 #include <Wire.h>
+#include <QMC5883LCompass.h>
 
 // Insert your network credentials
-#define WIFI_SSID "Dialog 4G 500"
-#define WIFI_PASSWORD "775bECe1"
+#define WIFI_SSID "Dialog 4G 932"
+#define WIFI_PASSWORD "B40a8EC1"
 
 #define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
-#define AWS_IOT_SUBSCRIBE_TOPIC "esp32/sub"
+#define AWS_IOT_SUBSCRIBE_TOPIC "esp32/test"
 
 WiFiClientSecure net = WiFiClientSecure();
 PubSubClient client(net);
 
 Adafruit_MPU6050 mpu;
-Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
+QMC5883LCompass compass;
+
 
 const int hallSensorPin = 34;
 
@@ -32,10 +34,13 @@ unsigned long sendDataPrevMillis = 0;
 int count = 0;
 int distance = 0;
 int currentStation = 0;
+int currentLocation = 0;
 
 //Define Ir Receiver pins
 #define DECODE_NEC     
 #define IR_RECEIVE_PIN  25
+#define wifiInd  16
+#define awsInd 17
 
 //Map 
  
@@ -45,21 +50,17 @@ int getMPUSensorReadings() {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
-  Serial.print("Accelerometer - X: ");
-  Serial.print(a.acceleration.x);
-  Serial.print(", Y: ");
-  Serial.print(a.acceleration.y);
-  Serial.print(", Z: ");
-  Serial.println(a.acceleration.z);
+  Serial.print("Acceleration - Y: ");
+  Serial.println(a.acceleration.y);
 
-  Serial.print("Gyroscope - X: ");
-  Serial.print(g.gyro.x);
-  Serial.print(", Y: ");
-  Serial.print(g.gyro.y);
-  Serial.print(", Z: ");
-  Serial.println(g.gyro.z);
+  // Serial.print("Gyroscope - X: ");
+  // Serial.print(g.gyro.x);
+  // Serial.print(", Y: ");
+  // Serial.print(g.gyro.y);
+  // Serial.print(", Z: ");
+  // Serial.println(g.gyro.z);
 
-  return a.acceleration.z;
+  return a.acceleration.y;
 }
 
 //Get Hall Effect Sensor data
@@ -72,47 +73,24 @@ int hallEffectSensor(){
 
 //Get Magnetometer data from HMC5883L
 int getMAGSensorReadings() {
-  sensors_event_t event;
-  mag.getEvent(&event);
+  int x, y, z, a, b;
+	char myArray[3];
+	
+	compass.read();
+  
+	x = compass.getX();
+	y = compass.getY();
+	z = compass.getZ();
+	
+	// Calculate heading angle
+  float heading = atan2(y, x) * 180.0 / PI;
 
+  // Adjust the heading to be in the range [0, 360)
+  if (heading < 0) {
+    heading += 360.0;
+  }
 
-/* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-  Serial.print("X: ");
-  Serial.print(event.magnetic.x);
-  Serial.print(" ");
-  Serial.print("Y: ");
-  Serial.print(event.magnetic.y);
-  Serial.print("");
-  Serial.print("Z: ");
-  Serial.print(event.magnetic.z);
-  Serial.print(" ");
-  Serial.println("uT");
-
-  float heading = atan2(event.magnetic.y, event.magnetic.x);
-
-// Once you have your heading, you must then add your ‘Declination Angle', which is the ‘Error' of the magnetic field in your location.
-// Find yours here: http://www.magnetic-declination.com/
-// Mine is: -13* 2′ W, which is ~13 Degrees, or (which we need) 0.22 radians
-// If you cannot find your Declination, comment out these two lines, your compass will be slightly off.
-  float declinationAngle = 0.22;
-  heading += declinationAngle;
-
-// Correct for when signs are reversed.
-  if(heading < 0)
-  heading += 2*PI;
-
-
-// Check for wrap due to addition of declination.
-  if(heading > 2*PI)
-  heading -= 2*PI;
-
-  // Convert radians to degrees for readability.
-  float headingDegrees = heading * 180/M_PI;
-
-  Serial.print("Heading (degrees): ");
-  Serial.println(headingDegrees);
-
-  return headingDegrees;
+  return heading;
 }
 
 //Read IR sensor data
@@ -127,7 +105,8 @@ int IrData(){
         }else{
           Serial.println();
         
-          int receivedCommand = IrReceiver.decodedIRData.command;
+          receivedCommand = IrReceiver.decodedIRData.command;
+  
           if(currentStation != receivedCommand){
               currentStation = receivedCommand;
               distance = 0;
@@ -139,6 +118,28 @@ int IrData(){
   
   }
 
+//Send Testing data to AWS
+void publishTestData()
+{
+  Serial.print("Publishing Test Data:");
+
+  StaticJsonDocument<200> doc;
+  doc["message"] = "This is Test Data , Connection was Successful";
+  doc["distance_Readings"] = distance;
+  doc["current_Station"] = currentStation;
+  doc["current_Location"] = currentLocation;
+  doc["current_Direction"] = getMAGSensorReadings();
+  doc["current_Acceleration"] = getMPUSensorReadings();
+  char jsonBuffer[512];
+  serializeJson(doc, jsonBuffer); // print to client
+ 
+  client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+
+  Serial.print("Successfully Publlished Test Data");
+
+}
+
+
 void messageHandler(char* topic, byte* payload, unsigned int length)
 {
   Serial.print("incoming: ");
@@ -147,6 +148,9 @@ void messageHandler(char* topic, byte* payload, unsigned int length)
   StaticJsonDocument<200> doc;
   deserializeJson(doc, payload);
   const char* message = doc["message"];
+  if(message == "test"){
+    publishTestData();
+  }
   Serial.println(message);
 }
 
@@ -161,6 +165,7 @@ void connectAWS()
     Serial.print(".");
     delay(300);
     }
+    digitalWrite(wifiInd, HIGH);
     Serial.println();
     Serial.print("Connected with IP: ");
     Serial.println(WiFi.localIP());
@@ -190,14 +195,14 @@ void connectAWS()
     Serial.println("AWS IoT Timeout!");
     return;
   }
- 
+  digitalWrite(awsInd, HIGH);
   // Subscribe to a topic
   client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
  
   Serial.println("AWS IoT Connected!");
 }
  
-void publishMessage()
+void publishMessage(int position)
 {
   Serial.print("Distance:");
   Serial.print(distance);
@@ -205,7 +210,8 @@ void publishMessage()
   Serial.println(currentStation);
   StaticJsonDocument<200> doc;
   doc["distance"] = distance;
-  doc["current Location"] = currentStation;
+  doc["current_Station"] = currentStation;
+  doc["current_Location"] = position;
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer); // print to client
  
@@ -215,7 +221,7 @@ void publishMessage()
 //Interupt for hall sensor for get distance
 void hallSensorInterrupt() {
     
-    distance += 10; // Add 10cm to the distance if the sensor value is high
+    distance += 15; // Add 10cm to the distance if the sensor value is high
     
 }
 
@@ -225,9 +231,13 @@ void setup() {
     Serial.begin(115200);
 
     attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, RISING);
-        
+
+    //Initiate Indicate LEDs
+    pinMode(wifiInd, OUTPUT); //WiFi indicator
+    pinMode(awsInd, OUTPUT); // AWS connection indicator
+
     //AWS Connect
-    //connectAWS();
+    connectAWS();
 
     //Ir Receive Begin    
     IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
@@ -239,56 +249,48 @@ void setup() {
     pinMode(hallSensorPin, INPUT); 
     pinMode(4, INPUT); 
 
-  // Wire.begin(); // Start the I2C communication
-  
-  // //Initialize MPU6050
-  // if (!mpu.begin()) {
-  //   Serial.println("Failed to find MPU6050 chip");
-  //   while (1) {
-  //     delay(10);
-  //   }
-  // }
 
-  // mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
-  // mpu.setGyroRange(MPU6050_RANGE_500_DEG);
-  // mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
+  Wire.begin(); // Start the I2C communication
   
-  // // Initialize HMC5883L
-  // if (!mag.begin()) {
-  //   Serial.println("Failed to find Magnetometer chip");
-  //   while (1) {
-  //     delay(10);
-  //   }
-  // }
+  //Initialize MPU6050
+  if (!mpu.begin()) {
+    Serial.println("Failed to find MPU6050 chip");
+    while (1) {
+      delay(10);
+    }
+  }
+
+  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+  mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
+  
+  // Initialize HMC5883L
+  compass.init();
   
   delay(20);
 }
 
 void loop() {
         int receivedCommand = IrData();
-        //int direction = getMAGSensorReadings();
+        int direction = getMAGSensorReadings();
         //hallEffectSensor();
-        // int acceleration = getMPUSensorReadings();
+        int acceleration = getMPUSensorReadings();
         
-        // int heading = 1;
-        // if(acceleration > 0){
-        //     heading = 1;
-        // }else{
-        //     heading = -1;
-        // }
-     int heading = 1;
-    int sensorValue = analogRead(4); 
-    sensorValue = map(sensorValue, 0, 4095, 0, 360);
-    Serial.print("Magnetometer Value: ");
-    Serial.println(sensorValue);
+        int heading = 1;
+        if(acceleration > 0){
+            heading = 1;
+        }else{
+            heading = 1;
+        }
 
-      supermarketMapper.updateLocation(currentStation, sensorValue, distance, heading);
-      supermarketMapper.displayLocation();
-        
-        // publishMessage();
-        // client.loop();
+  
+    supermarketMapper.updateLocation(receivedCommand, direction, distance, heading);
+      
+    currentLocation = supermarketMapper.displayLocation();
+    publishMessage(currentLocation);
+    client.loop();
 
-        delay(1500);
+    delay(1500);
 }
 
 
