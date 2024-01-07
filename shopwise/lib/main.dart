@@ -3,9 +3,6 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/chooseview.dart';
-import 'package:shopwise/pages/login_screen.dart';
-import 'package:shopwise/pages/products_list_page.dart';
-import 'package:shopwise/pages/register.dart';
 import 'package:shopwise/pages/select_items.dart';
 import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/startup.dart';
@@ -84,7 +81,9 @@ class _MyAppState extends State<MyApp> {
             StartupPage.routeName, // Set the startup page as the initial route
         routes: {
           StartupPage.routeName: (context) => StartupPage(),
+
           Choose.routeName: (context) => AuthenticatedView(child: Choose()),
+
           ShoppingList.routeName: (context) =>
               AuthenticatedView(child: ShoppingList()),
           SelectItems.routeName: (context) =>

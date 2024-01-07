@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
-
   CustomButton({
-    Key? key,
+    super.key,
     required this.textColor,
     required this.buttonColor,
     required this.text,
@@ -11,7 +11,12 @@ class CustomButton extends StatelessWidget {
     this.icon,
     this.iconImage,
     this.iconImageSize = 20,
-  }):super(key: key);
+    this.padding = const EdgeInsets.all(10),
+    this.margin = const EdgeInsets.all(10),
+    this.buttonHeight = 40,
+    this.buttonWidth=200,
+
+  });
 
   final Color textColor;
   final Color buttonColor;
@@ -19,38 +24,58 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   IconData? icon;
   Image? iconImage;
-  double buttonWidth = 200;
-  double buttonHeight = 40;
+  double buttonWidth;
+  double buttonHeight;
   double iconImageSize;
+  EdgeInsets padding;
+  EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: margin,
+      padding: padding,
       width: buttonWidth,
       height: buttonHeight,
       child: TextButton(
-        onPressed: onPressed,
+        onPressed: onPressed, // Pass the onPressed callback to the TextButton
         style: TextButton.styleFrom(
           backgroundColor: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
         ),
-        child: icon != null || iconImage!=null ? Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            icon != null ? Icon(icon,color: textColor,) : SizedBox(
-                      width: iconImageSize,
-                      height: iconImageSize,
-                      child: iconImage,
+        child: icon != null || iconImage != null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  icon != null
+                      ? Icon(icon, color: textColor)
+                      : SizedBox(
+                          width: iconImageSize,
+                          height: iconImageSize,
+                          child: iconImage,
+                        ),
+                  const SizedBox(width: 10),
+                  Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: textColor,
+                      fontWeight: FontWeight.bold,
                     ),
-            const SizedBox(width: 10),
-            Text(text,style: TextStyle(fontSize: 16,color: textColor,fontWeight:FontWeight.bold),),
-          ],
-        ): 
-        Text(text,style: TextStyle(fontSize: 16,color: textColor,fontWeight:FontWeight.bold),),
-      )
-      
+                  ),
+                ],
+              )
+            : Text(
+                text,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+      ),
     );
   }
 }
