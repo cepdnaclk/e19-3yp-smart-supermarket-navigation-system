@@ -4,6 +4,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/pages/login_screen.dart';
+import 'package:shopwise/pages/mqtt_client_test.dart';
 import 'package:shopwise/pages/products_list_page.dart';
 import 'package:shopwise/pages/register.dart';
 import 'package:shopwise/pages/select_items.dart';
@@ -89,6 +90,7 @@ class _MyAppState extends State<MyApp> {
               AuthenticatedView(child: ShoppingList()),
           SelectItems.routeName: (context) =>
               AuthenticatedView(child: SelectItems()),
+              MQTTClientTest.routeName: (context) => AuthenticatedView(child: MQTTClientTest()),
           // LoginScreen.routeName: (context) => const LoginScreen(),
         },
         // home: const MyHomePage(title: 'Shop Wise'),

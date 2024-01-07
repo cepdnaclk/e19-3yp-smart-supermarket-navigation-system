@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
 import 'package:shopwise/pages/login_screen.dart';
+import 'package:shopwise/pages/scan_barcode_view.dart';
 import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/pages/mqtt_client_test.dart';
@@ -65,7 +66,7 @@ class Choose extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => MQTTClientTest(),
+                        builder: (context) => ScanBarcode(),
                       ),
                     );
                   },

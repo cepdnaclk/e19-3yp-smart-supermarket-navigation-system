@@ -6,6 +6,7 @@ import 'package:shopwise/services/mqtt_service.dart';
 
 
 class MQTTClientTest extends StatefulWidget {
+  static const String routeName = '/mqttClientTest';
   const MQTTClientTest({Key? key}) : super(key: key);
 
   @override
