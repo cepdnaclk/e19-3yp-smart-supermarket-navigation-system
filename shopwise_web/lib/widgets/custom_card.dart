@@ -20,7 +20,7 @@ class CustomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return Container(
+  return SizedBox(
     width: width, // Set the desired width value
     height: height, // Set the desired height value
     child: Card(
