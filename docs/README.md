@@ -21,7 +21,6 @@ title: Smart Supermarket Navigation System
 -  E/19/017, W.A.S. Amanda, [e19017@eng.pdn.ac.lk](mailto:e19017@eng.pdn.ac.lk)
 -  E/19/057, C.O. Colombage, [e19057@eng.pdn.ac.lk](mailto:e19057@eng.pdn.ac.lk)
 -  E/19/210, R.P.J.R.Kumarasiri, [e19210@eng.pdn.ac.lk](mailto:e19210@eng.pdn.ac.lk)
--  E/19/210, R.P.J.R.Kumarasiri, [e19210@eng.pdn.ac.lk](mailto:e19210@eng.pdn.ac.lk)
 -  E/19/409, D.P. Udugamsooriya, [e19409@eng.pdn.ac.lk](mailto:e19409@eng.pdn.ac.lk)
 -  E/19/413, G.G.N. Viduranga, [e19413@eng.pdn.ac.lk](mailto:e19413@eng.pdn.ac.lk)
 
@@ -53,7 +52,7 @@ Join us on this transformative journey as we embark on the mission to not just i
 ## Solution Architecture
 
 <center>
-<img src="./images/arch_new.png" alt="Image" style="width:434px;height:275px;">
+<img src="./images/arch_3ms.jpg" alt="Image" style="width:434px;height:275px;">
 </center>
 <center>
 The solution architecture of our smart indoor navigation system is designed to provide efficient navigation and real-time tracking for customers within a premises. It utilizes IR bases and IR receivers as the primary hardware components and relies on AWS Iot core as the underlying technology, with the Amazon DynamoDB Database serving as the main database. The system caters to two main user groups: administrators and customers. Administrators have the ability to update map data, prices, and other relevant information, while customers can utilize the system to locate products on their shopping lists and receive real-time tracking updates. Additionally, the solution architecture utilizes the MQTT protocol for data transmission, ensuring secure communication between the different components.
@@ -87,6 +86,7 @@ Base Stations
 <br>
 <center>
 <img src="./images/base_station.png" alt="Image" style="width:384px;height:216px;">
+<img src="./images/base_station_scheme.png" alt="Image" style="width:384px;height:216px;">
 </center>
 
 Cart Module
@@ -94,6 +94,20 @@ Cart Module
 <br>
 <center>
 <img src="./images/cart_module.png" alt="Image" style="width:384px;height:216px;">
+<img src="./images/Cart_Schematic.png" alt="Image" style="width:384px;height:216px;">
+</center>
+
+## PCB Designs
+
+<center>
+<figure>
+<img src="./images/bs_angle.png" alt="Image" style="width:384px;height:216px;">
+<figcaption>Base Station PCB Design</figcaption>
+</figure>
+<figure>
+<img src="./images/cart_angle.png" alt="Image" style="width:384px;height:216px;">
+<figcaption>Cart PCB Design</figcaption>
+</figure>
 </center>
 
 
@@ -104,7 +118,7 @@ Cart Module
 
 
 <center>
-In the realm of Flutter testing, unit testing involves scrutinizing isolated functions or methods to verify their correctness and functionality. As an example, we perform unit testing on the ShopWise app by meticulously testing the function responsible for adding items to the grocery list, ensuring accurate and reliable outcomes. Moving to widget testing, the focus shifts to examining the interaction and behavior of individual UI components. In the context of our ShopWise app, widget testing would involve assessing the seamless integration of a text input field and a button used to add a grocery item, ensuring a user-friendly and glitch-free experience. Lastly, integrated testing provides a holistic evaluation by scrutinizing the application as a whole, and simulating real-world scenarios. Taking our ShopWise app example, integrated testing could involve running the app on an emulator and systematically testing all related functionalities, from item addition to the overall user interface, to ensure a robust and cohesive user experience.
+In Flutter testing, unit testing involves scrutinizing isolated functions or methods to verify their correctness and functionality. As an example, we perform unit testing on the ShopWise app by meticulously testing the function responsible for adding items to the grocery list, ensuring accurate and reliable outcomes. Moving to widget testing, the focus shifts to examining the interaction and behavior of individual UI components. In the context of our ShopWise app, widget testing would involve assessing the seamless integration of a text input field and a button used to add a grocery item, ensuring a user-friendly and glitch-free experience. Lastly, integrated testing provides a holistic evaluation by scrutinizing the application as a whole, and simulating real-world scenarios. Taking our ShopWise app example, integrated testing could involve running the app on an emulator and systematically testing all related functionalities, from item addition to the overall user interface, to ensure a robust and cohesive user experience.
 <br>
 <br>
 </center>
