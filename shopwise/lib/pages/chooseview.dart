@@ -43,6 +43,8 @@ class Choose extends StatelessWidget {
                 height: 50,
                 width: 300,
                 child: ElevatedButton(
+                  key: ValueKey("starts"),
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).secondaryHeaderColor,
                     foregroundColor: Colors.black,

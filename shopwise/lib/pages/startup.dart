@@ -22,11 +22,13 @@ class _StartupPageState extends State<StartupPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Image(
+            key: ValueKey("logo"),
             image: AssetImage("assets/images/shopwise_logo.png"),
             width: 350,
             height: 350,
           ),
           const Text(
+            
             "Let us make your day!",
             style: TextStyle(
               fontSize: 20,
@@ -37,6 +39,7 @@ class _StartupPageState extends State<StartupPage> {
             height: 50,
           ),
           AnimatedButton(
+            key: ValueKey("start"),
             onPress: () {
               Future.delayed(Duration(milliseconds: 500), () {
                 Navigator.pushReplacementNamed(context, Choose.routeName);
