@@ -317,7 +317,7 @@ class LineChartSample1State extends State<LineChartSample1> {
                 height: 37,
               ),
               const Text(
-                'Monthly Sales',
+                'Week overview',
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 32,
