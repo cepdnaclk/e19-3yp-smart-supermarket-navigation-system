@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise/models/product.dart';
 import 'package:shopwise/pages/select_items.dart';
+import 'package:shopwise/widgets/added_item.dart';
 
 class ShoppingList extends StatefulWidget {
   static const String routeName = '/shoppingList';
@@ -12,6 +13,14 @@ class ShoppingList extends StatefulWidget {
 }
 
 class _ShoppingListState extends State<ShoppingList> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    // Implement list save to MONGO DB
+  }
   void addItem(Product product) {
     widget.shoppingList.add(product);
   }
@@ -29,16 +38,32 @@ class _ShoppingListState extends State<ShoppingList> {
               child: ListView.builder(
                 itemCount: widget.shoppingList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(widget.shoppingList[index].title),
-                  );
+                  return Dismissible(
+                      background: Container(
+                        color: Colors.red,
+                      ),
+                      key: UniqueKey(),
+                      onDismissed: (DismissDirection direction) {
+                        setState(() {
+                          widget.shoppingList.removeAt(index);
+                        });
+                      },
+                      child: AddedItem(
+                        product: widget.shoppingList[index],
+                        theList: widget.shoppingList,
+                      ));
                 },
               ),
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // background
+                  foregroundColor: Colors.white // foreground
+                  ),
               onPressed: () {
-                final Future<dynamic?> item =
-                    Navigator.pushNamed(context, SelectItems.routeName, arguments: {'shoppingList':widget.shoppingList});
+                final Future<dynamic?> item = Navigator.pushNamed(
+                    context, SelectItems.routeName,
+                    arguments: {'shoppingList': widget.shoppingList});
                 item.then((result) {
                   if (result is Product) {
                     Product theProduct = result;
@@ -49,9 +74,7 @@ class _ShoppingListState extends State<ShoppingList> {
                   } else {
                     print("Not a product");
                     print(widget.shoppingList.length);
-                    setState(() {
-                        
-                    });
+                    setState(() {});
                   }
 
                   // if (result != null && result is Product) {

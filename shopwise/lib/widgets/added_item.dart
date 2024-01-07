@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise/models/product.dart';
 
-class AddedItem extends StatelessWidget {
+class AddedItem extends StatefulWidget {
   final Product product;
+  final List<Product> theList;
+
 
   // final String title;
   // final String description;
@@ -13,6 +15,8 @@ class AddedItem extends StatelessWidget {
   AddedItem({
     super.key,
     required this.product,
+      required this.theList,
+
     // required this.title,
     // required this.description,
     // required this.price,
@@ -22,16 +26,21 @@ class AddedItem extends StatelessWidget {
   });
 
   @override
+  State<AddedItem> createState() => _AddedItemState();
+}
+
+class _AddedItemState extends State<AddedItem> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 110,
+      height: 80,
       child: Column(children: [
         Expanded(
           child: ListTile(
             // leading: const Image(image: AssetImage("assets/images/coke.jpg")),
-            leading: Image.network(product.image, fit: BoxFit.fitHeight),
-            title: Text(product.title),
-            subtitle: Text(product.description),
+            leading: Image.network(widget.product.image, fit: BoxFit.fitHeight),
+            title: Text(widget.product.title),
+            subtitle: Text(widget.product.description),
             trailing: const SizedBox(
               width: 100,
               child: Column(
@@ -42,34 +51,34 @@ class AddedItem extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              "Available",
-              style:
-                  TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
-            ),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.pop(context, product);
-              },
-              child: const Text("Add Item"),
-              style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.green,
-                  side: BorderSide(color: Colors.green)),
-            ),
-            // SizedBox(
-            //   width: 2
-            // ),
-            // const SizedBox(width: 100),
-            // IconButton(onPressed: () {}, icon: Icon(Icons.delete_outline)),
-            // IconButton(onPressed: () {}, icon: Icon(Icons.remove)),
-            // Text("1"),
-            // IconButton(onPressed: () {}, icon: Icon(Icons.add)),
-          ],
-        )
+        // Row(
+        //   mainAxisSize: MainAxisSize.max,
+        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //   children: [
+        //     Text(
+        //       "Available",
+        //       style:
+        //           TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+        //     ),
+        //     OutlinedButton(
+        //       onPressed: () {
+        //         Navigator.pop(context, product);
+        //       },
+        //       child: const Text("Add Item"),
+        //       style: OutlinedButton.styleFrom(
+        //           foregroundColor: Colors.green,
+        //           side: BorderSide(color: Colors.green)),
+        //     ),
+        //     // SizedBox(
+        //     //   width: 2
+        //     // ),
+        //     // const SizedBox(width: 100),
+        //     // IconButton(onPressed: () {}, icon: Icon(Icons.delete_outline)),
+        //     // IconButton(onPressed: () {}, icon: Icon(Icons.remove)),
+        //     // Text("1"),
+        //     // IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+        //   ],
+        // )
       ]),
     );
   }

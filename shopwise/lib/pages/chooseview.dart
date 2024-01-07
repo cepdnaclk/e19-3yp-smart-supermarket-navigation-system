@@ -25,7 +25,7 @@ class Choose extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).secondaryHeaderColor,
+        // backgroundColor: Theme.of(context).secondaryHeaderColor,
         title: const Text("On your way!"),
       ),
       body: Center(
