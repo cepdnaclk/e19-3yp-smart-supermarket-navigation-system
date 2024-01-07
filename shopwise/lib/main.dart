@@ -33,7 +33,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -55,10 +55,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Authenticator(
-      
-     
       child: MaterialApp(
-        
         // builder: Authenticator.builder(),
         debugShowCheckedModeBanner: false,
         title: 'Shopwise',
@@ -66,11 +63,11 @@ class _MyAppState extends State<MyApp> {
           // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ).copyWith(
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
           primaryColor: Colors.white,
           secondaryHeaderColor: AppColors.primaryColor,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-    
               backgroundColor: const Color.fromARGB(1, 40, 185, 54),
             ),
           ),
@@ -83,16 +80,19 @@ class _MyAppState extends State<MyApp> {
             elevation: 4, // Add shadow to app bar
           ),
         ),
-        initialRoute: StartupPage.routeName, // Set the startup page as the initial route
+        initialRoute:
+            StartupPage.routeName, // Set the startup page as the initial route
         routes: {
           StartupPage.routeName: (context) => StartupPage(),
           Choose.routeName: (context) => AuthenticatedView(child: Choose()),
-          ShoppingList.routeName: (context) => AuthenticatedView(child: ShoppingList()),
-          SelectItems.routeName: (context) => AuthenticatedView(child: SelectItems()),
+          ShoppingList.routeName: (context) =>
+              AuthenticatedView(child: ShoppingList()),
+          SelectItems.routeName: (context) =>
+              AuthenticatedView(child: SelectItems()),
           // LoginScreen.routeName: (context) => const LoginScreen(),
         },
         // home: const MyHomePage(title: 'Shop Wise'),
-    
+
         // home: StartupPage(),
       ),
     );
