@@ -3,7 +3,7 @@ import 'package:shopwise_web/pages/dashboard/chart_built_in.dart';
 import 'package:shopwise_web/pages/dashboard/card_grid_view.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();

@@ -85,7 +85,9 @@ class _MyAppState extends State<MyApp> {
             StartupPage.routeName, // Set the startup page as the initial route
         routes: {
           StartupPage.routeName: (context) => StartupPage(),
+
           Choose.routeName: (context) => AuthenticatedView(child: Choose()),
+
           ShoppingList.routeName: (context) =>
               AuthenticatedView(child: ShoppingList()),
           SelectItems.routeName: (context) =>

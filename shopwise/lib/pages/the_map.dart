@@ -1,7 +1,9 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shopwise/pages/pixel.dart';
 import 'package:shopwise/pages/player.dart';
+import 'package:shopwise/pages/product.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
@@ -36,6 +38,10 @@ class _TheMapState extends State<TheMap> {
     104
   ];
 
+  List<int> products = [147, 115];
+
+  List<int> promotions = [125];
+
   String _scanBarcodeResult = '';
 
   @override
@@ -62,10 +68,37 @@ class _TheMapState extends State<TheMap> {
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     if (player == index) {
+                      if (promotions.contains(index - 1) ||
+                          promotions.contains(index + 1)) {
+                        print("Hi");
+                        final snackBar = SnackBar(
+                          /// need to set following properties for best effect of awesome_snackbar_content
+                          elevation: 0,
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Colors.transparent,
+                          content: AwesomeSnackbarContent(
+                            title: 'Promotion Alert!',
+                            message: '25% off',
+
+                            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                            contentType: ContentType.success,
+                          ),
+                        );
+
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(snackBar);
+                      }
                       return Container(
                         color: Colors
                             .grey, // Replace with your desired background color
                         child: MyPlayer(),
+                      );
+                    } else if (products.contains(index)) {
+                      //listing the shopping list numbers
+                      return MyPixel(
+                        color: Colors.green,
+                        child: Text((products.indexOf(index) + 1).toString()),
                       );
                     } else if (barriers.contains(index)) {
                       return MyPixel(
