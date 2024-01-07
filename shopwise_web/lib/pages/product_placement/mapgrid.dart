@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class MapGrid extends StatefulWidget {
-  const MapGrid({Key? key}) : super(key: key);
+  const MapGrid({super.key});
 
   @override
   _MapGridState createState() => _MapGridState();
@@ -19,8 +18,8 @@ class GridCell {
 }
 
 class _MapGridState extends State<MapGrid> {
-  TextEditingController _textFieldController1 = TextEditingController();
-  TextEditingController _textFieldController2 = TextEditingController();
+  final TextEditingController _textFieldController1 = TextEditingController();
+  final TextEditingController _textFieldController2 = TextEditingController();
 
   Map<String, bool> tappedCells = {};
 
@@ -29,10 +28,10 @@ class _MapGridState extends State<MapGrid> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 196, 218, 200),
+          backgroundColor: const Color.fromARGB(255, 196, 218, 200),
           title: Text(
             'Cell ${cell.id}',
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           content: Column(
@@ -41,14 +40,14 @@ class _MapGridState extends State<MapGrid> {
               // Add your text fields or any other content here
               TextField(
                 controller: _textFieldController1,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Item Id',
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 controller: _textFieldController2,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Item Name',
                 ),
               ),

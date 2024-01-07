@@ -79,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                       CustomButton(
                         textColor: Colors.black,
                         buttonColor: Colors.white70,
+                        buttonHeight: 60,
                         text: "Log In",
                         onPressed: () {
                           //authentication part
