@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise/models/product.dart';
 import 'package:shopwise/pages/select_items.dart';
+import 'package:shopwise/services/mongodb_service.dart';
 import 'package:shopwise/widgets/added_item.dart';
 
 class ShoppingList extends StatefulWidget {
@@ -56,6 +57,7 @@ class _ShoppingListState extends State<ShoppingList> {
               ),
             ),
             ElevatedButton(
+              key: ValueKey("Add item"),
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green, // background
                   foregroundColor: Colors.white // foreground
@@ -76,6 +78,9 @@ class _ShoppingListState extends State<ShoppingList> {
                     print(widget.shoppingList.length);
                     setState(() {});
                   }
+                  MongoDB_Service.initiateConnection();
+                  MongoDB_Service.insertData("products", {"title": "test"});
+                  MongoDB_Service.closeConnection();
 
                   // if (result != null && result is Product) {
                   //   String newItem = result;
