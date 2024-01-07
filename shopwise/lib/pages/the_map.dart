@@ -1,11 +1,14 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/billing_view.dart';
 
 import 'package:shopwise/pages/pixel.dart';
 import 'package:shopwise/pages/player.dart';
 import 'package:shopwise/pages/product.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:shopwise/widgets/barcode_scanner.dart';
+import 'package:shopwise/widgets/qrcode_scanner.dart';
 
 class TheMap extends StatefulWidget {
   final Stream<String> directionStream;
@@ -161,12 +164,38 @@ class _TheMapState extends State<TheMap> {
                     ),
                   ),
                 ), */
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      scanBarcode();
+                      // Navigator.pushNamed(context, BarcodeReader.routeName);
+                    },
+                    child: Text("Scan Barcode")),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.red,
+                    ),
+                    onPressed: () {
+                      _showExitConfirmationDialog(context);
+                    },
+                    child: Text("End Shopping")),
+              ),
             ],
           ),
         );
       },
     );
   }
+
+  
 
   void scanBarcode() async {
     String barcodeScanRes;
@@ -180,4 +209,39 @@ class _TheMapState extends State<TheMap> {
       _scanBarcodeResult = barcodeScanRes;
     });
   }
+
+
+
+ void _showExitConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Exit Confirmation'),
+          content: Text('Are you sure you want to exit?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Navigator.pop will pop the dialog without any action
+                Navigator.pop(context);
+              },
+              child: Text('No', style: TextStyle(color: Colors.black)),
+            ),
+            TextButton(
+              onPressed: () {
+                // Navigator.pushReplacement will navigate to a new screen
+                Navigator.pushReplacementNamed(
+                  context,
+                  TheBill.routeName,
+                );
+              },
+              child: Text('Yes', style: TextStyle(color: Colors.red),),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
 }

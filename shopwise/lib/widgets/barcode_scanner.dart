@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class BarcodeReader extends StatefulWidget {
+  static const routeName = '/barcode-reader';
   const BarcodeReader({super.key});
 
   @override
@@ -68,6 +69,7 @@ class _BarcodeReaderState extends State<BarcodeReader> {
             ),
             Text("Barcode Result : $_scanBarcodeResult",
                 style: TextStyle(fontSize: 20, color: Colors.black)),
+
           ],
         ),
       ),

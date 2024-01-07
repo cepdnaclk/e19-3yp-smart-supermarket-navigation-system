@@ -2,6 +2,7 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/billing_view.dart';
 import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/pages/login_screen.dart';
 import 'package:shopwise/pages/mqtt_client_test.dart';
@@ -11,6 +12,8 @@ import 'package:shopwise/pages/select_items.dart';
 import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/utils/colors.dart';
+import 'package:shopwise/widgets/barcode_scanner.dart';
+import 'package:shopwise/widgets/qrcode_scanner.dart';
 
 import 'amplifyconfiguration.dart';
 
@@ -93,6 +96,9 @@ class _MyAppState extends State<MyApp> {
           SelectItems.routeName: (context) =>
               AuthenticatedView(child: SelectItems()),
               MQTTClientTest.routeName: (context) => AuthenticatedView(child: MQTTClientTest()),
+              BarcodeReader.routeName: (context) => AuthenticatedView(child: BarcodeReader()),
+              TheBill.routeName: (context) => AuthenticatedView(child: TheBill()),
+              // QR_Code_Scanner.routeName: (context) => AuthenticatedView(child: QR_Code_Scanner()),
           // LoginScreen.routeName: (context) => const LoginScreen(),
         },
         // home: const MyHomePage(title: 'Shop Wise'),
