@@ -10,21 +10,15 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
 
-
-
 class MQTT_Service {
-
   static String statusText = "Status Text";
   static String location = "Location";
   static bool isConnected = false;
-   
 
-    static final MqttServerClient client =
+  static MqttServerClient client =
       MqttServerClient('a2yj8j5za4742r-ats.iot.eu-north-1.amazonaws.com', '');
 
-static StreamController<String> streamController = StreamController<String>();
-
-
+  static StreamController<String> streamController = StreamController<String>();
 
   static Future<bool> mqttConnect(String uniqueId) async {
     setStatus("Connecting to AWS IoT...");
@@ -79,9 +73,8 @@ static StreamController<String> streamController = StreamController<String>();
   static void setStatus(String content) {
     getJson(content);
     statusText = content;
-
   }
-  
+
   static void getJson(String message) {
     print("Trying.......................................................");
     print(message);
@@ -89,10 +82,8 @@ static StreamController<String> streamController = StreamController<String>();
       dynamic json = jsonDecode(message);
       streamController.add(json['current_Location'].toString());
 
-    
-        location = json['current_Location'].toString();
-     
-      
+      location = json['current_Location'].toString();
+
       print(json);
     } catch (e) {
       print("Occurredd............");
@@ -102,17 +93,14 @@ static StreamController<String> streamController = StreamController<String>();
 
   static void onConnected() {
     setStatus("Client connected");
- 
   }
 
   static void onDisconnected() {
-
-
     setStatus("Client disconnected");
     isConnected = false;
   }
 
-  static  void pong() {
+  static void pong() {
     print("ping response invoked");
   }
 
