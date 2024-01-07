@@ -19,7 +19,7 @@ class _ProductsListPageState extends State<ProductsListPage> {
           children: [
             Expanded(
               child: ListView(
-                children: [ProductListItem()],
+                children: [Text("Hello")],
               ),
             )
           ],

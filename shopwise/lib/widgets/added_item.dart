@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise/models/product.dart';
 
-class ProductListItem extends StatelessWidget {
+class AddedItem extends StatelessWidget {
   final Product product;
-  final List<Product> theList;
 
   // final String title;
   // final String description;
@@ -11,17 +10,16 @@ class ProductListItem extends StatelessWidget {
   // final String brand;
   // final String imageUrl;
   // Function? onTapAdd;
-   ProductListItem(
-      {super.key,
-      required this.product,
-      required this.theList,
-      // required this.title,
-      // required this.description,
-      // required this.price,
-      // required this.brand,
-      // // required this.onTapAdd,
-      // required this.imageUrl
-      });
+  AddedItem({
+    super.key,
+    required this.product,
+    // required this.title,
+    // required this.description,
+    // required this.price,
+    // required this.brand,
+    // // required this.onTapAdd,
+    // required this.imageUrl
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +53,7 @@ class ProductListItem extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {
-                theList.add(product);
-                print(theList.length);
-                // Navigator.pop(context, product);
+                Navigator.pop(context, product);
               },
               child: const Text("Add Item"),
               style: OutlinedButton.styleFrom(
