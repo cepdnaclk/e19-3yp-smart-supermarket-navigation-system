@@ -4,8 +4,7 @@
 #include "SupermarketMapper.h"
 #include <IRremote.hpp>
 #include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_HMC5883_U.h> 
+#include <Adafruit_Sensor.h> 
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include "Secret.h"
