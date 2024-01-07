@@ -53,7 +53,7 @@ class _SideNavBarState extends State<SideNavBar> {
                     child: Center(
                   child: AnimatedBuilder(
                     animation: _controller,
-                    builder: (context, child) {
+                    builder: (context,child) {
                       switch (_controller.selectedIndex) {
                         case 0:
                           _key.currentState?.closeDrawer();

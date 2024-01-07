@@ -19,7 +19,7 @@ class _PlacementState extends State<Placement> {
         body: Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(children: [
-        Text(
+        const Text(
           "Layout Update",
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-
 class ProduceTable extends StatefulWidget {
   final int index;
 
-  const ProduceTable({super.key, required this.index});
+  
+  const ProduceTable({Key? key, required this.index}) : super(key: key);
 
   @override
   State<ProduceTable> createState() => _ProduceTableState();
@@ -14,6 +14,7 @@ class _ProduceTableState extends State<ProduceTable> {
 
   @override
   Widget build(BuildContext context) {
+
     return Center(
       child: Column(
         children: [
@@ -24,7 +25,7 @@ class _ProduceTableState extends State<ProduceTable> {
                     width: 200,
                     alignment: Alignment.center,
                     child: const Text(
-                      "Product Name",
+                      "Product Id",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -34,7 +35,7 @@ class _ProduceTableState extends State<ProduceTable> {
                       width: 200,
                       alignment: Alignment.center,
                       child: const Text(
-                        "Category",
+                        "Name",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       )),
                   numeric: true),
@@ -117,7 +118,6 @@ class ProductsTableDataSource extends DataTableSource {
       break;
     }
 
-
     return products.map((product) {
       return DataRow(cells: [
         DataCell(Container(
@@ -163,8 +163,6 @@ class ProductsTableDataSource extends DataTableSource {
     );
   }
 
-
-  
   @override
   int get rowCount => products.length;
 

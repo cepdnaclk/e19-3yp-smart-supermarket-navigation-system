@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise_web/pages/product_types/additem_popup.dart';
 import 'package:shopwise_web/pages/product_types/product_tables.dart';
 
 class ProductsHome extends StatefulWidget {
@@ -11,7 +12,7 @@ class ProductsHome extends StatefulWidget {
 class _ProductsHomeState extends State<ProductsHome> {
   int tableIndex = 0;
 
-  List<String> categories = [
+  List<String>? categories = [
     'Produce',
     'Meat',
     'Beverages',
@@ -36,30 +37,41 @@ class _ProductsHomeState extends State<ProductsHome> {
             Container(
               padding: const EdgeInsets.all(5.0),
               height: 50, // Set a fixed height for the container
-              child: createCategoryButtons(categories),
+              child: createCategoryButtons(categories!),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black12,
+              child: SingleChildScrollView(
+                child: SingleChildScrollView(
+                  scrollDirection:Axis.horizontal,
+                  child: Container(
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.black12,
+                    ),
+                    child: loadTable(
+                        tableIndex), //this should load according to the state of the button
+                  ),
                 ),
-                child: loadTable(
-                    tableIndex), //this should load according to the state of the button
               ),
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(onPressed: (){
+              //open popup box to add new product
+              showDialog(context: context, builder: (context) => AddProductPopup(index: tableIndex));
+            }, child: const Text('Add New Product',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold))),
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
-  Widget createCategoryButtons(List<String> categories) {
+  Widget createCategoryButtons(List<String>? categories) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: categories.length,
+      itemCount:  categories!=null? categories.length:0,
       itemBuilder: (context, index) {
         return Container(
           margin: const EdgeInsets.only(right: 20),
@@ -72,7 +84,7 @@ class _ProductsHomeState extends State<ProductsHome> {
               setState(() {
                 tableIndex = index;
               });
-              print('Button pressed for category: ${categories[index]}');
+              
             }, // Pass the onPressed callback to the TextButton
             style: TextButton.styleFrom(
               backgroundColor: const Color.fromARGB(204, 149, 211, 160),
@@ -81,7 +93,7 @@ class _ProductsHomeState extends State<ProductsHome> {
               ),
             ),
             child: Text(
-              categories[index],
+              categories != null ? categories[index]:"",
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black,
@@ -97,16 +109,13 @@ class _ProductsHomeState extends State<ProductsHome> {
   Widget loadTable(int index) {
     switch (index) {
       case 0:
-        return const ProduceTable(index : 0);
+        return const ProduceTable(key: Key('produce_table_0'),index : 0);
       case 1:
-        return const ProduceTable(index : 1);
+        return const ProduceTable(key: Key('produce_table_1'),index : 1);
       case 2:
-        // Perform loading logic for Beverages table
-        return const ProduceTable(index : 2);
+        return const ProduceTable(key: Key('produce_table_2'),index : 2);
       default:
-        // Handle invalid index
-        return const ProduceTable(index: 0);
+        return const ProduceTable(key: Key('produce_table_0'),index: 0);
     }
   }
 }
-
