@@ -60,6 +60,7 @@ class _MyAppState extends State<MyApp> {
           // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ).copyWith(
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
           primaryColor: Colors.white,
           secondaryHeaderColor: AppColors.primaryColor,
           elevatedButtonTheme: ElevatedButtonThemeData(
@@ -80,8 +81,9 @@ class _MyAppState extends State<MyApp> {
             StartupPage.routeName, // Set the startup page as the initial route
         routes: {
           StartupPage.routeName: (context) => StartupPage(),
-          Choose.routeName: (context) =>
-              const AuthenticatedView(child: Choose()),
+
+          Choose.routeName: (context) => AuthenticatedView(child: Choose()),
+
           ShoppingList.routeName: (context) =>
               AuthenticatedView(child: ShoppingList()),
           SelectItems.routeName: (context) =>

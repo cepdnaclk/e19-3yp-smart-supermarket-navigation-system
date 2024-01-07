@@ -1,25 +1,19 @@
 class Product {
-  final String name;
+  final String title;
   final String image;
   final String price;
   final String description;
-  final String category;
   final String brand;
-  final String rating;
-  final String numReviews;
-  final String countInStock;
+  
   final String id;
 
   Product({
-    required this.name,
+    required this.title,
     required this.image,
     required this.price,
     required this.description,
-    required this.category,
     required this.brand,
-    required this.rating,
-    required this.numReviews,
-    required this.countInStock,
+   
     required this.id,
   });
 

@@ -15,7 +15,10 @@ class MQTT_Service {
   static String location = "Location";
   static bool isConnected = false;
 
-  static MqttServerClient client =
+   
+/// Mock client can't be created with final client
+    static final MqttServerClient client =
+
       MqttServerClient('a2yj8j5za4742r-ats.iot.eu-north-1.amazonaws.com', '');
 
   static StreamController<String> streamController = StreamController<String>();
