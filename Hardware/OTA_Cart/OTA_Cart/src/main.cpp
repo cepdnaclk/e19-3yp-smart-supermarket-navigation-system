@@ -1,27 +1,71 @@
-#include <Arduino.h>
 /*
- * This ESP32 code is created by esp32io.com
- *
- * This ESP32 code is released in the public domain
- *
- * For more detail (instruction and wiring diagram), visit https://esp32io.com/tutorials/esp32-led-blink
- */
+  -----------------------
+  ElegantOTA - Demo Example
+  -----------------------
 
-// the setup function runs once when you press reset or power the board
+  Skill Level: Beginner
+
+  This example provides with a bare minimal app with ElegantOTA functionality.
+
+  Github: https://github.com/ayushsharma82/ElegantOTA
+  WiKi: https://docs.elegantota.pro
+
+  Works with both ESP8266 & ESP32
+
+  -------------------------------
+
+  Upgrade to ElegantOTA Pro: https://elegantota.pro
+
+*/
+
+
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <WebServer.h>
+
+#include <ElegantOTA.h>
+
+const char *ssid = "dlg989";
+const char *password = "coc200044";
+
+
+WebServer server(80);
+
 #define LED_BUILTIN 25
-// the setup function runs once when you press reset or power the board
-void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
-  Serial.begin(9600);
+
+void setup(void)
+{
+    pinMode(LED_BUILTIN, OUTPUT);
+    Serial.begin(115200);
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(ssid, password);
+    Serial.println("");
+
+    // Wait for connection
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("");
+    Serial.print("Connected to ");
+    Serial.println(ssid);
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
+
+    server.on("/", []()
+              { server.send(200, "text/plain", "Hi! This is ElegantOTA Demo."); });
+
+    ElegantOTA.begin(&server); // Start ElegantOTA
+    server.begin();
+    Serial.println("HTTP server started");
 }
 
-// the loop function runs over and over again forever
-void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  Serial.println("On");
-  delay(1000);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  Serial.println("OFF");
-  delay(1000);                       // wait for a second
+void loop(void)
+{
+    server.handleClient();
+    ElegantOTA.loop();
+
+    // ? Main Loop Code Goes here,
+
 }
