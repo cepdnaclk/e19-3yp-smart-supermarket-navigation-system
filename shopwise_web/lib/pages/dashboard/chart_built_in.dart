@@ -101,19 +101,19 @@ class _LineChart extends StatelessWidget {
     String text;
     switch (value.toInt()) {
       case 1:
-        text = '1m';
+        text = '40';
         break;
       case 2:
-        text = '2m';
+        text = '80';
         break;
       case 3:
-        text = '3m';
+        text = '120';
         break;
       case 4:
-        text = '5m';
+        text = '160';
         break;
       case 5:
-        text = '6m';
+        text = '200';
         break;
       default:
         return Container();
@@ -136,14 +136,26 @@ class _LineChart extends StatelessWidget {
     );
     Widget text;
     switch (value.toInt()) {
-      case 2:
-        text = const Text('SEPT', style: style);
+      case 1:
+        text = const Text('MON', style: style);
+        break;
+      case 3:
+        text = const Text('TUE', style: style);
+        break;
+      case 5:
+        text = const Text('WED', style: style);
         break;
       case 7:
-        text = const Text('OCT', style: style);
+        text = const Text('THU', style: style);
         break;
-      case 12:
-        text = const Text('DEC', style: style);
+      case 9:
+        text = const Text('FRI', style: style);
+        break;
+      case 11:
+        text = const Text('SAT', style: style);
+        break;
+      case 13:
+        text = const Text('SUN', style: style);
         break;
       default:
         text = const Text('');
@@ -152,7 +164,7 @@ class _LineChart extends StatelessWidget {
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      space: 10,
+      space: 5,
       child: text,
     );
   }
@@ -317,12 +329,12 @@ class LineChartSample1State extends State<LineChartSample1> {
                 height: 37,
               ),
               const Text(
-                'Week overview',
+                'Visitor Insights',
                 style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 32,
+                  color: Color.fromARGB(255, 2, 21, 24),
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
+                  letterSpacing: 0.5,
                 ),
                 textAlign: TextAlign.center,
               ),

@@ -103,6 +103,7 @@ class ProductsTableDataSource extends DataTableSource {
     Product(6, "Chicken", "12350", 100, 100.00),
     Product(7, "Pork", "12351", 100, 100.00),
     Product(8, "Lamb", "12352", 100, 100.00),
+    Product(9, "Fish", "12353", 100, 100.00),
   ];
 
   List<DataRow> getRows(int index) {
