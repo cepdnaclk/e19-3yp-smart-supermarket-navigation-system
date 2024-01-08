@@ -5,7 +5,7 @@ import 'package:shopwise/pages/mqtt_client_test.dart';
 
 class ScanBarcode extends StatefulWidget {
   ScanBarcode({super.key});
-  String _scanBarcodeResult = '';
+  String _scanBarcodeResult = '-1';
 
   @override
   State<ScanBarcode> createState() => _ScanBarcodeState();
@@ -13,7 +13,7 @@ class ScanBarcode extends StatefulWidget {
 
 class _ScanBarcodeState extends State<ScanBarcode> {
   void scanBarcode() async {
-    String barcodeScanRes;
+    String barcodeScanRes = '-1';
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.BARCODE);
@@ -43,7 +43,7 @@ class _ScanBarcodeState extends State<ScanBarcode> {
                     height: 120,
                     child: ElevatedButton(
                       onPressed: scanBarcode,
-                      child: Text('Scan Item'),
+                      child: Text('Scan', style: TextStyle(fontSize: 25),),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
@@ -53,37 +53,40 @@ class _ScanBarcodeState extends State<ScanBarcode> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Finish Shopping'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(width: 20),
+                  // SizedBox(
+                  //   width: 120,
+                  //   height: 120,
+                  //   child: ElevatedButton(
+                  //     onPressed: () {},
+                  //     child: Text('Finish Shopping'),
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: Colors.green,
+                  //       foregroundColor: Colors.white,
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
             SizedBox(height: 20),
-            Text("Barcode Result : ${widget._scanBarcodeResult}",
+            // Text("QR result : ${widget._scanBarcodeResult != "-1" ? "Success" : "failure"}",
+            //     style: TextStyle(fontSize: 20, color: widget._scanBarcodeResult != -1 ? Colors.green : Colors.red)),
+            Text("QR: ",
                 style: TextStyle(fontSize: 20, color: Colors.black)),
             SizedBox(height: 20),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {
+                onPressed: widget._scanBarcodeResult != -1 ?  () {
+
                   Navigator.pushNamed(context, MQTTClientTest.routeName);
-                },
+                } : null,
                 child: Text("Proceed")),
           ],
         ),

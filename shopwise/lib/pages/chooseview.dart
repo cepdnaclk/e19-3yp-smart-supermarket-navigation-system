@@ -7,10 +7,26 @@ import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/pages/mqtt_client_test.dart';
 
-class Choose extends StatelessWidget {
-  const Choose({super.key});
-
+class Choose extends StatefulWidget {
+  Choose({super.key});
+String userName = "";
   static const String routeName = '/choose';
+
+  @override
+  State<Choose> createState() => _ChooseState();
+}
+
+class _ChooseState extends State<Choose> {
+  
+
+  // @override
+  // initState() {
+  //   super.initState();
+  //   getCurrentUser();
+
+  //   Future<AuthUser> getUser = getCurrentUser();
+  //   getUser.then((value) => {widget.userName = value.username});
+  // }
 
   Future<void> logoutStep(context) async {
     try {
@@ -22,12 +38,23 @@ class Choose extends StatelessWidget {
     }
   }
 
+  Future<AuthUser> getCurrentUser() async {
+    final user = await Amplify.Auth.getCurrentUser();
+    widget.userName = user.username;
+    print(user.username);
+    print("....");
+    print(widget.userName);
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("hi....${widget.userName}");
+
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Theme.of(context).secondaryHeaderColor,
-        title: const Text("On your way!"),
+        title: Text("On Your Way!"),
       ),
       body: Center(
         child: Container(
@@ -45,12 +72,13 @@ class Choose extends StatelessWidget {
                 width: 300,
                 child: ElevatedButton(
                   key: ValueKey("starts"),
-
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).secondaryHeaderColor,
                     foregroundColor: Colors.black,
                   ),
-                  onPressed: () {Navigator.pushNamed(context, ShoppingList.routeName);},
+                  onPressed: () {
+                    Navigator.pushNamed(context, ShoppingList.routeName);
+                  },
                   child: Text("Create the shopping list"),
                 ),
               ),

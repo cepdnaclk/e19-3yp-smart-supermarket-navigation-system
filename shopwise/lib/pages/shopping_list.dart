@@ -41,7 +41,7 @@ class _ShoppingListState extends State<ShoppingList> {
                 itemBuilder: (BuildContext context, int index) {
                   return Dismissible(
                       background: Container(
-                        color: Colors.red,
+                        color: Colors.red.shade300,
                       ),
                       key: UniqueKey(),
                       onDismissed: (DismissDirection direction) {
@@ -97,7 +97,11 @@ class _ShoppingListState extends State<ShoppingList> {
                 },
                 child: Text("Add Item"),
               ),
+            ),
+              SizedBox(
+              height: 20,
             )
+
           ],
         ),
       ),
