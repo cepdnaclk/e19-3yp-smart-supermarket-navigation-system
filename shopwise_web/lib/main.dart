@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shopwise_web/mongodb.dart';
 import 'package:shopwise_web/pages/login/login.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MongoDatabase.connect();
   runApp(const MyApp());
 }
 
