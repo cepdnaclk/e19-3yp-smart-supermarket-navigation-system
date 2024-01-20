@@ -53,18 +53,18 @@ class _SideNavBarState extends State<SideNavBar> {
                     child: Center(
                   child: AnimatedBuilder(
                     animation: _controller,
-                    builder: (context,child) {
+                    builder: (context, child) {
                       switch (_controller.selectedIndex) {
                         case 0:
                           _key.currentState?.closeDrawer();
                           return const Dashboard();
+                        /* case 1:
+                          _key.currentState?.closeDrawer();
+                          return const ProductsHome(); */
                         case 1:
                           _key.currentState?.closeDrawer();
-                          return const ProductsHome();
-                        case 2:
-                          _key.currentState?.closeDrawer();
                           return const Placement();
-                        case 3:
+                        case 2:
                           _key.currentState?.closeDrawer();
                           //log out
                           return const LoginPage();
@@ -114,7 +114,7 @@ class SideBarXExample extends StatelessWidget {
           icon: Icons.dashboard_outlined,
           label: 'Dashboard',
         ),
-        SidebarXItem(icon: Icons.shopping_bag_outlined, label: 'Products'),
+        // SidebarXItem(icon: Icons.shopping_bag_outlined, label: 'Products'),
         SidebarXItem(icon: Icons.shopping_cart, label: 'Layout Update'),
         SidebarXItem(icon: Icons.logout, label: 'Sign Out'),
         //SidebarXItem(icon: Icons.settings, label: 'Settings'),
