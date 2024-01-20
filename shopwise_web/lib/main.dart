@@ -1,7 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/login/login.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: "AIzaSyDlbIDquMpZs78Y5212IZhjTXwva-vGf0A",
+          appId: "1:1051084283871:web:e11421632c96074f76ee6a",
+          messagingSenderId: "1051084283871",
+          projectId: "shop-wise-f9d93"));
   runApp(const MyApp());
 }
 

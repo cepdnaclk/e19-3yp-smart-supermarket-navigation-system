@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MapGrid extends StatefulWidget {
@@ -44,21 +45,17 @@ class _MapGridState extends State<MapGrid> {
                   labelText: 'Item Id',
                 ),
               ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _textFieldController2,
-                decoration: const InputDecoration(
-                  labelText: 'Item Name',
-                ),
-              ),
             ],
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                String productId = _textFieldController1.text;
+
                 setState(() {
                   tappedCells[cell.id] = true; //if submitted then set to true
                 });
+                updateCell(productId, cell.id);
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -177,5 +174,11 @@ class _MapGridState extends State<MapGrid> {
         },
       ),
     );
+  }
+
+  void updateCell(String productId, String cellNumber) {
+    FirebaseFirestore.instance.collection('products').doc(productId).update({
+      'cell': cellNumber,
+    });
   }
 }

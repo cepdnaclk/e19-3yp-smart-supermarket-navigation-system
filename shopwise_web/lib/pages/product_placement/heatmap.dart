@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -49,7 +50,7 @@ class _HeatMapGridState extends State<HeatMapGrid> {
               TextField(
                 controller: _textFieldController2,
                 decoration: InputDecoration(
-                  labelText: 'Item Name',
+                  labelText: 'Promotion Details',
                 ),
               ),
             ],
@@ -57,9 +58,13 @@ class _HeatMapGridState extends State<HeatMapGrid> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                String productId = _textFieldController1.text;
+                String productName = _textFieldController2.text;
+
                 setState(() {
                   tappedCells[cell.id] = true; //if submitted then set to true
                 });
+                updateCell(productId, productName, cell.id);
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -182,5 +187,12 @@ class _HeatMapGridState extends State<HeatMapGrid> {
         },
       ),
     );
+  }
+
+  void updateCell(String productId, String details, String cellNumber) {
+    FirebaseFirestore.instance.collection('products').doc(productId).update({
+      'promotion': cellNumber,
+      'promo_details': details,
+    });
   }
 }
