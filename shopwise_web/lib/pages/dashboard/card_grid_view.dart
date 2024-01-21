@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/product_placement/database_manager.dart';
 
 class CardGridView extends StatefulWidget {
-  CardGridView({Key? key}) : super(key: key);
+  const CardGridView({super.key});
 
   @override
   _CardGridViewState createState() => _CardGridViewState();
@@ -26,6 +26,15 @@ class _CardGridViewState extends State<CardGridView> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    String currentSize;
+    if (screenSize.width < 575) {
+      currentSize = 'small';
+    } else if (screenSize.width > 575 && screenSize.width < 790) {
+      currentSize = "medium";
+    } else {
+      currentSize = "large";
+    }
+
     print(screenSize.width);
 
     return FutureBuilder<List>(
@@ -36,7 +45,10 @@ class _CardGridViewState extends State<CardGridView> {
       ]),
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // or some other widget
+          return Container(
+              alignment: Alignment.center,
+              height: 50,
+              child: const CircularProgressIndicator()); // or some other widget
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
@@ -77,53 +89,57 @@ class _CardGridViewState extends State<CardGridView> {
             // Add more cards here...
           };
 
-          return GridView.builder(
-            gridDelegate: (screenSize.width < 550)
-                ? SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCountSmall,
-                    childAspectRatio: 2.5,
-                    crossAxisSpacing: screenSize.width * 0.05,
-                  )
-                : (screenSize.width > 970)
-                    ? SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCountLarge,
-                        childAspectRatio: 2.5,
-                        crossAxisSpacing: screenSize.width * 0.08,
-                      )
-                    : SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        childAspectRatio: 2.5,
-                        crossAxisSpacing: screenSize.width * 0.08,
+          return Expanded(
+            child: GridView.builder(
+              gridDelegate: (currentSize == 'small')
+                  ? SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCountSmall,
+                      childAspectRatio: 2.5,
+                      crossAxisSpacing: screenSize.width * 0.05,
+                    )
+                  : (currentSize == 'large')
+                      ? SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCountLarge,
+                          childAspectRatio: 2.5,
+                          crossAxisSpacing: screenSize.width * 0.09,
+                        )
+                      : SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          childAspectRatio: 1.5,
+                          crossAxisSpacing: screenSize.width * 0.065,
+                        ),
+              itemCount: cardCount,
+              itemBuilder: (context, index) {
+                /* if (!detailsDict.containsKey(index)) {
+                  return Container(); // Return an empty container or a placeholder for missing data
+                } */
+                return Card(
+                  
+                  elevation: 0,
+                  color: detailsDict[index]["cardColor"] ?? Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: ListTile(
+                      leading: Icon(
+                        detailsDict[index]["icon"],
+                        size: 30,
                       ),
-            itemCount: cardCount,
-            itemBuilder: (context, index) {
-              /* if (!detailsDict.containsKey(index)) {
-                return Container(); // Return an empty container or a placeholder for missing data
-              } */
-              return Card(
-                elevation: 0,
-                color: detailsDict[index]["cardColor"] ?? Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: ListTile(
-                    leading: Icon(
-                      detailsDict[index]["icon"],
-                      size: 30,
-                    ),
-                    subtitle: Text(
-                      detailsDict[index]["title"],
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                    title: Text(
-                      detailsDict[index]["subtitle"],
-                      style: const TextStyle(fontSize: 15),
+                      subtitle: Text(
+                        detailsDict[index]["title"],
+                        style: TextStyle(fontSize: currentSize == 'large' ? 22 : 20),
+                      ),
+                      title: Text(
+                        detailsDict[index]["subtitle"],
+                        style: TextStyle(
+                            fontSize: currentSize == 'large' ? 16 : 13),
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         }
       },

@@ -4,7 +4,7 @@ class ProduceTable extends StatefulWidget {
   final int index;
 
   
-  const ProduceTable({Key? key, required this.index}) : super(key: key);
+  const ProduceTable({super.key, required this.index});
 
   @override
   State<ProduceTable> createState() => _ProduceTableState();

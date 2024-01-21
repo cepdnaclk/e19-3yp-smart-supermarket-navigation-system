@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shopwise_web/pages/login/login.dart';
+import 'package:shopwise_web/pages/login/register.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: FirebaseOptions(
+      options: const FirebaseOptions(
           apiKey: "AIzaSyDlbIDquMpZs78Y5212IZhjTXwva-vGf0A",
           appId: "1:1051084283871:web:e11421632c96074f76ee6a",
           messagingSenderId: "1051084283871",
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const LoginPage(),
+      home: const RegisterPage(),
     );
   }
 }

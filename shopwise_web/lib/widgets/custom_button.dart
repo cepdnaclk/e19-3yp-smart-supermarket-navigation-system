@@ -15,6 +15,7 @@ class CustomButton extends StatelessWidget {
     this.margin = const EdgeInsets.all(10),
     this.buttonHeight = 40,
     this.buttonWidth=200,
+    this.radius=20,
 
   });
 
@@ -29,6 +30,7 @@ class CustomButton extends StatelessWidget {
   double iconImageSize;
   EdgeInsets padding;
   EdgeInsets margin;
+  double radius;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class CustomButton extends StatelessWidget {
         style: TextButton.styleFrom(
           backgroundColor: buttonColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(radius),
           ),
         ),
         child: icon != null || iconImage != null

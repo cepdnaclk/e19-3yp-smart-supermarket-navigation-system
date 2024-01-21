@@ -5,7 +5,7 @@ import 'package:shopwise_web/pages/product_types/product_tables.dart';
 void main() {
   testWidgets('getRows returns valid DataRows', (WidgetTester tester) async {
     final dataSource = ProductsTableDataSource();
-    final index = 0;
+    const index = 0;
 
     final result = dataSource.getRows(index);
 

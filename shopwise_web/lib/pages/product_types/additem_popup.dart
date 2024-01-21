@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AddProductPopup extends StatefulWidget {
   final int index;
 
-  AddProductPopup({
+  const AddProductPopup({super.key, 
     required this.index,
   });
 

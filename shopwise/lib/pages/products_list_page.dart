@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shopwise/widgets/product_item.dart';
 
 class ProductsListPage extends StatefulWidget {
   const ProductsListPage({super.key});
@@ -19,7 +18,7 @@ class _ProductsListPageState extends State<ProductsListPage> {
           children: [
             Expanded(
               child: ListView(
-                children: [Text("Hello")],
+                children: const [Text("Hello")],
               ),
             )
           ],
