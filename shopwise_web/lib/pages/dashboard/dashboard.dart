@@ -22,26 +22,25 @@ class _DashboardState extends State<Dashboard> {
               color: Colors.white,
             ),
             padding: const EdgeInsets.all(10),
-            height: 210,
-            child: Column(
+            height: 200,
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              
               children: [
-                const Text(
+                Text(
                   "Today's Sales",
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: CardGridView()),
+                SizedBox(height: 10),
+                CardGridView(),
               ],
             ),
           ),
           const SizedBox(height: 10),
           Expanded(
+            
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),

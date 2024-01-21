@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/dashboard/dashboard.dart';
 import 'package:shopwise_web/pages/login/login.dart';
 import 'package:shopwise_web/pages/product_placement/product_placement.dart';
-import 'package:shopwise_web/pages/product_types/products_home.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class SideNavBar extends StatefulWidget {

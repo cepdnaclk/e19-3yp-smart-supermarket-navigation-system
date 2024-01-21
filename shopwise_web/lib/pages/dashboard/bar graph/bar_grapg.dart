@@ -26,9 +26,9 @@ class MyBarGraph extends StatelessWidget {
       BarChartData(
           maxY: 70,
           minY: 0,
-          gridData: FlGridData(show: false),
+          gridData: const FlGridData(show: false),
           borderData: FlBorderData(show: false),
-          titlesData: FlTitlesData(
+          titlesData: const FlTitlesData(
             show: true,
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -62,30 +62,30 @@ Widget getBottomTitles(double value, TitleMeta meta) {
   Widget text;
   switch (value.toInt()) {
     case 0:
-      text = Text('Mon', style: style);
+      text = const Text('Mon', style: style);
       break;
     case 1:
-      text = Text('Tue', style: style);
+      text = const Text('Tue', style: style);
       break;
     case 2:
-      text = Text('Wed', style: style);
+      text = const Text('Wed', style: style);
       break;
     case 3:
-      text = Text('Thu', style: style);
+      text = const Text('Thu', style: style);
       break;
     case 4:
-      text = Text('Fri', style: style);
+      text = const Text('Fri', style: style);
       break;
     case 5:
-      text = Text('Sat', style: style);
+      text = const Text('Sat', style: style);
       break;
     case 6:
-      text = Text('Sun', style: style);
+      text = const Text('Sun', style: style);
       break;
     default:
-      text = Text('', style: style);
+      text = const Text('', style: style);
       break;
   }
 
-  return SideTitleWidget(child: text, axisSide: meta.axisSide);
+  return SideTitleWidget(axisSide: meta.axisSide, child: text);
 }

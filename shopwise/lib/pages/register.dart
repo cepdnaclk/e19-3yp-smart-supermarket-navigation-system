@@ -36,7 +36,7 @@ class RegisterScreen extends StatelessWidget {
                 onPressed: () {},
               ),
               const SizedBox(height: 15),
-              Text("OR"),
+              const Text("OR"),
               const SizedBox(height: 15),
               CustomButton(
                 textColor: Colors.black,
@@ -45,7 +45,7 @@ class RegisterScreen extends StatelessWidget {
                 text: "Sign Up with Google",
                 onPressed: () {},
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -55,7 +55,7 @@ class RegisterScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LoginScreen()),
+                            builder: (context) => const LoginScreen()),
                       );
                     },
                     child: const Text("Sign In"),

@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class HeatMapGrid extends StatefulWidget {
-  const HeatMapGrid({Key? key}) : super(key: key);
+  const HeatMapGrid({super.key});
 
   @override
   _HeatMapGridState createState() => _HeatMapGridState();
@@ -20,8 +19,8 @@ class GridCell {
 }
 
 class _HeatMapGridState extends State<HeatMapGrid> {
-  TextEditingController _textFieldController1 = TextEditingController();
-  TextEditingController _textFieldController2 = TextEditingController();
+  final TextEditingController _textFieldController1 = TextEditingController();
+  final TextEditingController _textFieldController2 = TextEditingController();
 
   Map<String, bool> tappedCells = {};
 
@@ -30,10 +29,10 @@ class _HeatMapGridState extends State<HeatMapGrid> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 196, 218, 200),
+          backgroundColor: const Color.fromARGB(255, 196, 218, 200),
           title: Text(
             'Cell ${cell.id}',
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           content: Column(
@@ -42,14 +41,14 @@ class _HeatMapGridState extends State<HeatMapGrid> {
               // Add your text fields or any other content here
               TextField(
                 controller: _textFieldController1,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Item Id',
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 controller: _textFieldController2,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Promotion Details',
                 ),
               ),

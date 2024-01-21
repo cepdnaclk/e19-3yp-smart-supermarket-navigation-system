@@ -17,7 +17,7 @@ class LineChartSample1State extends State<LineChartSample1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Weekly Customer Summary',
           style: TextStyle(
             fontSize: 20,
@@ -37,7 +37,7 @@ class LineChartSample1State extends State<LineChartSample1> {
           builder:
               (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // or some other widget
+              return const CircularProgressIndicator(); // or some other widget
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {

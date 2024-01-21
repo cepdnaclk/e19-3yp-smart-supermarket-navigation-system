@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/product_placement/mapgrid.dart';
 import 'package:shopwise_web/pages/product_placement/heatmap.dart';
-import 'package:shopwise_web/side_navbar.dart';
-import 'package:shopwise_web/widgets/custom_button.dart';
 
 class Placement extends StatefulWidget {
   const Placement({super.key});
