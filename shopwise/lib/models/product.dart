@@ -20,7 +20,7 @@ class Product {
   // factory Product.fromJson(Map<String, dynamic> json) {
   //   return Product(
   //     name: json['name'],
-  //     image: json['image'],
+  //     image: json['image'], 
   //     price: json['price'],
   //     description: json['description'],
   //     category: json['category'],
