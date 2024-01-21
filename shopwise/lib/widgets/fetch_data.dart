@@ -30,8 +30,8 @@ Widget fetchData(String title, CollectionReference collection) {
                 itemBuilder: (context, index) {
                   var itemData = data[index].data() as Map<String, dynamic>;
                   return ListTile(
-                    title: Text(itemData['name']),
-                    subtitle: Text(itemData['description']),
+                    title: Text(itemData['title']),
+                    subtitle: Text(itemData['price']),
                     // Add other fields as needed
                   );
                 },

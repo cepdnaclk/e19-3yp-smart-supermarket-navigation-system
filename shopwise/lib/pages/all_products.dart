@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/widgets/fetch_data.dart';
 
-class MyWidget extends StatefulWidget {
+class AllProducts extends StatefulWidget {
   static const routeName = '/all_products';
-  const MyWidget({super.key});
+  const AllProducts({super.key});
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<AllProducts> createState() => _AllProductsState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _AllProductsState extends State<AllProducts> {
   final CollectionReference productsCollection =
       FirebaseFirestore.instance.collection('products');
 

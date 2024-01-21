@@ -1,5 +1,6 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:shopwise/pages/all_products.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
 import 'package:shopwise/pages/login_screen.dart';
 import 'package:shopwise/pages/scan_barcode_view.dart';
@@ -31,7 +32,7 @@ class Choose extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          height: 600,
+          height: 800,
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -45,12 +46,13 @@ class Choose extends StatelessWidget {
                 width: 300,
                 child: ElevatedButton(
                   key: ValueKey("starts"),
-
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).secondaryHeaderColor,
                     foregroundColor: Colors.black,
                   ),
-                  onPressed: () {Navigator.pushNamed(context, ShoppingList.routeName);},
+                  onPressed: () {
+                    Navigator.pushNamed(context, ShoppingList.routeName);
+                  },
                   child: Text("Create the shopping list"),
                 ),
               ),
@@ -71,6 +73,24 @@ class Choose extends StatelessWidget {
                     );
                   },
                   child: Text("Start shopping!"),
+                ),
+              ),
+              Container(
+                height: 50,
+                width: 300,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AllProducts(),
+                      ),
+                    );
+                  },
+                  child: Text("All Products"),
                 ),
               ),
               SizedBox(height: 10),

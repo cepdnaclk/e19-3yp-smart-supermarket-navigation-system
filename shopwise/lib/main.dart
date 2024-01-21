@@ -3,6 +3,8 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shopwise/pages/all_products.dart';
+import 'firebase_options.dart';
 
 
 import 'package:shopwise/pages/chooseview.dart';
@@ -25,7 +27,9 @@ import 'amplifyconfiguration.dart';
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -98,6 +102,8 @@ class _MyAppState extends State<MyApp> {
           SelectItems.routeName: (context) =>
               AuthenticatedView(child: SelectItems()),
               MQTTClientTest.routeName: (context) => AuthenticatedView(child: MQTTClientTest()),
+          AllProducts.routeName: (context) =>
+              AuthenticatedView(child: AllProducts()),
           // LoginScreen.routeName: (context) => const LoginScreen(),
         },
         // home: const MyHomePage(title: 'Shop Wise'),
