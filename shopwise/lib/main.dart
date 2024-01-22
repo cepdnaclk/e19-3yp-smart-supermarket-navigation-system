@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
@@ -5,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shopwise/pages/all_products.dart';
 import 'firebase_options.dart';
-
 
 import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/pages/login_screen.dart';
@@ -17,6 +18,8 @@ import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/utils/colors.dart';
 
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+
 import 'amplifyconfiguration.dart';
 
 // void main() async{
@@ -26,7 +29,7 @@ import 'amplifyconfiguration.dart';
 // }
 
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -59,6 +62,30 @@ class _MyAppState extends State<MyApp> {
       await Amplify.configure(amplifyconfig);
     } on Exception catch (e) {
       safePrint('An error occurred configuring Amplify: $e');
+    }
+
+    try {
+      var session = await Amplify.Auth.fetchAuthSession(
+          options: FetchAuthSessionOptions(forceRefresh: true));
+      var cognitoToken =
+          (session as CognitoAuthSession).userPoolTokensResult.value;
+      print('User token: ${cognitoToken.idToken}');
+      var sub_UUID = cognitoToken.idToken.claims.subject;
+      print('User token expanded: ${sub_UUID}');
+      var parts = cognitoToken.toJson();
+      print('User token json: ${parts}');
+
+      
+
+      // var header =
+      //     json.decode(utf8.decode(base64.decode(base64.normalize(parts.))));
+      // var payload =
+      //     json.decode(utf8.decode(base64.decode(base64.normalize(parts[1]))));
+
+      // print('kid: ${header['kid']}');
+      // print('aud: ${payload['aud']}');
+    } on AuthException catch (e) {
+      print(e.message);
     }
   }
 
@@ -101,7 +128,8 @@ class _MyAppState extends State<MyApp> {
               AuthenticatedView(child: ShoppingList()),
           SelectItems.routeName: (context) =>
               AuthenticatedView(child: SelectItems()),
-              MQTTClientTest.routeName: (context) => AuthenticatedView(child: MQTTClientTest()),
+          MQTTClientTest.routeName: (context) =>
+              AuthenticatedView(child: MQTTClientTest()),
           AllProducts.routeName: (context) =>
               AuthenticatedView(child: AllProducts()),
           // LoginScreen.routeName: (context) => const LoginScreen(),
