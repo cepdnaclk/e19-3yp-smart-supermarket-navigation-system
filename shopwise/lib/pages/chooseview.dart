@@ -1,5 +1,6 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopwise/pages/all_products.dart';
 import 'package:shopwise/pages/custom_map_view.dart';
 import 'package:shopwise/pages/login_screen.dart';
@@ -7,8 +8,9 @@ import 'package:shopwise/pages/scan_barcode_view.dart';
 import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/startup.dart';
 import 'package:shopwise/pages/mqtt_client_test.dart';
+import 'package:shopwise/providers/customer_provider.dart';
 
-class Choose extends StatelessWidget {
+class Choose extends ConsumerWidget {
   const Choose({super.key});
 
   static const String routeName = '/choose';
@@ -24,7 +26,7 @@ class Choose extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Theme.of(context).secondaryHeaderColor,
@@ -32,7 +34,7 @@ class Choose extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          height: 800,
+          height: 1200,
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -104,7 +106,20 @@ class Choose extends StatelessWidget {
                       foregroundColor: Colors.green,
                       side: BorderSide(color: Colors.green)),
                 ),
-              )
+              ),
+              Container(
+                height: 50,
+                width: 300,
+                child: OutlinedButton(
+                  child: Text("Add the customer"),
+                  onPressed: () => {
+                    ref.read(customerNotifierProvider.notifier).saveCustomer()
+                  },
+                  style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.green,
+                      side: BorderSide(color: Colors.green)),
+                ),
+              ),
             ],
           ),
         ),

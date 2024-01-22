@@ -30,7 +30,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
 
   void updateShoppingDate(DateTime shopping_date) {
     state = state.copyWith(shopping_date: shopping_date);
-  }
+  } 
 
   // Method to save the state in firebase database, 'customers' collection
   void saveCustomer() {

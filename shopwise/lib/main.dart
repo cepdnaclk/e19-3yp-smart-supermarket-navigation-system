@@ -6,7 +6,11 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shopwise/pages/all_products.dart';
+import 'package:shopwise/providers/customer_provider.dart';
 import 'firebase_options.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 
 import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/pages/login_screen.dart';
@@ -33,17 +37,18 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  // await dotenv.dotenv.load(fileName: "../.env");
+  runApp(ProviderScope(child: MyApp()) );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
 
   @override
@@ -51,6 +56,41 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     _configureAmplify();
+  }
+
+//   void encryptSUB(String encryptedSubBase64) {
+//     final key = encrypt.Key.fromUtf8('1234567890987654');
+//     final iv = encrypt.IV.fromLength(16); // AES block size is 16
+//     final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
+// // Assuming `encryptedSub` is the encrypted sub ID you stored in your database
+//     final encryptedSub = encrypt.Encrypted.fromBase64(encryptedSubBase64);
+
+//     print('encryptedSub: ${encryptedSub}');
+
+//     final decryptedSub = encrypter.decrypt(encryptedSub, iv: iv);
+
+//     print('decryptedSub: ${decryptedSub}');
+
+// // Now `decryptedSub` contains the original sub ID
+//   }
+  String encryptSUB(String sub) {
+    final key = encrypt.Key.fromUtf8(
+        "1234567890987654"); // Ensure this key is securely managed
+    final iv = encrypt.IV.fromLength(16); // AES block size is 16
+    final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
+    final encryptedSub = encrypter.encrypt(sub, iv: iv);
+
+    print('encryptedSub: ${encryptedSub.base64}');
+
+    final decryptedSub = encrypter.decrypt(encryptedSub, iv: iv);
+
+    print('decryptedSub: ${decryptedSub}');
+
+    return encryptedSub.base64.toString();
+
+// Now `decryptedSub` contains the original sub ID
   }
 
   Future<void> _configureAmplify() async {
@@ -66,7 +106,8 @@ class _MyAppState extends State<MyApp> {
 
     try {
       var session = await Amplify.Auth.fetchAuthSession(
-          options: FetchAuthSessionOptions(forceRefresh: true));
+        options: FetchAuthSessionOptions(forceRefresh: true),
+      );
       var cognitoToken =
           (session as CognitoAuthSession).userPoolTokensResult.value;
       print('User token: ${cognitoToken.idToken}');
@@ -75,7 +116,23 @@ class _MyAppState extends State<MyApp> {
       var parts = cognitoToken.toJson();
       print('User token json: ${parts}');
 
+      var encrypted = encryptSUB(sub_UUID.toString());
+
+      print('encrypted: ${encrypted}');
+
+      ref.read(customerNotifierProvider.notifier).updateSubUuid(encrypted);
+
+      ref.read(customerNotifierProvider.notifier).updateHashcode("myhashcode");
+
+      ref.read(customerNotifierProvider.notifier).updateOrderId("5");
+
+      ref.read(customerNotifierProvider.notifier).updateShoppingDate(DateTime.now());
+
       
+
+
+
+
 
       // var header =
       //     json.decode(utf8.decode(base64.decode(base64.normalize(parts.))));
