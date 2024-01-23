@@ -6,6 +6,7 @@ import 'package:shopwise/pages/player.dart';
 import 'package:shopwise/pages/product.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:shopwise/pages/the_bill.dart';
 
 class TheMap extends StatefulWidget {
   final Stream<String> directionStream;
@@ -117,50 +118,77 @@ class _TheMapState extends State<TheMap> {
 
               /////////////////////////Mapping ends here!/////////////////////////
 
-               Expanded(
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: ElevatedButton(
-                                  onPressed: scanBarcode,
-                                  child: Text('Scan Item'),
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: Text('Finish Shopping'),
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text("Barcode Result : $_scanBarcodeResult",
-                            style: TextStyle(fontSize: 20, color: Colors.black)),
-                      ],
+              //  Expanded(
+              //     child: Container(
+              //       child: Column(
+              //         children: [
+              //           Center(
+              //             child: Row(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               children: <Widget>[
+              //                 SizedBox(
+              //                   width: 120,
+              //                   height: 120,
+              //                   child: ElevatedButton(
+              //                     onPressed: scanBarcode,
+              //                     child: Text('Scan Item'),
+              //                     style: ElevatedButton.styleFrom(
+              //                       shape: RoundedRectangleBorder(
+              //                         borderRadius: BorderRadius.circular(10),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 SizedBox(width: 20),
+              //                 SizedBox(
+              //                   width: 120,
+              //                   height: 120,
+              //                   child: ElevatedButton(
+              //                     onPressed: () {},
+              //                     child: Text('Finish Shopping'),
+              //                     style: ElevatedButton.styleFrom(
+              //                       shape: RoundedRectangleBorder(
+              //                         borderRadius: BorderRadius.circular(10),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //           Text("Barcode Result : $_scanBarcodeResult",
+              //               style: TextStyle(fontSize: 20, color: Colors.black)),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
                     ),
-                  ),
-                ), 
+                    onPressed: () {
+                      scanBarcode();
+                      // Navigator.pushNamed(context, BarcodeReader.routeName);
+                    },
+                    child: Text("Scan Barcode")),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: Colors.red,
+                      ),
+                      foregroundColor: Colors.red,
+                    ),
+                    onPressed: () {
+                      _showExitConfirmationDialog(context);
+                    },
+                    child: Text("End Shopping")),
+              ),
             ],
           ),
         );
@@ -179,5 +207,39 @@ class _TheMapState extends State<TheMap> {
     setState(() {
       _scanBarcodeResult = barcodeScanRes;
     });
+  }
+
+  void _showExitConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Exit Confirmation'),
+          content: Text('Are you sure you want to exit?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Navigator.pop will pop the dialog without any action
+                Navigator.pop(context);
+              },
+              child: Text('No', style: TextStyle(color: Colors.black)),
+            ),
+            TextButton(
+              onPressed: () {
+                // Navigator.pushReplacement will navigate to a new screen
+                Navigator.pushReplacementNamed(
+                  context,
+                  TheBill.routeName,
+                );
+              },
+              child: Text(
+                'Yes',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

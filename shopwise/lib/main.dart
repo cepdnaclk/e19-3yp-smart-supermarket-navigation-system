@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shopwise/pages/all_products.dart';
 import 'package:shopwise/pages/scan_qrcode_page.dart';
+import 'package:shopwise/pages/the_bill.dart';
 import 'package:shopwise/providers/customer_provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -186,7 +187,8 @@ class _MyAppState extends ConsumerState<MyApp> {
               AuthenticatedView(child: MQTTClientTest()),
           AllProducts.routeName: (context) =>
               AuthenticatedView(child: AllProducts()),
-          ScanQrCodePage.routeName: (context) => ScanQrCodePage()
+          ScanQrCodePage.routeName: (context) => ScanQrCodePage(),
+          TheBill.routeName: (context) => AuthenticatedView(child: TheBill()),
           // LoginScreen.routeName: (context) => const LoginScreen(),
         },
         // home: const MyHomePage(title: 'Shop Wise'),
