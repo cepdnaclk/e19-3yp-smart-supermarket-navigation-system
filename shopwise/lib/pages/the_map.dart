@@ -117,7 +117,7 @@ class _TheMapState extends State<TheMap> {
 
               /////////////////////////Mapping ends here!/////////////////////////
 
-              /* Expanded(
+               Expanded(
                   child: Container(
                     child: Column(
                       children: [
@@ -160,7 +160,7 @@ class _TheMapState extends State<TheMap> {
                       ],
                     ),
                   ),
-                ), */
+                ), 
             ],
           ),
         );

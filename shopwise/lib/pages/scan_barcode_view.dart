@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shopwise/pages/mqtt_client_test.dart';
+import 'package:shopwise/pages/scan_qrcode_page.dart';
+import 'package:shopwise/providers/customer_provider.dart';
 
-class ScanBarcode extends StatefulWidget {
+class ScanBarcode extends ConsumerStatefulWidget {
   ScanBarcode({super.key});
   String _scanBarcodeResult = '';
 
   @override
-  State<ScanBarcode> createState() => _ScanBarcodeState();
+  ConsumerState<ScanBarcode> createState() => _ScanBarcodeState();
 }
 
-class _ScanBarcodeState extends State<ScanBarcode> {
+class _ScanBarcodeState extends ConsumerState<ScanBarcode> {
   void scanBarcode() async {
     String barcodeScanRes;
     try {
@@ -77,11 +80,13 @@ class _ScanBarcodeState extends State<ScanBarcode> {
                 style: TextStyle(fontSize: 20, color: Colors.black)),
             SizedBox(height: 20),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () {
+                  ref.read(customerNotifierProvider.notifier).updateHashcode(widget._scanBarcodeResult);
+                  ref.read(customerNotifierProvider.notifier).saveCustomer();
                   Navigator.pushNamed(context, MQTTClientTest.routeName);
                 },
                 child: Text("Proceed")),

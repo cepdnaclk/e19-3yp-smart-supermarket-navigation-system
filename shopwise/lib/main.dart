@@ -6,6 +6,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shopwise/pages/all_products.dart';
+import 'package:shopwise/pages/scan_qrcode_page.dart';
 import 'package:shopwise/providers/customer_provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +39,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // await dotenv.dotenv.load(fileName: "../.env");
-  runApp(ProviderScope(child: MyApp()) );
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -122,17 +123,13 @@ class _MyAppState extends ConsumerState<MyApp> {
 
       ref.read(customerNotifierProvider.notifier).updateSubUuid(encrypted);
 
-      ref.read(customerNotifierProvider.notifier).updateHashcode("myhashcode");
+      // ref.read(customerNotifierProvider.notifier).updateHashcode("myhashcode");
 
       ref.read(customerNotifierProvider.notifier).updateOrderId("5");
 
-      ref.read(customerNotifierProvider.notifier).updateShoppingDate(DateTime.now());
-
-      
-
-
-
-
+      ref
+          .read(customerNotifierProvider.notifier)
+          .updateShoppingDate(DateTime.now());
 
       // var header =
       //     json.decode(utf8.decode(base64.decode(base64.normalize(parts.))));
@@ -189,6 +186,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               AuthenticatedView(child: MQTTClientTest()),
           AllProducts.routeName: (context) =>
               AuthenticatedView(child: AllProducts()),
+          ScanQrCodePage.routeName: (context) => ScanQrCodePage()
           // LoginScreen.routeName: (context) => const LoginScreen(),
         },
         // home: const MyHomePage(title: 'Shop Wise'),
