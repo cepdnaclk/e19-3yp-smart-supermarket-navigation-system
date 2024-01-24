@@ -314,9 +314,9 @@ a:focus {
 .slider_section .detail-box .btn-box .btn1 {
   display: inline-block;
   padding: 10px 15px;
-  background-color: #0ade3b;
+  background-color: #10a834;
   color: #ffffff;
-  border-radius: 0;
+  border-radius: 20px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   border: none;
@@ -331,7 +331,7 @@ a:focus {
   padding: 10px 15px;
   background-color: #000000;
   color: #ffffff;
-  border-radius: 0;
+  border-radius: 20px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   border: none;
@@ -412,6 +412,8 @@ a:focus {
 
 .service_section {
   position: relative;
+  background-color: #12782c;
+  color: #ffffff;
 }
 
 .service_section .box {
@@ -427,7 +429,7 @@ a:focus {
   align-items: center;
   text-align: center;
   margin-top: 45px;
-  background-color: #f8f8f9;
+  background-color: #4e9c5a;
   padding: 20px;
   border-radius: 5px;
 }
@@ -484,7 +486,7 @@ a:focus {
   padding: 10px 45px;
   background-color: #0ade3b;
   color: #ffffff;
-  border-radius: 0;
+  border-radius: 20px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   border: none;
@@ -495,8 +497,8 @@ a:focus {
 }
 
 .about_section {
-  background-color: #12782c;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .about_section .heading_container {
@@ -577,6 +579,17 @@ a:focus {
   fill: #054c1f;
 }
 
+.why_section .img-box1 img { /*styles for highlevel system architecture image*/
+  max-width: 100%;
+  height: auto;
+  transition: all 0.3s;
+}
+@media (max-width: 700px) {
+  .img-box1 img {
+    max-width: 50%;
+  }
+}
+
 .why_section .box h5 {
   font-weight: bold;
   margin-bottom: 10px;
@@ -599,16 +612,16 @@ a:focus {
 .why_section .btn-box a {
   display: inline-block;
   padding: 10px 45px;
-  background-color: #0ade3b;
+  background-color: #1d8e3b;
   color: #ffffff;
-  border-radius: 0;
+  border-radius: 20px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   border: none;
 }
 
 .why_section .btn-box a:hover {
-  background-color: #08b931;
+  background-color: #1d8e3b;
 }
 
 /*team section */
