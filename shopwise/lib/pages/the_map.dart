@@ -1,5 +1,6 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:shopwise/pages/pixel.dart';
 import 'package:shopwise/pages/player.dart';
@@ -7,8 +8,9 @@ import 'package:shopwise/pages/product.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shopwise/pages/the_bill.dart';
+import 'package:shopwise/providers/customer_provider.dart';
 
-class TheMap extends StatefulWidget {
+class TheMap extends ConsumerStatefulWidget {
   final Stream<String> directionStream;
 
   TheMap({Key? key, required this.directionStream}) : super(key: key);
@@ -17,7 +19,7 @@ class TheMap extends StatefulWidget {
   _TheMapState createState() => _TheMapState();
 }
 
-class _TheMapState extends State<TheMap> {
+class _TheMapState extends ConsumerState<TheMap> {
   static int numberInRow = 11;
   int numberOfSquares = numberInRow * 19;
 
@@ -47,6 +49,11 @@ class _TheMapState extends State<TheMap> {
 
   @override
   Widget build(BuildContext context) {
+    @override
+    initState() {
+      super.initState();
+    }
+
     return StreamBuilder<String>(
       stream: widget.directionStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -170,7 +177,12 @@ class _TheMapState extends State<TheMap> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
+                      print(
+                          "Printing order id ........................................");
+                      print("Order Id is: " +
+                          ref.read(customerNotifierProvider).order_id);
                       scanBarcode();
+
                       // Navigator.pushNamed(context, BarcodeReader.routeName);
                     },
                     child: Text("Scan Barcode")),
