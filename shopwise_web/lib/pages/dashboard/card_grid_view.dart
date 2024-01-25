@@ -114,7 +114,6 @@ class _CardGridViewState extends State<CardGridView> {
                   return Container(); // Return an empty container or a placeholder for missing data
                 } */
                 return Card(
-                  
                   elevation: 0,
                   color: detailsDict[index]["cardColor"] ?? Colors.white,
                   shape: RoundedRectangleBorder(
@@ -128,13 +127,22 @@ class _CardGridViewState extends State<CardGridView> {
                       ),
                       subtitle: Text(
                         detailsDict[index]["title"],
-                        style: TextStyle(fontSize: currentSize == 'large' ? 22 : 20),
+                        style: TextStyle(
+                            fontSize: currentSize == 'large' ? 22 : 20),
                       ),
                       title: Text(
                         detailsDict[index]["subtitle"],
                         style: TextStyle(
                             fontSize: currentSize == 'large' ? 16 : 13),
                       ),
+                      trailing: index == 1
+                          ? ElevatedButton(
+                              onPressed: () {
+                                // Add your button press logic here
+                              },
+                              child: Text('Add Items'),
+                            )
+                          : null,
                     ),
                   ),
                 );
