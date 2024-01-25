@@ -126,7 +126,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
       // ref.read(customerNotifierProvider.notifier).updateHashcode("myhashcode");
 
-      ref.read(customerNotifierProvider.notifier).updateOrderId("5");
+      // ref.read(customerNotifierProvider.notifier).updateOrderId("5");
 
       ref
           .read(customerNotifierProvider.notifier)
@@ -187,7 +187,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               AuthenticatedView(child: MQTTClientTest()),
           AllProducts.routeName: (context) =>
               AuthenticatedView(child: AllProducts()),
-          ScanQrCodePage.routeName: (context) => ScanQrCodePage(),
+          // ScanQrCodePage.routeName: (context) => ScanQrCodePage(),
           TheBill.routeName: (context) => AuthenticatedView(child: TheBill()),
           // LoginScreen.routeName: (context) => const LoginScreen(),
         },

@@ -46,7 +46,10 @@ class _ScanBarcodeState extends ConsumerState<ScanBarcode> {
                     height: 120,
                     child: ElevatedButton(
                       onPressed: scanBarcode,
-                      child: Text('Scan Item'),
+                      child: Text(
+                        'Scan QR',
+                        style: TextStyle(fontSize: 20),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
@@ -85,7 +88,9 @@ class _ScanBarcodeState extends ConsumerState<ScanBarcode> {
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () {
-                  ref.read(customerNotifierProvider.notifier).updateHashcode(widget._scanBarcodeResult);
+                  ref
+                      .read(customerNotifierProvider.notifier)
+                      .updateHashcode(widget._scanBarcodeResult);
                   ref.read(customerNotifierProvider.notifier).saveCustomer();
                   Navigator.pushNamed(context, MQTTClientTest.routeName);
                 },

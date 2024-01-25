@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise/models/product.dart';
 import 'package:shopwise/widgets/new_product.dart';
@@ -46,6 +47,8 @@ class _SelectItemsState extends State<SelectItems> {
     final myArguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     List<Product> myShoppingList = myArguments['shoppingList'];
+
+   
 
     // myArguments != null ? widget.addedItems = myArguments as List<Product> : null;
     return Scaffold(

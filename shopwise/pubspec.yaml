@@ -53,6 +53,8 @@ dependencies:
   encrypt: any
   flutter_dotenv: ^5.1.0
   mobile_scanner: ^3.5.6
+  fluttertoast: ^8.0.8
+  
 
 dev_dependencies:
   flutter_test:
