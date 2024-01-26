@@ -1,24 +1,20 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:shopwise_web/pages/login/email_confirm.dart';
 import 'package:shopwise_web/pages/login/login.dart';
+import 'package:shopwise_web/side_navbar.dart';
 import 'package:shopwise_web/widgets/custom_button.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
-  static const String routeName = '/register';
+class ConfirmEmail extends StatefulWidget {
+  final String email;
+  const ConfirmEmail({super.key, required this.email});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<ConfirmEmail> createState() => _ConfirmEmailState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _ConfirmEmailState extends State<ConfirmEmail> {
   TextEditingController usernameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  bool _obscureText = true;
-
+  TextEditingController confirmationCodeController = TextEditingController();
 
   void showTemporaryAlert(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -30,63 +26,59 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool areFieldsFilled() {
-    return usernameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty &&
-        emailController.text.isNotEmpty;
+    return confirmationCodeController.text.isNotEmpty &&
+        usernameController.text.isNotEmpty;
   }
 
+@override
+  void initState() {
+    super.initState();
+    usernameController.text = widget.email;
+  }
+  
   @override
   void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
-    emailController.dispose();
+    confirmationCodeController.dispose();
     super.dispose();
   }
 
   //----------------------------------------
   /// Signs a user up with a username, password, and email. The required
   /// attributes may be different depending on your app's configuration.
-  Future<void> signUpUser({
-    required String username,
-    required String password,
-    required String email,
-    String? phoneNumber,
-  }) async {
-    try {
-      final userAttributes = {
-        AuthUserAttributeKey.preferredUsername: username,
-        if (phoneNumber != null) AuthUserAttributeKey.phoneNumber: phoneNumber,
-        // additional attributes as needed
-      };
-      final result = await Amplify.Auth.signUp(
-        username: email,
-        password: password,
-        options: SignUpOptions(
-          userAttributes: userAttributes,
-        ),
-      );
-      await _handleSignUpResult(result);
-    } on AuthException catch (e) {
-      safePrint('Error signing up user: ${e.message}');
-    }
-  }
-
-  Future<void> _handleSignUpResult(SignUpResult result) async {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-          builder: ((context) => ConfirmEmail(email: emailController.text))),
-      (route) => false,
+  Future<void> confirmUser({
+  required String username,
+  required String confirmationCode,
+}) async {
+  try {
+    final result = await Amplify.Auth.confirmSignUp(
+      username: username,
+      confirmationCode: confirmationCode,
     );
-    switch (result.nextStep.signUpStep) {
-      case AuthSignUpStep.confirmSignUp:
-        final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
-        _handleCodeDelivery(codeDeliveryDetails);
-        break;
-      case AuthSignUpStep.done:
-        safePrint('Sign up is complete');
-        break;
-    }
+    // Check if further confirmations are needed or if
+    // the sign up is complete.
+    await _handleSignUpResult(result);
+  } on AuthException catch (e) {
+    showTemporaryAlert(e.message);
+    safePrint('Error confirming user: ${e.message}');
   }
+}
+  
+  Future<void> _handleSignUpResult(SignUpResult result) async {
+  switch (result.nextStep.signUpStep) {
+    case AuthSignUpStep.confirmSignUp:
+      final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
+      _handleCodeDelivery(codeDeliveryDetails);
+      break;
+    case AuthSignUpStep.done:
+      showTemporaryAlert('Completed Signup.');
+      safePrint('Sign up is complete');
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: ((context) => const SideNavBar())),
+          (route) => false,
+        );
+      break;
+  }
+}
 
   void _handleCodeDelivery(AuthCodeDeliveryDetails codeDeliveryDetails) {
     showTemporaryAlert("Please check your email for the verification code.");
@@ -95,6 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'Please check your ${codeDeliveryDetails.deliveryMedium.name} for the code.',
     );
   }
+
 
 //-----------------------------------------
   @override
@@ -151,8 +144,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white10),
                                 child: TextField(
-                                  controller:
-                                      usernameController, // Add this line
+                                  
+                                  controller: usernameController, // Add this line
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
@@ -169,53 +162,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white10),
                                 child: TextField(
-                                  controller: emailController, // Add this line
+                                  controller:
+                                      confirmationCodeController, // Add this line
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: "Email",
+                                    hintText: "Code",
                                     hintStyle: TextStyle(color: Colors.white60),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white10,
-                                ),
-                                child: Stack(
-                                  alignment: Alignment.centerRight,
-                                  children: [
-                                    TextField(
-                                      controller: passwordController,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                      obscureText: _obscureText,
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Password",
-                                        hintStyle:
-                                            TextStyle(color: Colors.white60),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscureText = !_obscureText;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        _obscureText
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Colors.white60,
-                                        size: 20,
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ),
                               const SizedBox(height: 20),
@@ -225,13 +179,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                 buttonColor: Colors.white70,
                                 buttonHeight: 60,
                                 buttonWidth: 380,
-                                text: "Sign Up",
+                                text: "Confirm",
                                 onPressed: () {
                                   if (areFieldsFilled()) {
-                                    signUpUser(
-                                      username: usernameController.text,
-                                      password: passwordController.text,
-                                      email: emailController.text,
+                                    confirmUser(
+                                      confirmationCode: confirmationCodeController.text,
+                                      username:usernameController.text,
                                     );
                                   } else {
                                     showDialog(
@@ -381,71 +334,31 @@ class _RegisterPageState extends State<RegisterPage> {
                                       color: Colors.white10),
                                   child: TextField(
                                     controller:
-                                        emailController, // Add this line
+                                        confirmationCodeController, // Add this line
                                     style: const TextStyle(color: Colors.white),
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: "Email",
+                                      hintText: "Code",
                                       hintStyle:
                                           TextStyle(color: Colors.white60),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white10,
-                                  ),
-                                  child: Stack(
-                                    alignment: Alignment.centerRight,
-                                    children: [
-                                      TextField(
-                                        controller: passwordController,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                        obscureText: _obscureText,
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: "Password",
-                                          hintStyle:
-                                              TextStyle(color: Colors.white60),
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            _obscureText = !_obscureText;
-                                          });
-                                        },
-                                        icon: Icon(
-                                          _obscureText
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Colors.white60,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
+
                                 CustomButton(
                                   radius: 20,
                                   textColor: Colors.black,
                                   buttonColor: Colors.white70,
                                   buttonHeight: 60,
                                   buttonWidth: 380,
-                                  text: "Sign Up",
+                                  text: "Confirm",
                                   onPressed: () {
                                     if (areFieldsFilled()) {
                                       // Perform authentication or any other necessary action
-                                      signUpUser(
+                                      confirmUser(
                                         username: usernameController.text,
-                                        password: passwordController.text,
-                                        email: emailController.text,
+                                        confirmationCode: confirmationCodeController.text,
                                       );
                                     } else {
                                       showDialog(

@@ -1,3 +1,5 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/dashboard/dashboard.dart';
 import 'package:shopwise_web/pages/login/login.dart';
@@ -6,6 +8,7 @@ import 'package:sidebarx/sidebarx.dart';
 
 class SideNavBar extends StatefulWidget {
   const SideNavBar({super.key});
+  static const String routeName = '/side_navbar';
 
   @override
   State<SideNavBar> createState() => _SideNavBarState();
@@ -14,6 +17,17 @@ class SideNavBar extends StatefulWidget {
 class _SideNavBarState extends State<SideNavBar> {
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
   final _key = GlobalKey<ScaffoldState>();
+
+  Future<void> signOutCurrentUser() async {
+    final result = await Amplify.Auth.signOut();
+    if (result is CognitoCompleteSignOut) {
+      safePrint('Sign out completed successfully');
+      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+    } else if (result is CognitoFailedSignOut) {
+      safePrint('Error signing user out: ${result.exception.message}');
+    }
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +78,11 @@ class _SideNavBarState extends State<SideNavBar> {
                           _key.currentState?.closeDrawer();
                           return const Placement();
                         case 2:
-                          _key.currentState?.closeDrawer();
+                         // _key.currentState?.closeDrawer();
                           //log out
-                          return const LoginPage();
+                          signOutCurrentUser();
+                          return Text('');
+                          
                         default:
                           return const Dashboard();
                       }

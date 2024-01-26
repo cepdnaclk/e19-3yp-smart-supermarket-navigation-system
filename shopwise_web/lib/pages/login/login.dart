@@ -155,33 +155,133 @@
 //   }
 // }
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:shopwise_web/pages/login/forgotpassword.dart';
 import 'package:shopwise_web/pages/login/register.dart';
 import 'package:shopwise_web/side_navbar.dart';
 import 'package:shopwise_web/widgets/custom_button.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String? username;
+
+  const LoginPage({super.key, this.username});
+  static const String routeName = '/';
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  initState() {
+    super.initState();
+    emailController.text = widget.username ?? '';
+  }
+
+  bool _obscureText = true;
+
   bool areFieldsFilled() {
-    return usernameController.text.isNotEmpty &&
+    return emailController.text.isNotEmpty &&
         passwordController.text.isNotEmpty;
   }
 
-  @override
-  void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
-    super.dispose();
+  void showTemporaryAlert(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2), // Adjust the duration as needed
+      ),
+    );
+  }
+
+
+  Future<void> signInUser({
+    required String username,
+    required String password,
+  }) async {
+    try {
+      final result = await Amplify.Auth.signIn(
+        username: username,
+        password: password,
+      );
+      await _handleSignInResult(result, username);
+    } on AuthException catch (e) {
+      safePrint('Error signing in: ${e.message}');
+    }
+  }
+
+  Future<void> _handleSignInResult(SignInResult result, String username) async {
+    switch (result.nextStep.signInStep) {
+      case AuthSignInStep.confirmSignInWithSmsMfaCode:
+        final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
+        _handleCodeDelivery(codeDeliveryDetails);
+        break;
+      case AuthSignInStep.confirmSignInWithNewPassword:
+        safePrint('Enter a new password to continue signing in');
+        break;
+      case AuthSignInStep.resetPassword:
+        final resetResult = await Amplify.Auth.resetPassword(
+          username: username,
+        );
+        await _handleResetPasswordResult(resetResult);
+        break;
+      case AuthSignInStep.confirmSignUp:
+        // Resend the sign up code to the registered device.
+        final resendResult = await Amplify.Auth.resendSignUpCode(
+          username: username,
+        );
+        _handleCodeDelivery(resendResult.codeDeliveryDetails);
+        break;
+      case AuthSignInStep.done:
+        safePrint('Sign in is complete');
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: ((context) => const SideNavBar())),
+          (route) => false,
+        );
+        break;
+      default:
+        safePrint('Unhandled sign-in step: ${result.nextStep.signInStep}');
+        break;
+    }
+  }
+
+  Future<void> _handleResetPasswordResult(ResetPasswordResult result) async {
+    switch (result.nextStep.updateStep) {
+      case AuthResetPasswordStep.confirmResetPasswordWithCode:
+        final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
+        _handleCodeDelivery(codeDeliveryDetails);
+        break;
+      case AuthResetPasswordStep.done:
+        safePrint('Successfully reset password');
+        break;
+    }
+  }
+
+  void _handleCodeDelivery(AuthCodeDeliveryDetails codeDeliveryDetails) {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ForgotPassword(username: emailController.text,),
+        ));
+    safePrint(
+      'A confirmation code has been sent to ${codeDeliveryDetails.destination}. '
+      'Please check your ${codeDeliveryDetails.deliveryMedium.name} for the code.',
+    );
+  }
+
+  Future<void> resetPassword(String username) async {
+    try {
+      final result = await Amplify.Auth.resetPassword(
+        username: username,
+      );
+      await _handleResetPasswordResult(result);
+    } on AuthException catch (e) {
+      showTemporaryAlert("Please enter your Email address");
+      safePrint('Error resetting password: ${e.message}');
+    }
   }
 
   @override
@@ -221,7 +321,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Center(
                       child: SingleChildScrollView(
                         child: Container(
-                          height: 400,
+                          height: 430,
                           width: 380,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -239,11 +339,11 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Colors.white10),
                                 child: TextField(
                                   controller:
-                                      usernameController, // Add this line
+                                      emailController, // Add this line
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: "Username",
+                                    hintText: "Email",
                                     hintStyle: TextStyle(color: Colors.white60),
                                   ),
                                 ),
@@ -254,19 +354,48 @@ class _LoginPageState extends State<LoginPage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white10),
-                                child: TextField(
-                                  controller:
-                                      passwordController, // Add this line
-                                  style: const TextStyle(color: Colors.white),
-                                  obscureText: true,
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Password",
-                                      hintStyle:
-                                          TextStyle(color: Colors.white60)),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white10,
                                 ),
+                                child: Stack(
+                                  alignment: Alignment.centerRight,
+                                  children: [
+                                    TextField(
+                                      controller: passwordController,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      obscureText: _obscureText,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Password",
+                                        hintStyle:
+                                            TextStyle(color: Colors.white60),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscureText = !_obscureText;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        _obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Colors.white60,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  resetPassword(emailController.text);
+                                },
+                                child: Text("Forgot password",
+                                    style: TextStyle(
+                                        color: Colors.white.withOpacity(0.7))),
                               ),
                               const SizedBox(height: 20),
                               CustomButton(
@@ -279,12 +408,9 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: () {
                                   if (areFieldsFilled()) {
                                     // Perform authentication or any other necessary action
-
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              const SideNavBar())),
-                                      (route) => false,
+                                    signInUser(
+                                      username: emailController.text,
+                                      password: passwordController.text,
                                     );
                                   } else {
                                     showDialog(
@@ -369,7 +495,7 @@ class _LoginPageState extends State<LoginPage> {
               )
             : Center(
                 child: Container(
-                  height: 600,
+                  height: 620,
                   width: 430,
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 195, 241, 196),
@@ -398,7 +524,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           Container(
-                            height: 400,
+                            height: 430,
                             width: 380,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
@@ -416,11 +542,11 @@ class _LoginPageState extends State<LoginPage> {
                                       color: Colors.white10),
                                   child: TextField(
                                     controller:
-                                        usernameController, // Add this line
+                                        emailController, // Add this line
                                     style: const TextStyle(color: Colors.white),
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: "Username",
+                                      hintText: "Email",
                                       hintStyle:
                                           TextStyle(color: Colors.white60),
                                     ),
@@ -429,22 +555,52 @@ class _LoginPageState extends State<LoginPage> {
 
                                 const SizedBox(height: 10),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white10),
-                                  child: TextField(
-                                    controller:
-                                        passwordController, // Add this line
-                                    style: const TextStyle(color: Colors.white),
-                                    obscureText: true,
-                                    decoration: const InputDecoration(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white10,
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.centerRight,
+                                  children: [
+                                    TextField(
+                                      controller: passwordController,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      obscureText: _obscureText,
+                                      decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         hintText: "Password",
                                         hintStyle:
-                                            TextStyle(color: Colors.white60)),
-                                  ),
+                                            TextStyle(color: Colors.white60),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscureText = !_obscureText;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        _obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Colors.white60,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                                TextButton(
+                                  onPressed: () {
+                                    resetPassword(emailController.text);
+                                  },
+                                  child: Text("Forgot password?",
+                                      style: TextStyle(
+                                          color:
+                                              Colors.white.withOpacity(0.7))),
                                 ),
                                 const SizedBox(height: 20),
                                 CustomButton(
@@ -457,12 +613,9 @@ class _LoginPageState extends State<LoginPage> {
                                   onPressed: () {
                                     if (areFieldsFilled()) {
                                       // Perform authentication or any other necessary action
-
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: ((context) =>
-                                                const SideNavBar())),
-                                        (route) => false,
+                                      signInUser(
+                                        username: emailController.text,
+                                        password: passwordController.text,
                                       );
                                     } else {
                                       showDialog(
