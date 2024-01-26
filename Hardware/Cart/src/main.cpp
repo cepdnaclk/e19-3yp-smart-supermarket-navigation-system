@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include "PinDefinitionsAndMore.h"
 #include "SupermarketMapper.h"
+#include <display.h>
 #include <IRremote.hpp>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h> 
@@ -12,13 +13,19 @@
 #include <WiFi.h>
 #include <Wire.h>
 #include <QMC5883LCompass.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
 // Insert your network credentials
-#define WIFI_SSID "Dialog 4G 932"
-#define WIFI_PASSWORD "B40a8EC1"
+// #define WIFI_SSID "Dialog 4G 932"
+// #define WIFI_PASSWORD "B40a8EC1"
+
+#define WIFI_SSID "PeraComStudents"
+#define WIFI_PASSWORD "abcd1234"
 
 #define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/test"
+
 
 WiFiClientSecure net = WiFiClientSecure();
 PubSubClient client(net);
@@ -26,23 +33,39 @@ PubSubClient client(net);
 Adafruit_MPU6050 mpu;
 QMC5883LCompass compass;
 
-
-const int hallSensorPin = 34;
+const int hallSensorPin = 32;
 
 unsigned long sendDataPrevMillis = 0;
 int count = 0;
 int distance = 0;
 int currentStation = 0;
 int currentLocation = 0;
+uint8_t low_batt_counter = 0;
 
 //Define Ir Receiver pins
 #define DECODE_NEC     
 #define IR_RECEIVE_PIN  25
 #define wifiInd  16
 #define awsInd 17
+#define BATT_PIN 26
+
+//battry info
+#define BATTV_MAX           4.1     // maximum voltage of battery
+#define BATTV_MIN           3.2     // what we regard as an empty battery
+#define BATTV_LOW           3.4     // voltage considered to be low battery
+#define BATT_ALERT_THRESHOLD 5      // how many times we read low battery before sending alert
 
 //Map 
  
+ //Print Battery Info
+ void printBatteryLevel() {
+  float battv = analogRead(BATT_PIN) * 2 * 3.3 / 4095 *1.05;
+  int battPercent = (battv - BATTV_MIN) / (BATTV_MAX - BATTV_MIN) * 100;
+  Serial.print("Battery:");
+  Serial.println(battPrecent);
+  batteryLevel(battPercent);
+  
+}
 
 //Get Accelerometer and Gyroscope data  from MPU6050
 int getMPUSensorReadings() {
@@ -59,7 +82,7 @@ int getMPUSensorReadings() {
   // Serial.print(", Z: ");
   // Serial.println(g.gyro.z);
 
-  return a.acceleration.y;
+  return a.acceleration.z;
 }
 
 //Get Hall Effect Sensor data
@@ -82,13 +105,10 @@ int getMAGSensorReadings() {
 	z = compass.getZ();
 	
 	// Calculate heading angle
-  float heading = atan2(y, x) * 180.0 / PI;
 
-  // Adjust the heading to be in the range [0, 360)
-  if (heading < 0) {
-    heading += 360.0;
-  }
 
+  float heading = compass.getAzimuth();
+ 
   return heading;
 }
 
@@ -153,13 +173,13 @@ void messageHandler(char* topic, byte* payload, unsigned int length)
   Serial.println(message);
 }
 
-
 void connectAWS()
 {
     //Connect to Wifi
     WiFi.mode(WIFI_STA);
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     Serial.print("Connecting to Wi-Fi");
+    displayText("Connecting", 2, 1);
     while (WiFi.status() != WL_CONNECTED){
     Serial.print(".");
     delay(300);
@@ -167,6 +187,9 @@ void connectAWS()
     digitalWrite(wifiInd, HIGH);
     Serial.println();
     Serial.print("Connected with IP: ");
+    displayText("Connected", 2, 1);
+    displayText("Enjoy", 2, 1);
+    displayHeader();
     Serial.println(WiFi.localIP());
     Serial.println();
  
@@ -224,7 +247,11 @@ void hallSensorInterrupt() {
     
 }
 
+//Create Supermarket Mapper Object
 SupermarketMapper supermarketMapper;
+
+//Create Display Object
+//Display OledDisplay;
 
 void setup() {
     Serial.begin(115200);
@@ -234,6 +261,9 @@ void setup() {
     //Initiate Indicate LEDs
     pinMode(wifiInd, OUTPUT); //WiFi indicator
     pinMode(awsInd, OUTPUT); // AWS connection indicator
+
+    // initialize the OLED object
+    initOLED();
 
     //AWS Connect
     connectAWS();
@@ -247,7 +277,12 @@ void setup() {
     //Get Sensor data
     pinMode(hallSensorPin, INPUT); 
     pinMode(4, INPUT); 
+    pinMode(BATT_PIN, INPUT);
 
+    //Calibrate HMC5883L
+    //compass.calibrate();
+
+    
 
   Wire.begin(); // Start the I2C communication
   
@@ -284,7 +319,7 @@ void loop() {
 
   
     supermarketMapper.updateLocation(receivedCommand, direction, distance, heading);
-      
+    printBatteryLevel();
     currentLocation = supermarketMapper.displayLocation();
     publishMessage(currentLocation);
     client.loop();
