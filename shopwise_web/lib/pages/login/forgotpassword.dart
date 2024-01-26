@@ -77,6 +77,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     required String username,
     required String newPassword,
     required String confirmationCode,
+    
   }) async {
     try {
       final result = await Amplify.Auth.confirmResetPassword(
@@ -86,11 +87,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       );
       safePrint('Password reset complete: ${result.isPasswordReset}');
       showDialogMessage("Password Reset Complete.");
+       Future.delayed(const Duration(milliseconds: 100)).then((_) {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => LoginPage( username: usernameController.text,),
           ));
+       });
     } on AuthException catch (e) {
       safePrint('Error resetting password: ${e.message}');
     }

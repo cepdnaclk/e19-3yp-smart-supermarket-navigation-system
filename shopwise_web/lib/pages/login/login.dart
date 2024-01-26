@@ -209,6 +209,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       await _handleSignInResult(result, username);
     } on AuthException catch (e) {
+      showTemporaryAlert(e.message);
       safePrint('Error signing in: ${e.message}');
     }
   }

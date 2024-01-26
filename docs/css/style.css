@@ -584,6 +584,9 @@ a:focus {
   height: auto;
   transition: all 0.3s;
 }
+.img-box1 img.zoomed {
+  transform: scale(1.5);
+}
 @media (max-width: 700px) {
   .img-box1 img {
     max-width: 50%;

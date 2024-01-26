@@ -91,7 +91,7 @@
   </div>
 
 
-  <!-- service section -->
+  <!-- why section -->
   <section class="why_section">
     <div class="container layout_padding2">
       <div class="heading_container heading_center">
@@ -99,7 +99,11 @@
           <span>Software Design</span>
         </h2>
         <p>
-          Our web and mobile apps feature simple user interfaces and easy navigation, prioritizing a seamless user experience. With a strong focus on user experience and security, our apps ensure a smooth and secure shopping journey for customers.
+          <br>
+          Our web and mobile apps feature simple user interfaces and easy navigation, prioritizing a seamless user
+          experience. With a strong focus on user experience and security, our apps ensure a smooth and secure shopping
+          journey for customers. Additionally, our web app collects and analyzes data, providing valuable insights that
+          empower supermarket owners with actionable information.
         </p>
       </div>
       <div class="heading_container heading_center layout_padding2">
@@ -109,73 +113,221 @@
       </div>
       <br>
       <div class="heading_container ">
-        <h2 style="color: green;">
-          Frontend
+        <h3 style="color: green;">
+          <b>Frontend</b>
+        </h3>
+      </div>
+      <div class="row">
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
+          <Ul>
+            <li><b>Flutter framework</b> - Flutter is a powerful cross-platform framework that allows us to create
+              beautiful and performant user interfaces for both mobile and web applications. </li><br>
+            <li><b>Dart programming language</b> - Provides a concise and efficient syntax, making development smoother
+              and more efficient. </li>
+            </li>
+          </Ul>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
+          <div class="img-box">
+            <img src="images/frontend.png" alt="" width="300px">
+          </div>
+        </div>
+      </div>
+
+      <div class="layout_padding2">
+        <div class="heading_container">
+          <h3 style="color: green;">
+            <b>Backend</b>
+          </h3>
+        </div>
+        <div class="row ">
+          <div class="col-md-5 d-flex justify-content-center align-items-center">
+            <div class="img-box">
+              <img src="images/backend.png" alt="" width="350px">
+            </div>
+          </div>
+          <div class="col-md-7 d-flex justify-content-center align-items-center">
+            <Ul>
+              <li>
+                <b>AWS IoT Core:</b>
+                <p>- Enables secure communication and management of IoT devices at scale.<br>
+                  - Facilitates seamless connectivity, control, and interaction with IoT devices.</p>
+              </li>
+              <li>
+                <b>AWS Lambda:</b>
+                <p>- Enables serverless computing.<br>- Allows us to run code without provisioning or managing
+                  servers.<br>
+                  - Provides a scalable and cost-effective solution.</p>
+              </li>
+              <li>
+                <b>AWS Cognito:</b>
+                <p>- Offers user authentication, authorization, and management services.<br>
+                  - Simplifies the addition of user sign-up and sign-in capabilities.<br>
+                  - Provides secure user management features.
+                </p>
+              </li>
+              <li>
+                <b>AWS Amplify:</b>
+                <p>- A comprehensive development platform for building scalable web and mobile applications.<br>
+                  - Offers a set of tools and services for app development, including authentication, data storage, and
+                  analytics.</p>
+              </li>
+              <li>
+                <b>Firebase Database:</b>
+                <p>- A NoSQL database provided by Firebase, a Google Cloud platform.<br>
+                  - Enables storing and retrieving structured data in real-time.<br>
+                  - Supports offline data synchronization and real-time updates.<br>
+                  - Provides secure data storage and access controls.</p>
+              </li>
+            </Ul>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <h4><b>Two main applications</b></h4>
+        <br>
+        <Ul>
+          <li><b>Mobile Application</b> - Shop Wise mobile application for supermarket customers</li>
+          <li><b>Web Application</b> - Shop Wise web application for supermarket owners</li>
+          </li>
+        </Ul>
+      </div>
+      <div class="container layout_padding2">
+        <h4 style="color: green;"><b>Mobile Application</b></h4>
+        <br>
+        <h5><b>UI Design</b></h5>
+        <br>
+        <div class="col-sm-12 d-flex justify-content-center align-items-center ">
+          <div class="img-box1">
+            <img src="images/solution_architecture.png" alt="" width=100% onclick="zoomImage(this);">
+          </div>
+          <script>
+            function zoomImage(image) {
+              image.classList.toggle("zoomed");
+            }
+          </script>
+        </div>
+      </div>
+      <div class="container layout_padding2">
+        <h4 style="color: green;"><b>Web Application</b></h4>
+        <br>
+        <h5><b>UI Design</b></h5><br>
+        <div class="col-sm-12 d-flex justify-content-center align-items-center ">
+          <div class="img-box1">
+            <img src="images/webUI.png" alt="" width=100% onclick="zoomImage(this);">
+          </div>
+          <script>
+            function zoomImage(image) {
+              image.classList.toggle("zoomed");
+            }
+          </script>
+        </div>
+      </div>
+      <div class="heading_container heading_center">
+        <h2>
+          <span> Software Testing</span>
         </h2>
       </div>
-      <div class="col-sm-12 d-flex justify-content-center align-items-center ">
-        <div class="img-box1">
-          <img src="images/solution_architecture.png" alt="" width="800px">
+      <div class="container layout_padding2">
+        <h4 style="color: green;"><b>Unit Testing</b></h4>
+        <br>
+        <p>
+          Unit testing is a fast and isolated software testing method that evaluates individual units of source code
+          to
+          assess their suitability for use. In our project, we employed unit testing to validate the connection
+          between
+          the AWS IoT Core and our mobile app. Additionally, we conducted tests on the individual components of our
+          mobile
+          and web apps to ensure their functionality and reliability. By conducting comprehensive unit testing, we
+          guarantee the quality and performance of our software components.
+        </p>
+        <div class="img-box d-flex justify-content-center">
+          <img src="images/unit_testing.png" alt="" width="95%">
         </div>
-      </div>
-      <br>
-      <div class="heading_container">
-        <h2 style="color: green;">
-          Backend
-        </h2>
-      </div>
-      <div class="col-sm-12 d-flex justify-content-center align-items-center ">
-        <div class="img-box1">
-          <img src="images/solution_architecture.png" alt="" width="800px">
-        </div>
-      </div>
-    </div>
-    <div class = "container ">
-      <h4><b>Two main applications</b></h4>
-      <br>
-      <Ul>
-        <li><b>Mobile Application</b> - Shop Wise mobile application for supermarket customers</li>
-        <li><b>Web Application</b> - Shop Wise web application for supermarket owners</li></li>
-      </Ul>
-    </div>
-    <div class = "container layout_padding2">
-      <h4 style="color: green;"><b>Mobile Application</b></h4>
-      <br>
-      <h5><b>UI Design</b></h5>
-      <div class="col-sm-12 d-flex justify-content-center align-items-center ">
-        <div class="img-box1">
-          <img src="images/solution_architecture.png" alt="" width="800px">
-        </div>
-      </div>
-    </div>
-    <div class = "container layout_padding2">
-      <h4 style="color: green;"><b>Web Application</b></h4>
-      <br>
-      <h5><b>UI Design</b></h5>
-      <div class="col-sm-12 d-flex justify-content-center align-items-center ">
-        <div class="img-box1">
-          <img src="images/solution_architecture.png" alt="" width="800px">
-        </div>
-      </div>
-    </div>
-    <div class="heading_container layout_padding2 heading_center">
-      <h2>
-        <span> Software Testing</span>
-      </h2>
+        <br>
 
-    </div>
+        <h4 style="color: green;"><b>Widget Testing</b></h4>
+        <br>
+        <div class="row">
+          <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <div class="img-box">
+              <img src="images/widget_testing.jpg" alt="" width="520px">
+            </div>
+          </div>
+          <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <div class="detail-box">
+              <p>
+                Widget testing is a vital aspect of our project, which utilizes the Flutter cross-platform
+                framework. We
+                have
+                implemented widget testing for both our web and mobile apps. This testing approach is crucial as it
+                focuses on
+                testing user components and their functionality. By conducting widget testing, we ensure that the
+                user
+                interface
+                (UI) behaves as intended, validating the behavior and interactions of various UI elements. This
+                meticulous
+                testing ensures a seamless and consistent user experience across both web and mobile platforms.
+              </p>
+            </div>
+          </div>
+        </div>
 
-    
+
+        <br>
+        <h4 style="color: green;"><b>API Testing</b></h4>
+        <br>
+        <div class="row">
+          <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <div class="img-box">
+              <img src="images/api_testing.jpg" alt="" width="520px">
+            </div>
+          </div>
+          <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <div class="detail-box">
+              <p>
+                API testing is an essential software testing approach used to evaluate the functionality and
+                reliability
+                of
+                application programming interfaces (APIs). In our project, we employed API testing specifically to
+                test
+                the CRUD
+                (Create, Read, Update, Delete) operations. By conducting API testing, we ensured that the API
+                endpoints
+                for
+                performing CRUD operations were working as expected, enabling seamless data manipulation and
+                management.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <br>
+        <h4 style="color: green;"><b>Integration Testing</b></h4><br>
+        <p>
+          Integration testing is an important software testing approach that we have implemented in our project. It
+          involves combining individual units of source code and testing them as a group. In our case, we have
+          specifically designed integration testing to verify the interaction between the frontend and backend
+          components
+          of our application. This comprehensive testing enables us to ensure that different parts of the app work
+          together seamlessly, as expected. By conducting integration testing, we can identify and resolve any
+          issues or
+          inconsistencies that may arise when integrating the frontend and backend components, ultimately delivering
+          a
+          robust and reliable application.
+        </p>
+        <br>
+      </div>
   </section>
 
   <!-- end service section -->
-  
+
   <!-- info section -->
-  
+
   <section class="info_section layout_padding2">
     <div class="container">
       <div class="row">
-        <div class="col-md-6 col-lg-6 info_col">
+        <div class="col-md-6 col-lg-5 info_col">
           <div class="info_contact">
             <h4>
               Address
@@ -212,7 +364,7 @@
               <i class="fa fa-github" aria-hidden="true"></i>
               
             </a>
-            <a href="">
+           <a href="">
               <i class="fa fa-twitter" aria-hidden="true"></i>
             </a>
             <a href="">
@@ -223,21 +375,22 @@
             </a> 
           </div> -->
         </div>
-        <!-- <div class="col-md-6 col-lg-3 info_col">
+        <div class="col-md-6 col-lg-4 info_col">
           <div class="info_detail">
             <h4>
-              Info
+              Useful Links
             </h4>
-            <p>
-              necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin
-              words, combined with a handful
-            </p>
+            <div class="info_links">
+            <a href="https://www.ce.pdn.ac.lk/">Department of Computer Engineering</a>
+            <a href="https://eng.pdn.ac.lk/">Faculty of Engineering</a>
+            <a href="https://www.pdn.ac.lk/"> University of Peradeniya</a>
+            </div>
           </div>
-        </div> -->
+        </div>
         <div class="col-md-6 col-lg-3 mx-auto info_col">
           <div class="info_link_box">
             <h4>
-              Links
+              Go To
             </h4>
             <div class="info_links">
               <a class="active" href="index.html">
@@ -258,7 +411,7 @@
             </div>
           </div>
         </div>
-        
+
       </div>
     </div>
   </section>
@@ -274,7 +427,7 @@
     </div>
   </section>
   <!-- footer section -->
-  
+
   <!-- jQery -->
   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
   <!-- popper js -->
@@ -292,7 +445,7 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
   </script>
   <!-- End Google Map -->
-  
+
 </body>
 
 </html>
