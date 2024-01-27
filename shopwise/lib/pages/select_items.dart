@@ -127,8 +127,11 @@ class _SelectItemsState extends ConsumerState<SelectItems> {
       onWillPop: () async {
         String sub_UUID =
             ref.read(customerNotifierProvider.notifier).getSubUuid();
+        String email = ref.read(customerNotifierProvider.notifier).getEmail();
         print("sub_UUID: $sub_UUID");
-        ref.read(shoppingListProvider.notifier).saveShoppingList(sub_UUID);
+        ref
+            .read(shoppingListProvider.notifier)
+            .saveShoppingList(sub_UUID, email);
         return true;
       },
       child: Scaffold(

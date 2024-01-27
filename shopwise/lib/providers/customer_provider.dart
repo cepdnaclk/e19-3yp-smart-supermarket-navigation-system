@@ -19,6 +19,10 @@ class CustomerNotifier extends StateNotifier<Customer> {
     return state.sub_uuid;
   }
 
+  String getEmail() {
+    return state.email;
+  }
+
   // Create seperate methods to update each field
   void updateSubUuid(String sub_uuid) {
     state = state.copyWith(sub_uuid: sub_uuid);
@@ -27,6 +31,8 @@ class CustomerNotifier extends StateNotifier<Customer> {
   void updateEmail(String email) {
     state = state.copyWith(email: email);
   } 
+
+
 
   void updateHashcode(String hashcode) {
     state = state.copyWith(hashcode: hashcode);

@@ -22,7 +22,7 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
     state = [];
   }
 
-  void saveShoppingList(String sub_UUID) {
+  void saveShoppingList(String sub_UUID, String email) {
     // Get a reference to the database collection 'customers'
     final ordersCollection = FirebaseFirestore.instance.collection('orders');
 
@@ -38,23 +38,26 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
         // Create a new entry
         ordersCollection.add({
           'id': sub_UUID,
+          'email': email,
           'products': state.map((e) => e.id).toList(),
         });
       } else {
         print("updating");
 
         List<QueryDocumentSnapshot<Map<String, dynamic>>> curentOrder =
-            value.docs.where((element) => element.data()['id'] == sub_UUID).toList();
+            value.docs.where((element) => element.data()['email'] == email).toList();
         // Update the entry
         if (curentOrder.isNotEmpty) {
           print("if case");
           curentOrder[0].reference.update({
+            'id': sub_UUID,
             'products': state.map((e) => e.id).toList(),
           });
         } else {
           print("else case");
           ordersCollection.add({
             'id': sub_UUID,
+            'email': email,
             'products': state.map((e) => e.id).toList(),
           });
         }
