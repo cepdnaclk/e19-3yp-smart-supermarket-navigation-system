@@ -24,14 +24,17 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
 
   void saveShoppingList(String sub_UUID) {
     // Get a reference to the database collection 'customers'
-    final shoppingListCollection =
-        FirebaseFirestore.instance.collection('orders');
+    final ordersCollection = FirebaseFirestore.instance.collection('orders');
+
+ 
 
     // Call the method to save the customer
-    shoppingListCollection.add({
+    ordersCollection.add({
       'id': sub_UUID,
-      'items': state,
+      'products': state.map((e) => e.id).toList(),
     });
+
+    print("saved!");
   }
 }
 

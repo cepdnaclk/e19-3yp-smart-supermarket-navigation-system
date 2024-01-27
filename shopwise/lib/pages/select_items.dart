@@ -1,11 +1,14 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopwise/models/product.dart';
+import 'package:shopwise/providers/customer_provider.dart';
+import 'package:shopwise/providers/shopping_list_provider.dart';
 import 'package:shopwise/widgets/new_product.dart';
 import 'package:shopwise/widgets/product_item.dart';
 
-class SelectItems extends StatefulWidget {
+class SelectItems extends ConsumerStatefulWidget {
   static const String routeName = '/selectItem';
   SelectItems({super.key});
 
@@ -32,10 +35,10 @@ class SelectItems extends StatefulWidget {
   // ];
 
   @override
-  State<SelectItems> createState() => _SelectItemsState();
+  ConsumerState<SelectItems> createState() => _SelectItemsState();
 }
 
-class _SelectItemsState extends State<SelectItems> {
+class _SelectItemsState extends ConsumerState<SelectItems> {
   void fetchProducts() async {
     final List<Product> tempList = <Product>[];
     CollectionReference collection =
@@ -120,39 +123,48 @@ class _SelectItemsState extends State<SelectItems> {
     List<Product> myShoppingList = myArguments['shoppingList'];
 
     // myArguments != null ? widget.addedItems = myArguments as List<Product> : null;
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Select Items'),
-        ),
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: widget.itemList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ProductListItem(
-                      product: widget.itemList[index],
-                      theList: myArguments['shoppingList'],
-                    );
-                    // return ListTile(
-                    //   onTap: () => Navigator.pop(
-                    //       context, widget.itemList[index].toString()),
-                    //   title: Text(widget.itemList[index].title),
-                    // );
-                  },
-                ),
-              ),
-
-              // ProductListItem(), // SocialPictureGroup(
-              //     imgUrl: "https://t4.ftcdn.net/jpg/02/47/92/55/360_F_247925567_FcVIHcFpkL6IQjQrZULxnBVtm3dPrtAx.jpg",
-
-              //            title: "Burger",
-              //     color: Colors.green,
-              //     onTap: () {})
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        String sub_UUID =
+            ref.read(customerNotifierProvider.notifier).getSubUuid();
+        print("sub_UUID: $sub_UUID");
+        ref.read(shoppingListProvider.notifier).saveShoppingList(sub_UUID);
+        return true;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Select Items'),
           ),
-        ));
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: widget.itemList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ProductListItem(
+                        product: widget.itemList[index],
+                        theList: myArguments['shoppingList'],
+                      );
+                      // return ListTile(
+                      //   onTap: () => Navigator.pop(
+                      //       context, widget.itemList[index].toString()),
+                      //   title: Text(widget.itemList[index].title),
+                      // );
+                    },
+                  ),
+                ),
+
+                // ProductListItem(), // SocialPictureGroup(
+                //     imgUrl: "https://t4.ftcdn.net/jpg/02/47/92/55/360_F_247925567_FcVIHcFpkL6IQjQrZULxnBVtm3dPrtAx.jpg",
+
+                //            title: "Burger",
+                //     color: Colors.green,
+                //     onTap: () {})
+              ],
+            ),
+          )),
+    );
   }
 }

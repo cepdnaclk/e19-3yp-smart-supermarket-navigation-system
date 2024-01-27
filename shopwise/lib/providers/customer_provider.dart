@@ -14,6 +14,9 @@ class CustomerNotifier extends StateNotifier<Customer> {
     state = customer;
 
   }
+  String getSubUuid() {
+    return state.sub_uuid;
+  }
 
   // Create seperate methods to update each field
   void updateSubUuid(String sub_uuid) {
