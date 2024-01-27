@@ -15,6 +15,8 @@ public:
   int displayLocation();
   int getCurrentCell();
   void resetPosition();
+  int getLocationX();
+  int getLocationY();
 
 private:
   std::pair<int, int> cart_location; // {row, col}
@@ -207,6 +209,17 @@ int SupermarketMapper::getCurrentCell()
 {
   // Get the current cell number based on the cart's location
   return supermarketMatrix[cart_location.first][cart_location.second];
+}
+int SupermarketMapper::getLocationX()
+{
+  
+  return cart_location.first;
+}
+
+int SupermarketMapper::getLocationY()
+{
+  
+  return cart_location.second;
 }
 
 void SupermarketMapper::resetPosition()

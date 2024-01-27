@@ -70,4 +70,32 @@ void batteryLevel(int16_t lev){
 
 }
 
+void showTestData(int direction ,int acceleration , int distance , int currentCell,int current_Station ,int locationX ,int locationY){
+
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.setTextSize(2);
+  display.println("ShopWise");
+  display.setCursor(0,16);
+  display.setTextSize(1);
+  display.print("Direction: ");
+  display.println(direction);
+  display.print("Acceleration: ");
+  display.println(acceleration);
+  display.print("Distance: ");
+  display.println(distance);
+  display.print("Current Station: ");
+  display.println(current_Station);
+  display.print("Current Cell: ");
+  display.println(currentCell);
+  display.print("(X,Y): ");
+  display.print(locationX);
+  display.print(",");
+  display.println(locationY);
+  
+  display.display();
+  //display.startscrollright(0x00, 0x01);
+
+}
+
 #endif  // OLED_FUNCTIONS_H

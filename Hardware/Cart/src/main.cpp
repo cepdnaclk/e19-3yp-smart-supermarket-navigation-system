@@ -295,6 +295,7 @@ void publishMessage(int position)
   doc["distance"] = distance;
   doc["current_Station"] = currentStation;
   doc["current_Location"] = position;
+  doc["current_Direction"] = getMAGSensorReadings();
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer); // print to client
 
@@ -444,16 +445,19 @@ void loop()
   publishMessage(currentLocation);
   client.loop();
 
-  // Print Battery Level
-  if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
-  {
-    prev_battLev = printBatteryLevel();
-    batt_counter = 0;
-  }
-  else
-  {
-    batt_counter++;
-  }
+  // // Print Battery Level
+  // if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
+  // {
+  //   prev_battLev = printBatteryLevel();
+  //   batt_counter = 0;
+  // }
+  // else
+  // {
+  //   batt_counter++;
+  // }
+
+  // Test Results
+  showTestData(direction, acceleration, distance, currentLocation, currentStation, supermarketMapper.getLocationX(), supermarketMapper.getLocationY());
 
   delay(1500);
 }
