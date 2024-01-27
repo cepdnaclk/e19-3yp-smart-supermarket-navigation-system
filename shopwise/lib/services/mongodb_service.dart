@@ -17,6 +17,7 @@ static String connectionString = "mongodb+srv://e19210:YQB3qDTT8P4wHQeF@cluster0
     print("Taking collection");
 
     var currentCollection = db.collection(collection);
+    print("currentCollection: ${currentCollection.toString()}" );
     print(await currentCollection.find().toList());
     // print("Inserting data");
 
