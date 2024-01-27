@@ -1,11 +1,12 @@
 
 #include <Arduino.h>
+#include <ElegantOTA.h>
 #include "PinDefinitionsAndMore.h"
 #include "SupermarketMapper.h"
 #include <display.h>
 #include <IRremote.hpp>
 #include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h> 
+#include <Adafruit_Sensor.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include "Secret.h"
@@ -17,15 +18,14 @@
 #include <Adafruit_SSD1306.h>
 
 // Insert your network credentials
-#define WIFI_SSID "Dialog 4G 932"
-#define WIFI_PASSWORD "B40a8EC1"
+// #define WIFI_SSID "Dialog 4G 932"
+// #define WIFI_PASSWORD "B40a8EC1"
 
 // #define WIFI_SSID "PeraComStudents"
 // #define WIFI_PASSWORD "abcd1234"
 
-#define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
+#define AWS_IOT_PUBLISH_TOPIC "esp32/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/test"
-
 
 WiFiClientSecure net = WiFiClientSecure();
 PubSubClient client(net);
@@ -35,6 +35,8 @@ QMC5883LCompass compass;
 
 const int hallSensorPin = 32;
 
+const int biosPin = 35;
+
 unsigned long sendDataPrevMillis = 0;
 int count = 0;
 int distance = 0;
@@ -43,24 +45,79 @@ int currentLocation = 0;
 uint8_t batt_counter = 200;
 uint8_t prev_battLev = 200;
 
-//Define Ir Receiver pins
-#define DECODE_NEC     
-#define IR_RECEIVE_PIN  25
-#define wifiInd  16
+// Define Ir Receiver pins
+#define DECODE_NEC
+#define IR_RECEIVE_PIN 25
+#define wifiInd 16
 #define awsInd 17
 #define BATT_PIN 33
 
-//battry info
-#define BATTV_MAX           4.1     // maximum voltage of battery
-#define BATTV_MIN           3.2     // what we regard as an empty battery
-#define BATTV_LOW           3.4     // voltage considered to be low battery
-#define BATT_ALERT_THRESHOLD 5      // how many times we read low battery before sending alert
+// battry info
+#define BATTV_MAX 4.1          // maximum voltage of battery
+#define BATTV_MIN 3.2          // what we regard as an empty battery
+#define BATTV_LOW 3.4          // voltage considered to be low battery
+#define BATT_ALERT_THRESHOLD 5 // how many times we read low battery before sending alert
 
-//Map 
- 
- //Print Battery Info
- int printBatteryLevel() {
-  float battv = analogRead(BATT_PIN) * 2 * 3.3 / 4095 *1.05;
+// Map
+
+// Wifi list
+const char *ssid[] = {"Dialog 4G 932", "dlg989", "Eng-Student", "PeraComStudents"}; // List of SSIDs to try
+const char *password[] = {"B40a8EC1", "coc200044", "3nG5tuDt", "abcd1234"};         // Corresponding passwords
+const int num_ssids = 4;
+int ssid_index = 0;
+
+// Try multiple wifi(s) and connect
+void connectToWiFi()
+{
+  Serial.println("Connecting to WiFi");
+  clearDisplay();
+  displayText("Connecting to WiFi", 2, 1);
+  delay(500);
+
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED && ssid_index < num_ssids)
+  {
+    Serial.print("Attempting connection to ");
+    Serial.println(ssid[ssid_index]);
+    clearDisplay();
+    displayText("Trying...", 2, 0);
+    displayText(ssid[ssid_index], 2, 2);
+
+    for (int i = 0; i < 5; i++)
+    {
+      WiFi.begin(ssid[ssid_index], password[ssid_index]);
+      delay(300);
+      if (WiFi.status() == WL_CONNECTED)
+        break;
+    }
+
+    ssid_index++;
+  }
+
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    Serial.println("Connected to WiFi");
+    Serial.print("SSID: ");
+    Serial.println(WiFi.SSID());
+    Serial.print("IP Address: ");
+    Serial.println(WiFi.localIP());
+    clearDisplay();
+    displayText("WiFi connected!", 2, 1);
+    digitalWrite(wifiInd, HIGH);
+  }
+  else
+  {
+    Serial.println("Could not connect to any available SSID");
+    clearDisplay();
+    displayText("WiFi connection failed!", 1, 1);
+  }
+  delay(1000);
+}
+
+// Print Battery Info
+int printBatteryLevel()
+{
+  float battv = analogRead(BATT_PIN) * 2 * 3.3 / 4095 * 1.05;
   Serial.println(battv);
   int battPercent = (battv - BATTV_MIN) / (BATTV_MAX - BATTV_MIN) * 100;
   Serial.print("Battery:");
@@ -69,8 +126,9 @@ uint8_t prev_battLev = 200;
   return battPercent;
 }
 
-//Get Accelerometer and Gyroscope data  from MPU6050
-int getMPUSensorReadings() {
+// Get Accelerometer and Gyroscope data  from MPU6050
+int getMPUSensorReadings()
+{
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
@@ -87,59 +145,65 @@ int getMPUSensorReadings() {
   return a.acceleration.z;
 }
 
-//Get Hall Effect Sensor data
-int hallEffectSensor(){
-  int sensorValue = analogRead(hallSensorPin); 
+// Get Hall Effect Sensor data
+int hallEffectSensor()
+{
+  int sensorValue = analogRead(hallSensorPin);
   Serial.print("Analog Sensor Value: ");
   Serial.println(sensorValue);
   return sensorValue;
-  }
+}
 
-//Get Magnetometer data from HMC5883L
-int getMAGSensorReadings() {
+// Get Magnetometer data from HMC5883L
+int getMAGSensorReadings()
+{
   int x, y, z, a, b;
-	char myArray[3];
-	
-	compass.read();
-  
-	x = compass.getX();
-	y = compass.getY();
-	z = compass.getZ();
-	
-	// Calculate heading angle
+  char myArray[3];
 
+  compass.read();
+
+  x = compass.getX();
+  y = compass.getY();
+  z = compass.getZ();
+
+  // Calculate heading angle
 
   float heading = compass.getAzimuth();
- 
+
   return heading;
 }
 
-//Read IR sensor data
-int IrData(){
-  int receivedCommand=0;
-  if (IrReceiver.decode()) {
-       
-        IrReceiver.printIRResultShort(&Serial);
-        IrReceiver.printIRSendUsage(&Serial);
-        if (IrReceiver.decodedIRData.protocol == UNKNOWN) {
-            Serial.println(F("Received noise or an unknown (or not yet enabled) protocol"));
-        }else{
-          Serial.println();
-        
-          receivedCommand = IrReceiver.decodedIRData.command;
-  
-          if(currentStation != receivedCommand){
-              currentStation = receivedCommand;
-              distance = 0;
-          }
-        }
-        IrReceiver.resume(); // Enable receiving of the next value
-    }
-    return receivedCommand;
-  
-  }
+// Read IR sensor data
+int IrData()
+{
+  int receivedCommand = 0;
+  if (IrReceiver.decode())
+  {
 
-//Send Testing data to AWS
+    IrReceiver.printIRResultShort(&Serial);
+    IrReceiver.printIRSendUsage(&Serial);
+    if (IrReceiver.decodedIRData.protocol == UNKNOWN)
+    {
+      Serial.println(F("Received noise or an unknown (or not yet enabled) protocol"));
+    }
+    else
+    {
+      Serial.println();
+
+      receivedCommand = IrReceiver.decodedIRData.command;
+
+      if (currentStation != receivedCommand)
+      {
+        currentStation = receivedCommand;
+        distance = 0;
+      }
+    }
+    IrReceiver.resume(); // Enable receiving of the next value
+  }
+  return receivedCommand;
+}
+
+// Send Testing data to AWS
 void publishTestData()
 {
   Serial.print("Publishing Test Data:");
@@ -153,23 +217,22 @@ void publishTestData()
   doc["current_Acceleration"] = getMPUSensorReadings();
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer); // print to client
- 
+
   client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
 
   Serial.print("Successfully Publlished Test Data");
-
 }
 
-
-void messageHandler(char* topic, byte* payload, unsigned int length)
+void messageHandler(char *topic, byte *payload, unsigned int length)
 {
   Serial.print("incoming: ");
   Serial.println(topic);
- 
+
   StaticJsonDocument<200> doc;
   deserializeJson(doc, payload);
-  const char* message = doc["message"];
-  if(message == "test"){
+  const char *message = doc["message"];
+  if (message == "test")
+  {
     publishTestData();
   }
   Serial.println(message);
@@ -177,47 +240,32 @@ void messageHandler(char* topic, byte* payload, unsigned int length)
 
 void connectAWS()
 {
-    //Connect to Wifi
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    Serial.print("Connecting to Wi-Fi");
-    displayText("Connectingto WiFi", 2, 1);
-    while (WiFi.status() != WL_CONNECTED){
-    Serial.print(".");
-    delay(300);
-    }
-    digitalWrite(wifiInd, HIGH);
-    Serial.println();
-    Serial.print("Connected with IP: ");
-    Serial.println(WiFi.localIP());
-    Serial.println();
+  // Connect to Wifi
+  connectToWiFi();
 
-    clearDisplay();
-    displayText("Connected to WiFi", 2, 1);
- 
   // Configure WiFiClientSecure to use the AWS IoT device credentials
   net.setCACert(AWS_CERT_CA);
   net.setCertificate(AWS_CERT_CRT);
   net.setPrivateKey(AWS_CERT_PRIVATE);
- 
+
   // Connect to the MQTT broker on the AWS endpoint we defined earlier
   client.setServer(AWS_IOT_ENDPOINT, 8883);
- 
+
   // Create a message handler
   client.setCallback(messageHandler);
- 
+
   Serial.println("Connecting to AWS IOT");
   clearDisplay();
   displayText("Connectingto Server", 2, 1);
- 
+
   while (!client.connect(THINGNAME))
   {
     Serial.print(".");
     delay(100);
   }
- 
+
   if (!client.connected())
-  { 
+  {
     clearDisplay();
     displayText("Connection Failed", 2, 1);
     Serial.println("AWS IoT Timeout!");
@@ -226,18 +274,17 @@ void connectAWS()
   digitalWrite(awsInd, HIGH);
   // Subscribe to a topic
   client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
- 
+
   Serial.println("AWS IoT Connected!");
-  //display screen connection status
+  // display screen connection status
   clearDisplay();
   displayText("Connected To Server", 2, 1);
   clearDisplay();
   displayText("Enjoy", 2, 1);
   displayText("Shopping", 2, 2);
   displayHeader();
-
 }
- 
+
 void publishMessage(int position)
 {
   Serial.print("Distance:");
@@ -250,61 +297,116 @@ void publishMessage(int position)
   doc["current_Location"] = position;
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer); // print to client
- 
+
   client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
 }
- 
-//Interupt for hall sensor for get distance
-void hallSensorInterrupt() {
-    
-    distance += 15; // Add 10cm to the distance if the sensor value is high
-    
+
+// Interupt for hall sensor for get distance
+void hallSensorInterrupt()
+{
+
+  distance += 15; // Add 10cm to the distance if the sensor value is high
 }
 
-//Create Supermarket Mapper Object
+// The following codes are for OTA implementation (server, biosMode)
+// web server for elegantOTA
+WebServer server(80);
+
+void biosMode()
+{
+  // display Recovery Init Screen
+  clearDisplay();
+  displayText("Recovery", 2, 1);
+  displayText("Mode", 2, 2);
+  delay(2000);
+
+  // Connect to Wifi
+  connectToWiFi();
+
+  // Once connected, get the local IP address
+  IPAddress localIP = WiFi.localIP();
+
+  // Convert the IP address to char array
+  char ssidName[20];
+  char ipAddressCharArray[16]; // IPv4 addresses are at most 15 characters long
+  WiFi.SSID().toCharArray(ssidName, sizeof(ssidName));
+  localIP.toString().toCharArray(ipAddressCharArray, sizeof(ipAddressCharArray));
+
+  server.on("/", []()
+            { server.send(200, "text/plain", "Shopwise booted in recovery mode."); });
+
+  ElegantOTA.begin(&server); // Start ElegantOTA
+  server.begin();
+  Serial.println("Recovery server started");
+
+  // Set ip address info to display
+  clearDisplay();
+  displayText("   ~Recovery Mode~", 1, 0);
+  displayText(ssidName, 1, 2);
+  displayText(ipAddressCharArray, 1, 4);
+
+  while (1)
+  {
+    server.handleClient();
+    ElegantOTA.loop();
+  }
+}
+
+// Create Supermarket Mapper Object
 SupermarketMapper supermarketMapper;
 
-//Create Display Object
-//Display OledDisplay;
+// Create Display Object
+// Display OledDisplay;
 
-void setup() {
-    Serial.begin(115200);
+void setup()
+{
+  Serial.begin(115200);
 
-    attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, RISING);
+  // initialize the OLED object
+  initOLED();
 
-    //Initiate Indicate LEDs
-    pinMode(wifiInd, OUTPUT); //WiFi indicator
-    pinMode(awsInd, OUTPUT); // AWS connection indicator
+  pinMode(biosPin, INPUT);
+  int Push_button_state = digitalRead(biosPin);
 
-    // initialize the OLED object
-    initOLED();
+  if (Push_button_state == HIGH)
+  {
+    // delay(500);
+    Serial.println("Booting in recovery mode");
+    delay(500);
+    biosMode();
+  }
 
-    //AWS Connect
-    connectAWS();
+  attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, RISING);
 
-    
-    //Ir Receive Begin    
-    IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
-    //Serial.print(F("Ready to receive IR signals of protocols: "));
-    //printActiveIRProtocols(&Serial);
-    //Serial.println(F("at pin " STR(IR_RECEIVE_PIN)));
+  // Initiate Indicate LEDs
+  pinMode(wifiInd, OUTPUT); // WiFi indicator
+  pinMode(awsInd, OUTPUT);  // AWS connection indicator
 
-    //Get Sensor data
-    pinMode(hallSensorPin, INPUT); 
-    pinMode(4, INPUT); 
-    pinMode(BATT_PIN, INPUT);
+  // AWS Connect
+  connectAWS();
 
-    //Calibrate HMC5883L
-    //compass.calibrate();
+  // Ir Receive Begin
+  IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
+  // Serial.print(F("Ready to receive IR signals of protocols: "));
+  // printActiveIRProtocols(&Serial);
+  // Serial.println(F("at pin " STR(IR_RECEIVE_PIN)));
 
-    
+  // Get Sensor data
+  pinMode(hallSensorPin, INPUT);
+  pinMode(4, INPUT);
+  pinMode(BATT_PIN, INPUT);
+
+  // Calibrate HMC5883L
+  // compass.calibrate();
 
   Wire.begin(); // Start the I2C communication
-  
-  //Initialize MPU6050
-  if (!mpu.begin()) {
+
+  // Initialize MPU6050
+  if (!mpu.begin())
+  {
     Serial.println("Failed to find MPU6050 chip");
-    while (1) {
+    while (1)
+    {
       delay(10);
     }
   }
@@ -312,43 +414,46 @@ void setup() {
   mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
   mpu.setGyroRange(MPU6050_RANGE_500_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
-  
+
   // Initialize HMC5883L
   compass.init();
-  
+
   delay(20);
 }
 
-void loop() {
-        int receivedCommand = IrData();
-        int direction = getMAGSensorReadings();
-        //hallEffectSensor();
-        int acceleration = getMPUSensorReadings();
-        
-        int heading = 1;
-        if(acceleration > 0){
-            heading = 1;
-        }else{
-            heading = 1;
-        }
+void loop()
+{
+  int receivedCommand = IrData();
+  int direction = getMAGSensorReadings();
+  // hallEffectSensor();
+  int acceleration = getMPUSensorReadings();
 
-  
-    supermarketMapper.updateLocation(receivedCommand, direction, distance, heading);
-    
-    
-    currentLocation = supermarketMapper.displayLocation();
-    publishMessage(currentLocation);
-    client.loop();
+  int heading = 1;
+  if (acceleration > 0)
+  {
+    heading = 1;
+  }
+  else
+  {
+    heading = 1;
+  }
 
-    //Print Battery Level
-    if(batt_counter >= 200 && prev_battLev >= printBatteryLevel()){
-      prev_battLev = printBatteryLevel();
-      batt_counter = 0;
-      }else{
-        batt_counter++;
-      }
+  supermarketMapper.updateLocation(receivedCommand, direction, distance, heading);
 
-    delay(1500);
+  currentLocation = supermarketMapper.displayLocation();
+  publishMessage(currentLocation);
+  client.loop();
+
+  // Print Battery Level
+  if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
+  {
+    prev_battLev = printBatteryLevel();
+    batt_counter = 0;
+  }
+  else
+  {
+    batt_counter++;
+  }
+
+  delay(1500);
 }
-
-
