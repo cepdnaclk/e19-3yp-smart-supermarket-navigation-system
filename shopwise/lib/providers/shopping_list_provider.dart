@@ -26,13 +26,46 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
     // Get a reference to the database collection 'customers'
     final ordersCollection = FirebaseFirestore.instance.collection('orders');
 
- 
+    // Fetch data from orders collection and check whether there is an entry with the current sub_UUID
+    // If there is an entry, update the entry with the current shopping list
+    // If there is no entry, create a new entry with the current shopping list
+    // final query = ordersCollection.where('id', isEqualTo: sub_UUID);
+    // print("query: ${query}");
+
+    ordersCollection.get().then((value) {
+      if (value.docs.length == 0) {
+        print("creating");
+        // Create a new entry
+        ordersCollection.add({
+          'id': sub_UUID,
+          'products': state.map((e) => e.id).toList(),
+        });
+      } else {
+        print("updating");
+
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> curentOrder =
+            value.docs.where((element) => element.data()['id'] == sub_UUID).toList();
+        // Update the entry
+        if (curentOrder.isNotEmpty) {
+          print("if case");
+          curentOrder[0].reference.update({
+            'products': state.map((e) => e.id).toList(),
+          });
+        } else {
+          print("else case");
+          ordersCollection.add({
+            'id': sub_UUID,
+            'products': state.map((e) => e.id).toList(),
+          });
+        }
+      }
+    });
 
     // Call the method to save the customer
-    ordersCollection.add({
-      'id': sub_UUID,
-      'products': state.map((e) => e.id).toList(),
-    });
+    // ordersCollection.add({
+    //   'id': sub_UUID,
+    //   'products': state.map((e) => e.id).toList(),
+    // });
 
     print("saved!");
   }

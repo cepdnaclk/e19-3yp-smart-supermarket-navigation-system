@@ -131,6 +131,10 @@ class _MyAppState extends ConsumerState<MyApp> {
 
       // ref.read(customerNotifierProvider.notifier).updateOrderId("5");
 
+      var email = cognitoToken.idToken.email;
+
+      ref.read(customerNotifierProvider.notifier).updateEmail(email!);
+
       ref
           .read(customerNotifierProvider.notifier)
           .updateShoppingDate(DateTime.now());

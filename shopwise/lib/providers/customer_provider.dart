@@ -6,6 +6,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
   CustomerNotifier()
       : super(Customer(
             order_id: '',
+            email: '',
             sub_uuid: '',
             hashcode: '',
             shopping_date: DateTime.now()));
@@ -22,6 +23,10 @@ class CustomerNotifier extends StateNotifier<Customer> {
   void updateSubUuid(String sub_uuid) {
     state = state.copyWith(sub_uuid: sub_uuid);
   }
+
+  void updateEmail(String email) {
+    state = state.copyWith(email: email);
+  } 
 
   void updateHashcode(String hashcode) {
     state = state.copyWith(hashcode: hashcode);
@@ -44,6 +49,7 @@ class CustomerNotifier extends StateNotifier<Customer> {
     // Call the method to save the customer
     customerCollection.add({
       'sub_uuid': state.sub_uuid,
+      'email': state.email,
       'hashcode': state.hashcode,
       'order_id': state.order_id,
       'shopping_date': state.shopping_date,
