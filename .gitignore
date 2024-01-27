@@ -244,3 +244,7 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter,platformio,python
+
+mapping/navigation/assets/certs/DeviceCertificate.crt
+mapping/navigation/assets/certs/Private.key
+mapping/navigation/assets/certs/RootCA.pem

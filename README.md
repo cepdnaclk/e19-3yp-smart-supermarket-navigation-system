@@ -15,3 +15,9 @@
 In this project we hope to develop an indoor navigation system for supermarkets, 
 aimed at enhancing the shopping experience of customers while providing valuable insights for the shop 
 owners
+
+## Links
+
+- [Project Page](https://cepdnaclk.github.io/e19-3yp-smart-supermarket-navigation-system/)
+- [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
+- [University of Peradeniya](https://eng.pdn.ac.lk/)

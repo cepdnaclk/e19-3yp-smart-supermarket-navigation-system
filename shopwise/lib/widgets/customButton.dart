@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
+
   CustomButton({
     Key? key,
     required this.textColor,
@@ -8,6 +10,8 @@ class CustomButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.icon,
+    this.iconImage,
+    this.iconImageSize = 20,
   }):super(key: key);
 
   final Color textColor;
@@ -15,8 +19,10 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   IconData? icon;
+  Image? iconImage;
   double buttonWidth = 300;
   double buttonHeight = 50;
+  double iconImageSize;
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +37,19 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
         ),
-        child: icon != null ? Row(
+        child: icon != null || iconImage!=null ? Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon),
-            const SizedBox(width: 10,),
-            Text(text,style: TextStyle(fontSize: 20,color: textColor,fontWeight:FontWeight.bold),),
+            icon != null ? Icon(icon,color: textColor,) : SizedBox(
+                      width: iconImageSize,
+                      height: iconImageSize,
+                      child: iconImage,
+                    ),
+            const SizedBox(width: 10),
+            Text(text,style: TextStyle(fontSize: 16,color: textColor,fontWeight:FontWeight.bold),),
           ],
         ): 
-        Text(text,style: TextStyle(fontSize: 20,color: textColor,fontWeight:FontWeight.bold),),
+        Text(text,style: TextStyle(fontSize: 16,color: textColor,fontWeight:FontWeight.bold),),
       )
       
     );
