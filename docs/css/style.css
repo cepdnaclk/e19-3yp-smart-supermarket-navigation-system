@@ -54,6 +54,10 @@ body {
 .heading_container h2 span {
   color: #0ade3b;
 }
+.heading_container h3 span {
+  color: #0ade3b;
+}
+
 
 .heading_container p {
   margin-top: 10px;
@@ -431,7 +435,7 @@ a:focus {
   margin-top: 45px;
   background-color: #4e9c5a;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 15px;
 }
 
 .service_section .box .img-box {
