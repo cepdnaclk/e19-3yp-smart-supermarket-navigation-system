@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/product_placement/database_manager.dart';
 
@@ -139,6 +140,127 @@ class _CardGridViewState extends State<CardGridView> {
                           ? ElevatedButton(
                               onPressed: () {
                                 // Add your button press logic here
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    TextEditingController
+                                        _textFieldController1 =
+                                        TextEditingController();
+                                    TextEditingController
+                                        _textFieldController2 =
+                                        TextEditingController();
+                                    TextEditingController
+                                        _textFieldController3 =
+                                        TextEditingController();
+                                    TextEditingController
+                                        _textFieldController4 =
+                                        TextEditingController();
+                                    TextEditingController
+                                        _textFieldController5 =
+                                        TextEditingController();
+
+                                    return Dialog(
+                                      child: Container(
+                                        width: 400, // Set your desired width
+                                        height: 600, // Set your desired height
+                                        child: AlertDialog(
+                                          title: Text(
+                                            'Add Item',
+                                            style:
+                                                TextStyle(color: Colors.green),
+                                          ),
+                                          content: Column(
+                                            children: <Widget>[
+                                              TextField(
+                                                controller:
+                                                    _textFieldController1,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Item Id',
+                                                ),
+                                              ),
+                                              // const SizedBox(height: 20),
+                                              TextField(
+                                                controller:
+                                                    _textFieldController2,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Item name',
+                                                ),
+                                              ),
+                                              TextField(
+                                                controller:
+                                                    _textFieldController3,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Description',
+                                                ),
+                                              ),
+                                              TextField(
+                                                controller:
+                                                    _textFieldController4,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Price',
+                                                ),
+                                              ),
+                                              TextField(
+                                                controller:
+                                                    _textFieldController5,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Brand',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: Text(
+                                                'Submit',
+                                                style: TextStyle(
+                                                    color: Colors.green),
+                                              ),
+                                              onPressed: () {
+                                                // Handle the form submission logic here
+                                                // Get a reference to the Firestore collection
+                                                CollectionReference products =
+                                                    FirebaseFirestore.instance
+                                                        .collection('products');
+
+                                                // Create a new document with the 'id' as the document ID
+                                                DocumentReference newProduct =
+                                                    products.doc(
+                                                        _textFieldController1
+                                                            .text);
+
+                                                // Add a new document with the form data and default values
+                                                newProduct.set({
+                                                  'id': _textFieldController1
+                                                      .text,
+                                                  'title': _textFieldController2
+                                                      .text,
+                                                  'description':
+                                                      _textFieldController3
+                                                          .text,
+                                                  'price': _textFieldController4
+                                                      .text,
+                                                  'brand': _textFieldController5
+                                                      .text,
+                                                  'cell': null,
+                                                  'image': null,
+                                                  'promo_details': null,
+                                                  'promotion': null,
+                                                });
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
                               },
                               child: Text('Add Items'),
                             )
