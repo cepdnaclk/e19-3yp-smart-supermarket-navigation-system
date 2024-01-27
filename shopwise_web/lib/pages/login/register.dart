@@ -1,10 +1,12 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:shopwise_web/pages/login/email_confirm.dart';
 import 'package:shopwise_web/pages/login/login.dart';
-import 'package:shopwise_web/side_navbar.dart';
 import 'package:shopwise_web/widgets/custom_button.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+  static const String routeName = '/register';
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -14,6 +16,18 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  bool _obscureText = true;
+
+
+  void showTemporaryAlert(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2), // Adjust the duration as needed
+      ),
+    );
+  }
 
   bool areFieldsFilled() {
     return usernameController.text.isNotEmpty &&
@@ -25,9 +39,64 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     usernameController.dispose();
     passwordController.dispose();
+    emailController.dispose();
     super.dispose();
   }
 
+  //----------------------------------------
+  /// Signs a user up with a username, password, and email. The required
+  /// attributes may be different depending on your app's configuration.
+  Future<void> signUpUser({
+    required String username,
+    required String password,
+    required String email,
+    String? phoneNumber,
+  }) async {
+    try {
+      final userAttributes = {
+        AuthUserAttributeKey.preferredUsername: username,
+        if (phoneNumber != null) AuthUserAttributeKey.phoneNumber: phoneNumber,
+        // additional attributes as needed
+      };
+      final result = await Amplify.Auth.signUp(
+        username: email,
+        password: password,
+        options: SignUpOptions(
+          userAttributes: userAttributes,
+        ),
+      );
+      await _handleSignUpResult(result);
+    } on AuthException catch (e) {
+      safePrint('Error signing up user: ${e.message}');
+    }
+  }
+
+  Future<void> _handleSignUpResult(SignUpResult result) async {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+          builder: ((context) => ConfirmEmail(email: emailController.text))),
+      (route) => false,
+    );
+    switch (result.nextStep.signUpStep) {
+      case AuthSignUpStep.confirmSignUp:
+        final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
+        _handleCodeDelivery(codeDeliveryDetails);
+        break;
+      case AuthSignUpStep.done:
+        safePrint('Sign up is complete');
+        break;
+    }
+  }
+
+  void _handleCodeDelivery(AuthCodeDeliveryDetails codeDeliveryDetails) {
+    showTemporaryAlert("Please check your email for the verification code.");
+    safePrint(
+      'A confirmation code has been sent to ${codeDeliveryDetails.destination}. '
+      'Please check your ${codeDeliveryDetails.deliveryMedium.name} for the code.',
+    );
+  }
+
+//-----------------------------------------
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -114,18 +183,39 @@ class _RegisterPageState extends State<RegisterPage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white10),
-                                child: TextField(
-                                  controller:
-                                      passwordController, // Add this line
-                                  style: const TextStyle(color: Colors.white),
-                                  obscureText: true,
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Password",
-                                      hintStyle:
-                                          TextStyle(color: Colors.white60)),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white10,
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.centerRight,
+                                  children: [
+                                    TextField(
+                                      controller: passwordController,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      obscureText: _obscureText,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Password",
+                                        hintStyle:
+                                            TextStyle(color: Colors.white60),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscureText = !_obscureText;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        _obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Colors.white60,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(height: 20),
@@ -138,13 +228,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 text: "Sign Up",
                                 onPressed: () {
                                   if (areFieldsFilled()) {
-                                    // Perform authentication or any other necessary action
-
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              const SideNavBar())),
-                                      (route) => false,
+                                    signUpUser(
+                                      username: usernameController.text,
+                                      password: passwordController.text,
+                                      email: emailController.text,
                                     );
                                   } else {
                                     showDialog(
@@ -309,18 +396,39 @@ class _RegisterPageState extends State<RegisterPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white10),
-                                  child: TextField(
-                                    controller:
-                                        passwordController, // Add this line
-                                    style: const TextStyle(color: Colors.white),
-                                    obscureText: true,
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Password",
-                                        hintStyle:
-                                            TextStyle(color: Colors.white60)),
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white10,
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.centerRight,
+                                    children: [
+                                      TextField(
+                                        controller: passwordController,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                        obscureText: _obscureText,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Password",
+                                          hintStyle:
+                                              TextStyle(color: Colors.white60),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscureText = !_obscureText;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          _obscureText
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: Colors.white60,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 const SizedBox(height: 20),
@@ -334,12 +442,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                   onPressed: () {
                                     if (areFieldsFilled()) {
                                       // Perform authentication or any other necessary action
-
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: ((context) =>
-                                                const SideNavBar())),
-                                        (route) => false,
+                                      signUpUser(
+                                        username: usernameController.text,
+                                        password: passwordController.text,
+                                        email: emailController.text,
                                       );
                                     } else {
                                       showDialog(

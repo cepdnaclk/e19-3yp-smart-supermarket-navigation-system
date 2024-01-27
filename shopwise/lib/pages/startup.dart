@@ -28,7 +28,6 @@ class _StartupPageState extends State<StartupPage> {
             height: 350,
           ),
           const Text(
-            
             "Let us make your day!",
             style: TextStyle(
               fontSize: 20,
