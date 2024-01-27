@@ -14,12 +14,32 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
     state = [...state, product];
   }
 
-  void removeItem(Product product) {
+  void removeItem(Product product, String email) {
+    final ordersCollection = FirebaseFirestore.instance.collection('orders');
+
     state = state.where((element) => element.id != product.id).toList();
+    ordersCollection.get().then((value) {
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> curentOrder = value.docs
+          .where((element) => element.data()['email'] == email)
+          .toList();
+      //   List<String> existingProducts =
+      //     (curentOrder[0].data()['products'] as List)
+      //         .map((e) => e.toString())
+      //         .toList();
+      // existingProducts.addAll(state.map((e) => e.id).toList());
+      // print("if case");
+      curentOrder[0].reference.update({
+        'products': state.map((e) => e.id.toString()).toList(),
+      });
+    });
   }
 
   void clearList() {
     state = [];
+  }
+
+  void updateList(List<Product> products) {
+    state = products;
   }
 
   void saveShoppingList(String sub_UUID, String email) {
@@ -44,17 +64,22 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
       } else {
         print("updating");
 
-        List<QueryDocumentSnapshot<Map<String, dynamic>>> curentOrder =
-            value.docs.where((element) => element.data()['email'] == email).toList();
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> curentOrder = value
+            .docs
+            .where((element) => element.data()['email'] == email)
+            .toList();
         // Update the entry
         if (curentOrder.isNotEmpty) {
           List<String> existingProducts =
-              (curentOrder[0].data()['products'] as List).map((e) => e.toString()).toList();
-          existingProducts.addAll(state.map((e) => e.id).toList());
+              (curentOrder[0].data()['products'] as List)
+                  .map((e) => e.toString())
+                  .toList();
+          List<String> newProducts = (state.map((e) => e.id).toList()).where((element) => existingProducts.contains(element) == false).toList();
+          existingProducts.addAll(newProducts);
           print("if case");
           curentOrder[0].reference.update({
             'id': sub_UUID,
-            'products':  existingProducts, 
+            'products': existingProducts,
           });
         } else {
           print("else case");

@@ -8,6 +8,7 @@ import 'package:shopwise/pages/scan_barcode_view.dart';
 import 'package:shopwise/pages/scan_qrcode_page.dart';
 import 'package:shopwise/pages/select_items.dart';
 import 'package:shopwise/providers/customer_provider.dart';
+import 'package:shopwise/providers/shopping_list_provider.dart';
 import 'package:shopwise/services/mongodb_service.dart';
 import 'package:shopwise/widgets/added_item.dart';
 
@@ -145,8 +146,10 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
                             ),
                             key: UniqueKey(),
                             onDismissed: (DismissDirection direction) {
+                              ref.read(shoppingListProvider.notifier).removeItem(widget.shoppingList[index], ref.read(customerNotifierProvider.notifier).getEmail());
                               setState(() {
                                 widget.shoppingList.removeAt(index);
+
                               });
                             },
                             child: AddedItem(
@@ -215,15 +218,15 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
                 onPressed: () => {
                   if (widget.shoppingList.length > 0)
                     {
-                      ref
-                          .read(customerNotifierProvider.notifier)
-                          .updateOrderId("5"),
-                      ordersCollection.add({
-                        'id': '5',
-                        'products': widget.shoppingList
-                            .map((element) => element.id)
-                            .toList()
-                      }),
+                      // ref
+                      //     .read(customerNotifierProvider.notifier)
+                      //     .updateOrderId("5"),
+                      // ordersCollection.add({
+                      //   'id': '5',
+                      //   'products': widget.shoppingList
+                      //       .map((element) => element.id)
+                      //       .toList()
+                      // }),
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => ScanBarcode(),
