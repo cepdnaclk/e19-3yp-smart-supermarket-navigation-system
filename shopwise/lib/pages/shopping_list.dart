@@ -14,13 +14,94 @@ import 'package:shopwise/widgets/added_item.dart';
 class ShoppingList extends ConsumerStatefulWidget {
   static const String routeName = '/shoppingList';
   ShoppingList({super.key});
-  final List<Product> shoppingList = <Product>[];
+   List<Product> shoppingList = <Product>[];
 
   @override
   ConsumerState<ShoppingList> createState() => _ShoppingListState();
 }
 
 class _ShoppingListState extends ConsumerState<ShoppingList> {
+// Need to fetch the ids of the productList from the database if the shoppingList is empty
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    fetchCustomersShoppingList();
+    super.initState();
+  }
+
+  void fetchCustomersShoppingList() {
+    final productsCollection =
+        FirebaseFirestore.instance.collection('products');
+        List<Product> tempRelatedProducts = [];
+    List<String> productIds;
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> relatedProducts;
+    String currentEmail =
+        ref.read(customerNotifierProvider.notifier).getEmail();
+    final ordersCollection = FirebaseFirestore.instance.collection('orders');
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> emailRelatedOrdersList;
+    ordersCollection.get().then((value) => {
+          print("value.docs.length..............: ${value.docs.length}"),
+          print(
+            value.docs.map(
+              (e) => e.data(),
+            ),
+          ),
+          emailRelatedOrdersList = value.docs
+              .where((e) => e.data()['email'] == currentEmail)
+              .toList(),
+
+          if (emailRelatedOrdersList.isNotEmpty)
+            {
+              print("emailRelatedOrdersList: ${emailRelatedOrdersList}"),
+              print("that data inside that" +
+                  emailRelatedOrdersList[0].data().toString()),
+              print(
+                  "The products list ${emailRelatedOrdersList[0].data()['products']}"),
+              productIds =
+                  (emailRelatedOrdersList[0].data()['products'] as List).map((e) => e.toString()).toList(),
+
+              // Need to fetch the products from the database using the product ids
+              productsCollection.get().then((value) => {
+                    print(
+                        "value.docs.length..............: ${value.docs.length}"),
+                    relatedProducts = value.docs
+                        .where((element) => productIds.contains(element.id))
+                        .toList(),
+                    print("relatedProducts: ${relatedProducts}"),
+
+// Create a Product object for each in relatedProducts
+                    relatedProducts.forEach((element) {
+                      Product product = Product(
+                        title: element.data()['title'],
+                        image: element.data()['image'],
+                        price: element.data()['price'],
+                        description: element.data()['description'],
+                        brand: element.data()['brand'],
+                        promo_details: element.data()['promo_details'],
+                        cell: element.data()['cell'],
+                        promotion: element.data()['promotion'],
+                        id: element.id,
+                      );
+                      tempRelatedProducts.add(product);
+                    }),
+
+                    setState(() {
+                      widget.shoppingList = tempRelatedProducts;
+                    }),
+
+                  }),
+
+                  
+            }
+          //   // Need to expand the emailRelatedOrdersList to get the product ids
+          //   // Need to fetch the products from the database using the product ids
+          //   // Need to add the products to the shoppingList
+          //   // List<String> productIds = emailRelatedOrdersList[0].data()['products'].toList() as List<String>,
+          // }
+        });
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -70,7 +151,7 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
                             },
                             child: AddedItem(
                               product: widget.shoppingList[index],
-                              theList: widget.shoppingList,
+                              // theList: widget.shoppingList,
                             ));
                       },
                     ),

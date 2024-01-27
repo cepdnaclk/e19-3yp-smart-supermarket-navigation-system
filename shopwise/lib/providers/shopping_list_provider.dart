@@ -48,10 +48,13 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
             value.docs.where((element) => element.data()['email'] == email).toList();
         // Update the entry
         if (curentOrder.isNotEmpty) {
+          List<String> existingProducts =
+              (curentOrder[0].data()['products'] as List).map((e) => e.toString()).toList();
+          existingProducts.addAll(state.map((e) => e.id).toList());
           print("if case");
           curentOrder[0].reference.update({
             'id': sub_UUID,
-            'products': state.map((e) => e.id).toList(),
+            'products':  existingProducts, 
           });
         } else {
           print("else case");
