@@ -125,7 +125,7 @@ class _SelectItemsState extends State<SelectItems> {
           title: const Text('Select Items'),
         ),
         body: Container(
-          height: 300,
+          height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
               Expanded(
