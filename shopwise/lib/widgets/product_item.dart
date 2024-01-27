@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopwise/models/product.dart';
+import 'package:shopwise/providers/shopping_list_provider.dart';
 
-class ProductListItem extends StatefulWidget {
+class ProductListItem extends ConsumerStatefulWidget {
   final Product product;
   final List<Product> theList;
 
@@ -11,23 +13,23 @@ class ProductListItem extends StatefulWidget {
   // final String brand;
   // final String imageUrl;
   // Function? onTapAdd;
-   ProductListItem(
-      {super.key,
-      required this.product,
-      required this.theList,
-      // required this.title,
-      // required this.description,
-      // required this.price,
-      // required this.brand,
-      // // required this.onTapAdd,
-      // required this.imageUrl
-      });
+  ProductListItem({
+    super.key,
+    required this.product,
+    required this.theList,
+    // required this.title,
+    // required this.description,
+    // required this.price,
+    // required this.brand,
+    // // required this.onTapAdd,
+    // required this.imageUrl
+  });
 
   @override
-  State<ProductListItem> createState() => _ProductListItemState();
+  ConsumerState<ProductListItem> createState() => _ProductListItemState();
 }
 
-class _ProductListItemState extends State<ProductListItem> {
+class _ProductListItemState extends ConsumerState<ProductListItem> {
   var color = Colors.green;
   var clicked = false;
   @override
@@ -66,22 +68,28 @@ class _ProductListItemState extends State<ProductListItem> {
             Container(
               width: MediaQuery.of(context).size.width * 0.3,
               child: ElevatedButton(
-                
-                onPressed: clicked  ?  (){}:() {
-                  widget.theList.add(widget.product);
-                 
-                  print(widget.theList.length);
-            
-                  setState(() {
-                    clicked = true;
-                  });
-                  // Navigator.pop(context, product);
-                },
+                onPressed: clicked
+                    ? () {}
+                    : () {
+                        widget.theList.add(widget.product);
+
+                        print(widget.theList.length);
+
+                        setState(() {
+                          ref
+                              .read(shoppingListProvider.notifier)
+                              .addItem(widget.product);
+                          clicked = true;
+                        });
+                        print(ref.read(shoppingListProvider.notifier).state);
+                        // Navigator.pop(context, product);
+                      },
                 child: clicked ? Text("Added") : Text("Add Item"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: clicked ? Colors.grey : Colors.green,
-                    foregroundColor:  Colors.black,
-                    side: BorderSide(color: clicked ? Colors.grey : Colors.green)),
+                    backgroundColor: clicked ? Colors.grey : Colors.green,
+                    foregroundColor: Colors.black,
+                    side: BorderSide(
+                        color: clicked ? Colors.grey : Colors.green)),
               ),
             ),
             // SizedBox(
