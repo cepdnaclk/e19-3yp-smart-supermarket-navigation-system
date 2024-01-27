@@ -17,11 +17,11 @@
 #include <Adafruit_SSD1306.h>
 
 // Insert your network credentials
-// #define WIFI_SSID "Dialog 4G 932"
-// #define WIFI_PASSWORD "B40a8EC1"
+#define WIFI_SSID "Dialog 4G 932"
+#define WIFI_PASSWORD "B40a8EC1"
 
-#define WIFI_SSID "PeraComStudents"
-#define WIFI_PASSWORD "abcd1234"
+// #define WIFI_SSID "PeraComStudents"
+// #define WIFI_PASSWORD "abcd1234"
 
 #define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/test"
@@ -40,14 +40,15 @@ int count = 0;
 int distance = 0;
 int currentStation = 0;
 int currentLocation = 0;
-uint8_t low_batt_counter = 0;
+uint8_t batt_counter = 200;
+uint8_t prev_battLev = 200;
 
 //Define Ir Receiver pins
 #define DECODE_NEC     
 #define IR_RECEIVE_PIN  25
 #define wifiInd  16
 #define awsInd 17
-#define BATT_PIN 26
+#define BATT_PIN 33
 
 //battry info
 #define BATTV_MAX           4.1     // maximum voltage of battery
@@ -58,13 +59,14 @@ uint8_t low_batt_counter = 0;
 //Map 
  
  //Print Battery Info
- void printBatteryLevel() {
+ int printBatteryLevel() {
   float battv = analogRead(BATT_PIN) * 2 * 3.3 / 4095 *1.05;
+  Serial.println(battv);
   int battPercent = (battv - BATTV_MIN) / (BATTV_MAX - BATTV_MIN) * 100;
   Serial.print("Battery:");
-  Serial.println(battPrecent);
+  Serial.println(battPercent);
   batteryLevel(battPercent);
-  
+  return battPercent;
 }
 
 //Get Accelerometer and Gyroscope data  from MPU6050
@@ -179,7 +181,7 @@ void connectAWS()
     WiFi.mode(WIFI_STA);
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     Serial.print("Connecting to Wi-Fi");
-    displayText("Connecting", 2, 1);
+    displayText("Connectingto WiFi", 2, 1);
     while (WiFi.status() != WL_CONNECTED){
     Serial.print(".");
     delay(300);
@@ -187,11 +189,11 @@ void connectAWS()
     digitalWrite(wifiInd, HIGH);
     Serial.println();
     Serial.print("Connected with IP: ");
-    displayText("Connected", 2, 1);
-    displayText("Enjoy", 2, 1);
-    displayHeader();
     Serial.println(WiFi.localIP());
     Serial.println();
+
+    clearDisplay();
+    displayText("Connected to WiFi", 2, 1);
  
   // Configure WiFiClientSecure to use the AWS IoT device credentials
   net.setCACert(AWS_CERT_CA);
@@ -205,6 +207,8 @@ void connectAWS()
   client.setCallback(messageHandler);
  
   Serial.println("Connecting to AWS IOT");
+  clearDisplay();
+  displayText("Connectingto Server", 2, 1);
  
   while (!client.connect(THINGNAME))
   {
@@ -213,7 +217,9 @@ void connectAWS()
   }
  
   if (!client.connected())
-  {
+  { 
+    clearDisplay();
+    displayText("Connection Failed", 2, 1);
     Serial.println("AWS IoT Timeout!");
     return;
   }
@@ -222,6 +228,14 @@ void connectAWS()
   client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
  
   Serial.println("AWS IoT Connected!");
+  //display screen connection status
+  clearDisplay();
+  displayText("Connected To Server", 2, 1);
+  clearDisplay();
+  displayText("Enjoy", 2, 1);
+  displayText("Shopping", 2, 2);
+  displayHeader();
+
 }
  
 void publishMessage(int position)
@@ -268,6 +282,7 @@ void setup() {
     //AWS Connect
     connectAWS();
 
+    
     //Ir Receive Begin    
     IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
     //Serial.print(F("Ready to receive IR signals of protocols: "));
@@ -319,10 +334,19 @@ void loop() {
 
   
     supermarketMapper.updateLocation(receivedCommand, direction, distance, heading);
-    printBatteryLevel();
+    
+    
     currentLocation = supermarketMapper.displayLocation();
     publishMessage(currentLocation);
     client.loop();
+
+    //Print Battery Level
+    if(batt_counter >= 200 && prev_battLev >= printBatteryLevel()){
+      prev_battLev = printBatteryLevel();
+      batt_counter = 0;
+      }else{
+        batt_counter++;
+      }
 
     delay(1500);
 }

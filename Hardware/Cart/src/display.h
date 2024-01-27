@@ -43,23 +43,23 @@ void clearDisplay() {
 }
 
 void scrollString(const char* text, int16_t startPoint) {
-  display.setCursor(0,0);
+  display.setCursor(0,startPoint);
   display.setTextSize(2);
-  display.println("ShopWise");
+  display.println(text);
   display.display();
   display.startscrollright(0x00, 0x01);
 }
 
 void batteryLevel(int16_t lev){
   int BATT_X = 0;
-  int BATT_Y = 45;
+  int BATT_Y = 48;
   int BATT_W = 85;
   int LINE_HEIGHT_1 = 15;
   
 
   display.setTextSize(2);
-  display.setCursor(0, 45);
-  display.fillRect(BATT_X, BATT_Y, SCREEN_WIDTH, LINE_HEIGHT_1, SSD1306_BLACK);
+  display.setCursor(BATT_X, BATT_Y);
+  //display.fillRect(BATT_X, BATT_Y, SCREEN_WIDTH, LINE_HEIGHT_1, SSD1306_BLACK);
   display.drawRect(BATT_X, BATT_Y, BATT_W + 2, LINE_HEIGHT_1+1, SSD1306_WHITE);
   display.fillRect(BATT_X +1, BATT_Y, (lev * BATT_W)/100, LINE_HEIGHT_1, SSD1306_WHITE);
   char buf[4];
@@ -70,8 +70,4 @@ void batteryLevel(int16_t lev){
 
 }
 
-void success(){
-  displayHeader();
-  
-}
 #endif  // OLED_FUNCTIONS_H
