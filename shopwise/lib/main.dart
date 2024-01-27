@@ -90,7 +90,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     print('decryptedSub: ${decryptedSub}');
 
-    return encryptedSub.base64.toString();
+    return encryptedSub.base64;
 
 // Now `decryptedSub` contains the original sub ID
   }
@@ -123,6 +123,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       print('encrypted: ${encrypted}');
 
       ref.read(customerNotifierProvider.notifier).updateSubUuid(encrypted);
+
+      print("Decrypting sub uuid............");
+      var encrypted_key = ref.read(customerNotifierProvider).sub_uuid;
 
       // ref.read(customerNotifierProvider.notifier).updateHashcode("myhashcode");
 

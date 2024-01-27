@@ -4,7 +4,9 @@ class Product {
   final String price;
   final String description;
   final String brand;
-  
+  final String promo_details;
+  final String cell;
+  final String promotion;
   final String id;
 
   Product({
@@ -13,7 +15,9 @@ class Product {
     required this.price,
     required this.description,
     required this.brand,
-   
+    required this.promo_details,
+    required this.cell,
+    required this.promotion,
     required this.id,
   });
 
