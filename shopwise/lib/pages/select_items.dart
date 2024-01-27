@@ -53,14 +53,14 @@ class _SelectItemsState extends ConsumerState<SelectItems> {
     for (QueryDocumentSnapshot<Object?> documentSnapshot
         in querySnapshot.docs) {
       String id = documentSnapshot.id;
-      String title = documentSnapshot['title'] as String;
-      String image = documentSnapshot['image'] as String;
-      String price = documentSnapshot['price'] as String;
-      String description = documentSnapshot['description'] as String;
-      String brand = documentSnapshot['brand'] as String;
-      String promo_details = documentSnapshot['promo_details'] as String;
-      String cell = documentSnapshot['cell'] as String;
-      String promotion = documentSnapshot['promotion'] as String;
+      String title = documentSnapshot['title'] != null ? documentSnapshot['title'] as String : "";
+      String image = documentSnapshot['image'] != null ? documentSnapshot['image'] as String : "";
+      String price = documentSnapshot['price'] != null ? documentSnapshot['price'] as String : "";
+      String description = documentSnapshot['description'] != null ? documentSnapshot['description'] as String : "";
+      String brand = documentSnapshot['brand'] != null ? documentSnapshot['brand']  as String : "";
+      String promo_details = documentSnapshot['promo_details'] != null ? documentSnapshot['promo_details'] as String : "";
+      String cell = documentSnapshot['cell'] != null ? documentSnapshot['cell']  as String : "";
+      String promotion = documentSnapshot['promotion'] != null ? documentSnapshot['promotion']  as String : "";
 
       Product product = Product(
         title: title,
