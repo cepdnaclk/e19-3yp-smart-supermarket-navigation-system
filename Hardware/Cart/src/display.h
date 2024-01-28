@@ -70,7 +70,7 @@ void batteryLevel(int16_t lev){
 
 }
 
-void showTestData(int direction ,int acceleration , int distance , int currentCell,int current_Station ,int locationX ,int locationY){
+void showTestData(int direction ,float acceleration , int distance , int currentCell,int current_Station ,int locationX ,int locationY, int directionX, int directionY, int directionZ){
 
   display.clearDisplay();
   display.setCursor(0,0);
@@ -80,7 +80,7 @@ void showTestData(int direction ,int acceleration , int distance , int currentCe
   display.setTextSize(1);
   display.print("Direction: ");
   display.println(direction);
-  display.print("Acceleration: ");
+  display.print("Acceleration:");
   display.println(acceleration);
   display.print("Distance: ");
   display.println(distance);
