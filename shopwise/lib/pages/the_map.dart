@@ -172,7 +172,7 @@ class _TheMapState extends ConsumerState<TheMap> {
       ShoppingListFetcher shoppingListFetcher = ShoppingListFetcher(
           email: ref.read(customerNotifierProvider.notifier).getEmail());
       setState(() {
-        shoppingList = shoppingListFetcher.fetchCustomersShoppingList();
+        // shoppingList = shoppingListFetcher.fetchCustomersShoppingList();
       });
 
       cell_list = shoppingList.map((e) => int.parse(e.cell)).toList();

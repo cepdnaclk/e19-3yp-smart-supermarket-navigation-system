@@ -8,7 +8,8 @@ class ShoppingListFetcher {
     currentEmail = email;
   }
 
-  Future<List<Product>> fetchCustomersShoppingList() async {
+  List<Product> fetchCustomersShoppingList(
+      void Function(List<Product>) callback) {
     final productsCollection =
         FirebaseFirestore.instance.collection('products');
     List<Product> tempRelatedProducts = [];
@@ -64,6 +65,7 @@ class ShoppingListFetcher {
                       );
                       tempRelatedProducts.add(product);
                     }),
+                    callback(tempRelatedProducts),
                   }),
             }
           //   // Need to expand the emailRelatedOrdersList to get the product ids

@@ -16,7 +16,7 @@ import 'package:shopwise/widgets/added_item.dart';
 class ShoppingList extends ConsumerStatefulWidget {
   static const String routeName = '/shoppingList';
   ShoppingList({super.key});
-   List<Product> shoppingList = <Product>[];
+  List<Product> shoppingList = <Product>[];
 
   @override
   ConsumerState<ShoppingList> createState() => _ShoppingListState();
@@ -32,15 +32,27 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
     super.initState();
   }
 
-  void fetchthelist(){
-    print("fetchthelist..........");
-    ShoppingListFetcher shoppingListFetcher = ShoppingListFetcher(email: ref.read(customerNotifierProvider.notifier).getEmail());
+  List<Product> callback(List<Product> list) {
+    print("callback..........");
+    print("list.length: ${list.length}");
     setState(() {
-      widget.shoppingList = shoppingListFetcher.fetchCustomersShoppingList();
+      widget.shoppingList = list;
     });
+    return widget.shoppingList;
+  }
+
+  void fetchthelist() {
+    print("fetchthelist..........");
+    ShoppingListFetcher shoppingListFetcher = ShoppingListFetcher(
+        email: ref.read(customerNotifierProvider.notifier).getEmail());
+
+    shoppingListFetcher.fetchCustomersShoppingList(callback);
+
+    // setState(() {
+    //   widget.shoppingList = shoppingListFetcher.fetchCustomersShoppingList(callback);
+    // });
 
     print("widget.shoppingList.length: ${widget.shoppingList.length}");
-    
   }
 
 //   void fetchCustomersShoppingList() {
@@ -105,7 +117,6 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
 
 //                   }),
 
-                  
 //             }
 //           //   // Need to expand the emailRelatedOrdersList to get the product ids
 //           //   // Need to fetch the products from the database using the product ids
@@ -158,10 +169,16 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
                             ),
                             key: UniqueKey(),
                             onDismissed: (DismissDirection direction) {
-                              ref.read(shoppingListProvider.notifier).removeItem(widget.shoppingList[index], ref.read(customerNotifierProvider.notifier).getEmail());
+                              ref
+                                  .read(shoppingListProvider.notifier)
+                                  .removeItem(
+                                      widget.shoppingList[index],
+                                      ref
+                                          .read(
+                                              customerNotifierProvider.notifier)
+                                          .getEmail());
                               setState(() {
                                 widget.shoppingList.removeAt(index);
-
                               });
                             },
                             child: AddedItem(
