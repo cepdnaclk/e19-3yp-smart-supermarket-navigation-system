@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ import 'package:shopwise/services/pathfinder.dart';
 
 class TheMap extends ConsumerStatefulWidget {
   final Stream<String> directionStream;
+  List<Product> shoppingList = [];
 
   TheMap({Key? key, required this.directionStream}) : super(key: key);
 
@@ -24,7 +27,6 @@ class TheMap extends ConsumerStatefulWidget {
 }
 
 class _TheMapState extends ConsumerState<TheMap> {
-  List<Product> shoppingList = [];
   static int numberInRow = 11;
   int numberOfSquares = numberInRow * 19;
 
@@ -165,28 +167,46 @@ class _TheMapState extends ConsumerState<TheMap> {
 
   String _scanBarcodeResult = '';
 
+  bool isStarting = true;
+
   @override
   Widget build(BuildContext context) {
-    void fetchthelist() {
-      print("Fetching the list............................................");
-      ShoppingListFetcher shoppingListFetcher = ShoppingListFetcher(
-          email: ref.read(customerNotifierProvider.notifier).getEmail());
+    List<Product> callback(List<Product> list) {
+      print("callback..........");
+      print("list.length: ${list.length}");
       setState(() {
-        // shoppingList = shoppingListFetcher.fetchCustomersShoppingList();
+        widget.shoppingList = list;
       });
+      cell_list = widget.shoppingList.map((e) => int.parse(e.cell)).toList();
+      print("cell_list: $cell_list");
 
-      cell_list = shoppingList.map((e) => int.parse(e.cell)).toList();
-      idList = shoppingList.map((e) => int.parse(e.id)).toList();
+      idList = widget.shoppingList.map((e) => int.parse(e.id)).toList();
+
+      print("idList: $idList");
 
       PathFinder pathFinder =
           PathFinder(shopping_list: idList, cell_list: cell_list);
-      pathFinder.findPath();
+      setState(() {
+        pathcells = pathFinder.findPath();
+        products = cell_list;
+      });
+
+      return widget.shoppingList;
+    }
+
+    void fetchthelist() {
+      print(
+          "Fetching the list......................................................................................................");
+      ShoppingListFetcher shoppingListFetcher = ShoppingListFetcher(
+          email: ref.read(customerNotifierProvider.notifier).getEmail());
+
+      shoppingListFetcher.fetchCustomersShoppingList(callback);
     }
 
     @override
     initState() {
-      super.initState();
       fetchthelist();
+      super.initState();
     }
 
     Future<void> fetchData() async {
@@ -213,144 +233,196 @@ class _TheMapState extends ConsumerState<TheMap> {
         }
 
         return Expanded(
-          child: Column(
+          child: Stack(
             children: [
               Expanded(
-                flex: 4,
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: numberOfSquares,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: numberInRow,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    if (player == index) {
-                      if (promotions.contains(index - 1) ||
-                          promotions.contains(index + 1)) {
-                        print("Hi");
-                        final snackBar = SnackBar(
-                          /// need to set following properties for best effect of awesome_snackbar_content
-                          elevation: 0,
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          content: AwesomeSnackbarContent(
-                            title: 'Promotion Alert!',
-                            message: '25% off',
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: numberOfSquares,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: numberInRow,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          if (player == index) {
+                            if (promotions.contains(index - 1) ||
+                                promotions.contains(index + 1)) {
+                              print("Hi");
+                              final snackBar = SnackBar(
+                                /// need to set following properties for best effect of awesome_snackbar_content
+                                elevation: 0,
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.transparent,
+                                content: AwesomeSnackbarContent(
+                                  title: 'Promotion Alert!',
+                                  message: '25% off',
 
-                            /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-                            contentType: ContentType.success,
+                                  /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                                  contentType: ContentType.success,
+                                ),
+                              );
+
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(snackBar);
+                            }
+                            return Container(
+                              color: Colors
+                                  .grey, // Replace with your desired background color
+                              child: MyPlayer(),
+                            );
+                          } else if (products.contains(index)) {
+                            //listing the shopping list numbers
+                            return MyPixel(
+                              color: Colors.green,
+                              child: Text(""),
+                              // child: Text((products.indexOf(index) + 1).toString()),
+                            );
+                          } else if (barriers.contains(index)) {
+                            return MyPixel(
+                              color: Colors.blue[700],
+                              child: Text(""),
+                              // child: Text(index.toString()),
+                            );
+                          } else if (pathcells.contains(index)) {
+                            return MyPixel(
+                              color: Colors.yellow,
+                              child: Text(""),
+                              // child: Text(index.toString()),
+                            );
+                          } else {
+                            return MyPixel(
+                              color: Colors.grey,
+                              child: Text(""),
+                              // child: Text(index.toString()),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+
+                    /////////////////////////Mapping ends here!/////////////////////////
+
+                    //  Expanded(
+                    //     child: Container(
+                    //       child: Column(
+                    //         children: [
+                    //           Center(
+                    //             child: Row(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: <Widget>[
+                    //                 SizedBox(
+                    //                   width: 120,
+                    //                   height: 120,
+                    //                   child: ElevatedButton(
+                    //                     onPressed: scanBarcode,
+                    //                     child: Text('Scan Item'),
+                    //                     style: ElevatedButton.styleFrom(
+                    //                       shape: RoundedRectangleBorder(
+                    //                         borderRadius: BorderRadius.circular(10),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //                 SizedBox(width: 20),
+                    //                 SizedBox(
+                    //                   width: 120,
+                    //                   height: 120,
+                    //                   child: ElevatedButton(
+                    //                     onPressed: () {},
+                    //                     child: Text('Finish Shopping'),
+                    //                     style: ElevatedButton.styleFrom(
+                    //                       shape: RoundedRectangleBorder(
+                    //                         borderRadius: BorderRadius.circular(10),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //           Text("Barcode Result : $_scanBarcodeResult",
+                    //               style: TextStyle(fontSize: 20, color: Colors.black)),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
                           ),
-                        );
+                          onPressed: () {
+                            print(
+                                "Printing order id ........................................");
+                            print("Order Id is: " +
+                                ref.read(customerNotifierProvider).order_id);
+                            fetchData();
 
-                        ScaffoldMessenger.of(context)
-                          ..hideCurrentSnackBar()
-                          ..showSnackBar(snackBar);
-                      }
-                      return Container(
-                        color: Colors
-                            .grey, // Replace with your desired background color
-                        child: MyPlayer(),
-                      );
-                    } else if (products.contains(index)) {
-                      //listing the shopping list numbers
-                      return MyPixel(
-                        color: Colors.green,
-                        child: Text((products.indexOf(index) + 1).toString()),
-                      );
-                    } else if (barriers.contains(index)) {
-                      return MyPixel(
-                        color: Colors.blue[700],
-                        child: Text(index.toString()),
-                      );
-                    } else {
-                      return MyPixel(
-                        color: Colors.grey,
-                        child: Text(index.toString()),
-                      );
-                    }
-                  },
+                            scanBarcode();
+
+                            // Navigator.pushNamed(context, BarcodeReader.routeName);
+                          },
+                          child: Text("Scan Barcode")),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Colors.red,
+                            ),
+                            foregroundColor: Colors.red,
+                          ),
+                          onPressed: () {
+                         
+                            _showExitConfirmationDialog(context);
+                          },
+                          child: Text("End Shopping")),
+                    ),
+                  ],
                 ),
               ),
-
-              /////////////////////////Mapping ends here!/////////////////////////
-
-              //  Expanded(
-              //     child: Container(
-              //       child: Column(
-              //         children: [
-              //           Center(
-              //             child: Row(
-              //               mainAxisAlignment: MainAxisAlignment.center,
-              //               children: <Widget>[
-              //                 SizedBox(
-              //                   width: 120,
-              //                   height: 120,
-              //                   child: ElevatedButton(
-              //                     onPressed: scanBarcode,
-              //                     child: Text('Scan Item'),
-              //                     style: ElevatedButton.styleFrom(
-              //                       shape: RoundedRectangleBorder(
-              //                         borderRadius: BorderRadius.circular(10),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 SizedBox(width: 20),
-              //                 SizedBox(
-              //                   width: 120,
-              //                   height: 120,
-              //                   child: ElevatedButton(
-              //                     onPressed: () {},
-              //                     child: Text('Finish Shopping'),
-              //                     style: ElevatedButton.styleFrom(
-              //                       shape: RoundedRectangleBorder(
-              //                         borderRadius: BorderRadius.circular(10),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //           Text("Barcode Result : $_scanBarcodeResult",
-              //               style: TextStyle(fontSize: 20, color: Colors.black)),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      print(
-                          "Printing order id ........................................");
-                      print("Order Id is: " +
-                          ref.read(customerNotifierProvider).order_id);
-                      fetchData();
-                      scanBarcode();
-
-                      // Navigator.pushNamed(context, BarcodeReader.routeName);
-                    },
-                    child: Text("Scan Barcode")),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: Colors.red,
+              isStarting
+                  ? Center(
+                      child: GestureDetector(
+                        onTap: () => {
+                          print("Glass tapped"),
+                             fetchthelist(),
+                          setState(
+                            () {
+                              isStarting = false;
+                            },
+                          )
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomCenter,
+                                    colors: [Colors.white60, Colors.white10]),
+                                borderRadius: BorderRadius.circular(25),
+                                border:
+                                    Border.all(color: Colors.white30, width: 2),
+                              ), // Replace with your desired color
+                              child: Center(child: Text("Tap to Start!")),
+                            ),
+                          ),
+                        ),
                       ),
-                      foregroundColor: Colors.red,
-                    ),
-                    onPressed: () {
-                      _showExitConfirmationDialog(context);
-                    },
-                    child: Text("End Shopping")),
-              ),
+                    )
+                  : Container(),
             ],
           ),
         );

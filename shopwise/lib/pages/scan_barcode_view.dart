@@ -89,7 +89,7 @@ class _ScanBarcodeState extends ConsumerState<ScanBarcode> {
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () {
-                  List<int> shoppinListIds = ref.read(shoppingListProvider.notifier).getShoppingListIDS();
+                  // List<int> shoppinListIds = ref.read(shoppingListProvider.notifier).getShoppingListIDS();
                   ref
                       .read(customerNotifierProvider.notifier)
                       .updateHashcode(widget._scanBarcodeResult);

@@ -112,7 +112,7 @@ bool isSafe(List<List<int>> mat, List<List<bool>> visited, int x, int y) {
   return [-1, []]; */
   }
 
-  void findPath() {
+  List<int> findPath() {
     // List<List<int>> mat = [
     //   [1, 0, 1, 1, 1, 1, 0, 1, 1, 1],
     //   [1, 0, 1, 0, 1, 1, 1, 0, 1, 1],
@@ -223,6 +223,8 @@ bool isSafe(List<List<int>> mat, List<List<bool>> visited, int x, int y) {
   } else {
     print("Shortest Path doesn't exist");
   } */
+
+  return numbers;
   }
 
 
