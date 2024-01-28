@@ -5,6 +5,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shopwise/pages/mqtt_client_test.dart';
 import 'package:shopwise/pages/scan_qrcode_page.dart';
 import 'package:shopwise/providers/customer_provider.dart';
+import 'package:shopwise/providers/shopping_list_provider.dart';
 
 class ScanBarcode extends ConsumerStatefulWidget {
   ScanBarcode({super.key});
@@ -88,6 +89,7 @@ class _ScanBarcodeState extends ConsumerState<ScanBarcode> {
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () {
+                  List<int> shoppinListIds = ref.read(shoppingListProvider.notifier).getShoppingListIDS();
                   ref
                       .read(customerNotifierProvider.notifier)
                       .updateHashcode(widget._scanBarcodeResult);

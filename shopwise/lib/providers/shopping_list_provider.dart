@@ -14,6 +14,10 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
     state = [...state, product];
   }
 
+  List<int> getShoppingListIDS() {
+    return state.map((e) => int.parse(e.id)).toList();
+  }
+
   void removeItem(Product product, String email) {
     final ordersCollection = FirebaseFirestore.instance.collection('orders');
 
@@ -74,7 +78,9 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
               (curentOrder[0].data()['products'] as List)
                   .map((e) => e.toString())
                   .toList();
-          List<String> newProducts = (state.map((e) => e.id).toList()).where((element) => existingProducts.contains(element) == false).toList();
+          List<String> newProducts = (state.map((e) => e.id).toList())
+              .where((element) => existingProducts.contains(element) == false)
+              .toList();
           existingProducts.addAll(newProducts);
           print("if case");
           curentOrder[0].reference.update({

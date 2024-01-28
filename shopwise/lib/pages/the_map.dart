@@ -2,6 +2,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shopwise/models/product.dart';
 
 import 'package:shopwise/pages/pixel.dart';
 import 'package:shopwise/pages/player.dart';
@@ -10,6 +11,8 @@ import 'package:shopwise/pages/product.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shopwise/pages/the_bill.dart';
 import 'package:shopwise/providers/customer_provider.dart';
+import 'package:shopwise/services/fetch_shoppinglist_products.dart';
+import 'package:shopwise/services/pathfinder.dart';
 
 class TheMap extends ConsumerStatefulWidget {
   final Stream<String> directionStream;
@@ -21,11 +24,17 @@ class TheMap extends ConsumerStatefulWidget {
 }
 
 class _TheMapState extends ConsumerState<TheMap> {
+  List<Product> shoppingList = [];
   static int numberInRow = 11;
   int numberOfSquares = numberInRow * 19;
 
   //palyer position
   int player = 167;
+
+  List<int> cell_list = [];
+  List<int> idList = [];
+
+  List<int> pathcells = [];
 
   List<int> barriers = [
     176,
@@ -158,9 +167,26 @@ class _TheMapState extends ConsumerState<TheMap> {
 
   @override
   Widget build(BuildContext context) {
+    void fetchthelist() {
+      print("Fetching the list............................................");
+      ShoppingListFetcher shoppingListFetcher = ShoppingListFetcher(
+          email: ref.read(customerNotifierProvider.notifier).getEmail());
+      setState(() {
+        shoppingList = shoppingListFetcher.fetchCustomersShoppingList();
+      });
+
+      cell_list = shoppingList.map((e) => int.parse(e.cell)).toList();
+      idList = shoppingList.map((e) => int.parse(e.id)).toList();
+
+      PathFinder pathFinder =
+          PathFinder(shopping_list: idList, cell_list: cell_list);
+      pathFinder.findPath();
+    }
+
     @override
     initState() {
       super.initState();
+      fetchthelist();
     }
 
     Future<void> fetchData() async {

@@ -4,6 +4,7 @@ import 'package:shopwise/pages/chooseview.dart';
 import 'package:shopwise/pages/login_screen.dart';
 
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:shopwise/services/pathfinder.dart';
 
 class StartupPage extends StatefulWidget {
   //const StartupPage({super.key});
@@ -14,6 +15,7 @@ class StartupPage extends StatefulWidget {
 }
 
 class _StartupPageState extends State<StartupPage> {
+  PathFinder pathFinder = PathFinder(shopping_list: [1, 2, 3, 4], cell_list: [178, 101, 104, 159]);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +42,7 @@ class _StartupPageState extends State<StartupPage> {
           AnimatedButton(
             key: ValueKey("start"),
             onPress: () {
+              // pathFinder.findPath();
               Future.delayed(Duration(milliseconds: 500), () {
                 Navigator.pushReplacementNamed(context, Choose.routeName);
               });
