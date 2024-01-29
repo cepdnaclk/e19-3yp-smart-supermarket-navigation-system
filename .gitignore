@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/flutter,platformio,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=flutter,platformio,python
 
+# Ignore virtual environment
+**/venv/
+
 ### Flutter ###
 # Flutter/Dart/Pub related
 **/doc/api/
