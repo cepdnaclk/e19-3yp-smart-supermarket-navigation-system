@@ -18,6 +18,12 @@ class _SideNavBarState extends State<SideNavBar> {
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
   final _key = GlobalKey<ScaffoldState>();
 
+  @override
+  void dispose() {
+    signOutCurrentUser(); // Logout when the widget is disposed
+    super.dispose();
+  }
+
   Future<void> signOutCurrentUser() async {
     final result = await Amplify.Auth.signOut();
     if (result is CognitoCompleteSignOut) {
@@ -26,7 +32,6 @@ class _SideNavBarState extends State<SideNavBar> {
     } else if (result is CognitoFailedSignOut) {
       safePrint('Error signing user out: ${result.exception.message}');
     }
-    
   }
 
   @override
@@ -78,11 +83,11 @@ class _SideNavBarState extends State<SideNavBar> {
                           _key.currentState?.closeDrawer();
                           return const Placement();
                         case 2:
-                         // _key.currentState?.closeDrawer();
+                          // _key.currentState?.closeDrawer();
                           //log out
                           signOutCurrentUser();
                           return Text('');
-                          
+
                         default:
                           return const Dashboard();
                       }
