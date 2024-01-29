@@ -1,7 +1,9 @@
 
 #include <Arduino.h>
+#include <ElegantOTA.h>
 #include "PinDefinitionsAndMore.h"
 #include "SupermarketMapper.h"
+#include <display.h>
 #include <IRremote.hpp>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
@@ -12,21 +14,18 @@
 #include <WiFi.h>
 #include <Wire.h>
 #include <QMC5883LCompass.h>
-
-// For ElegantOTA
-#include <WiFiClient.h>
-#include <WebServer.h>
-#include <ElegantOTA.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
 // Insert your network credentials
-#define WIFI_SSID "Dialog 4G 932"
-#define WIFI_PASSWORD "B40a8EC1"
+// #define WIFI_SSID "Dialog 4G 932"
+// #define WIFI_PASSWORD "B40a8EC1"
+
+// #define WIFI_SSID "PeraComStudents"
+// #define WIFI_PASSWORD "abcd1234"
 
 #define AWS_IOT_PUBLISH_TOPIC "esp32/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/test"
-
-// ElegantOTA
-WebServer server(80);
 
 WiFiClientSecure net = WiFiClientSecure();
 PubSubClient client(net);
@@ -34,21 +33,98 @@ PubSubClient client(net);
 Adafruit_MPU6050 mpu;
 QMC5883LCompass compass;
 
-const int hallSensorPin = 34;
+const int hallSensorPin = 32;
+
+const int biosPin = 35;
 
 unsigned long sendDataPrevMillis = 0;
 int count = 0;
 int distance = 0;
 int currentStation = 0;
 int currentLocation = 0;
+uint8_t batt_counter = 200;
+uint8_t prev_battLev = 200;
 
 // Define Ir Receiver pins
 #define DECODE_NEC
 #define IR_RECEIVE_PIN 25
 #define wifiInd 16
 #define awsInd 17
+#define BATT_PIN 33
+
+// battry info
+#define BATTV_MAX 4.1          // maximum voltage of battery
+#define BATTV_MIN 3.2          // what we regard as an empty battery
+#define BATTV_LOW 3.4          // voltage considered to be low battery
+#define BATT_ALERT_THRESHOLD 5 // how many times we read low battery before sending alert
 
 // Map
+
+// Wifi list
+const char *ssid[] = {"Dialog 4G 932", "dlg989", "Eng-Student", "PeraComStudents"}; // List of SSIDs to try
+const char *password[] = {"B40a8EC1", "coc200044", "3nG5tuDt", "abcd1234"};         // Corresponding passwords
+const int num_ssids = 4;
+int ssid_index = 0;
+
+// Try multiple wifi(s) and connect
+void connectToWiFi()
+{
+  Serial.println("Connecting to WiFi");
+  clearDisplay();
+  displayText("Connecting to WiFi", 2, 1);
+  delay(500);
+
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED && ssid_index < num_ssids)
+  {
+    Serial.print("Attempting connection to ");
+    Serial.println(ssid[ssid_index]);
+    clearDisplay();
+    displayText("Trying...", 2, 0);
+    displayText(ssid[ssid_index], 2, 2);
+
+    for (int i = 0; i < 5; i++)
+    {
+      WiFi.begin(ssid[ssid_index], password[ssid_index]);
+      delay(300);
+      if (WiFi.status() == WL_CONNECTED)
+        break;
+    }
+
+    ssid_index++;
+  }
+
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    Serial.println("Connected to WiFi");
+    Serial.print("SSID: ");
+    Serial.println(WiFi.SSID());
+    Serial.print("IP Address: ");
+    Serial.println(WiFi.localIP());
+    clearDisplay();
+    displayText("WiFi connected!", 2, 1);
+    digitalWrite(wifiInd, HIGH);
+  }
+  else
+  {
+    Serial.println("Could not connect to any available SSID");
+    clearDisplay();
+    displayText("WiFi connection failed!", 1, 1);
+  }
+  delay(1000);
+}
+
+// Print Battery Info
+int printBatteryLevel()
+{
+  float battv = analogRead(BATT_PIN) * 2 * 3.3 / 4095 * 1.05;
+  Serial.println(battv);
+  int battPercent = (battv - BATTV_MIN) / (BATTV_MAX - BATTV_MIN) * 100;
+  Serial.print("Battery:");
+  Serial.println(battPercent);
+  batteryLevel(battPercent);
+  return battPercent;
+}
 
 // Get Accelerometer and Gyroscope data  from MPU6050
 int getMPUSensorReadings()
@@ -66,7 +142,7 @@ int getMPUSensorReadings()
   // Serial.print(", Z: ");
   // Serial.println(g.gyro.z);
 
-  return a.acceleration.y;
+  return a.acceleration.z;
 }
 
 // Get Hall Effect Sensor data
@@ -91,13 +167,8 @@ int getMAGSensorReadings()
   z = compass.getZ();
 
   // Calculate heading angle
-  float heading = atan2(y, x) * 180.0 / PI;
 
-  // Adjust the heading to be in the range [0, 360)
-  if (heading < 0)
-  {
-    heading += 360.0;
-  }
+  float heading = compass.getAzimuth();
 
   return heading;
 }
@@ -169,6 +240,8 @@ void messageHandler(char *topic, byte *payload, unsigned int length)
 
 void connectAWS()
 {
+  // Connect to Wifi
+  connectToWiFi();
 
   // Configure WiFiClientSecure to use the AWS IoT device credentials
   net.setCACert(AWS_CERT_CA);
@@ -182,6 +255,8 @@ void connectAWS()
   client.setCallback(messageHandler);
 
   Serial.println("Connecting to AWS IOT");
+  clearDisplay();
+  displayText("Connectingto Server", 2, 1);
 
   while (!client.connect(THINGNAME))
   {
@@ -191,6 +266,8 @@ void connectAWS()
 
   if (!client.connected())
   {
+    clearDisplay();
+    displayText("Connection Failed", 2, 1);
     Serial.println("AWS IoT Timeout!");
     return;
   }
@@ -199,6 +276,13 @@ void connectAWS()
   client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
 
   Serial.println("AWS IoT Connected!");
+  // display screen connection status
+  clearDisplay();
+  displayText("Connected To Server", 2, 1);
+  clearDisplay();
+  displayText("Enjoy", 2, 1);
+  displayText("Shopping", 2, 2);
+  displayHeader();
 }
 
 void publishMessage(int position)
@@ -224,40 +308,79 @@ void hallSensorInterrupt()
   distance += 15; // Add 10cm to the distance if the sensor value is high
 }
 
+// The following codes are for OTA implementation (server, biosMode)
+// web server for elegantOTA
+WebServer server(80);
+
+void biosMode()
+{
+  // display Recovery Init Screen
+  clearDisplay();
+  displayText("Recovery", 2, 1);
+  displayText("Mode", 2, 2);
+  delay(2000);
+
+  // Connect to Wifi
+  connectToWiFi();
+
+  // Once connected, get the local IP address
+  IPAddress localIP = WiFi.localIP();
+
+  // Convert the IP address to char array
+  char ssidName[20];
+  char ipAddressCharArray[16]; // IPv4 addresses are at most 15 characters long
+  WiFi.SSID().toCharArray(ssidName, sizeof(ssidName));
+  localIP.toString().toCharArray(ipAddressCharArray, sizeof(ipAddressCharArray));
+
+  server.on("/", []()
+            { server.send(200, "text/plain", "Shopwise booted in recovery mode."); });
+
+  ElegantOTA.begin(&server); // Start ElegantOTA
+  server.begin();
+  Serial.println("Recovery server started");
+
+  // Set ip address info to display
+  clearDisplay();
+  displayText("   ~Recovery Mode~", 1, 0);
+  displayText(ssidName, 1, 2);
+  displayText(ipAddressCharArray, 1, 4);
+
+  while (1)
+  {
+    server.handleClient();
+    ElegantOTA.loop();
+  }
+}
+
+// Create Supermarket Mapper Object
 SupermarketMapper supermarketMapper;
+
+// Create Display Object
+// Display OledDisplay;
 
 void setup()
 {
   Serial.begin(115200);
+
+  // initialize the OLED object
+  initOLED();
+
+  pinMode(biosPin, INPUT);
+  int Push_button_state = digitalRead(biosPin);
+
+  if (Push_button_state == HIGH)
+  {
+    // delay(500);
+    Serial.println("Booting in recovery mode");
+    delay(500);
+    biosMode();
+  }
 
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, RISING);
 
   // Initiate Indicate LEDs
   pinMode(wifiInd, OUTPUT); // WiFi indicator
   pinMode(awsInd, OUTPUT);  // AWS connection indicator
-
-  // Connect to Wifi
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Connecting to Wi-Fi");
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    Serial.print(".");
-    delay(300);
-  }
-  digitalWrite(wifiInd, HIGH);
-  Serial.println();
-  Serial.print("Connected with IP: ");
-  Serial.println(WiFi.localIP());
-  Serial.println();
-
-  // Begin HTTP Server
-  server.on("/", []()
-            { server.send(200, "text/plain", "This is HTTP endpoint for cart."); });
-
-  ElegantOTA.begin(&server); // Start ElegantOTA
-  server.begin();
-  Serial.println("HTTP server started");
 
   // AWS Connect
   connectAWS();
@@ -271,6 +394,10 @@ void setup()
   // Get Sensor data
   pinMode(hallSensorPin, INPUT);
   pinMode(4, INPUT);
+  pinMode(BATT_PIN, INPUT);
+
+  // Calibrate HMC5883L
+  // compass.calibrate();
 
   Wire.begin(); // Start the I2C communication
 
@@ -296,10 +423,6 @@ void setup()
 
 void loop()
 {
-  // ! Needed For ElegentOTA
-  server.handleClient();
-  ElegantOTA.loop();
-
   int receivedCommand = IrData();
   int direction = getMAGSensorReadings();
   // hallEffectSensor();
@@ -320,6 +443,17 @@ void loop()
   currentLocation = supermarketMapper.displayLocation();
   publishMessage(currentLocation);
   client.loop();
+
+  // Print Battery Level
+  if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
+  {
+    prev_battLev = printBatteryLevel();
+    batt_counter = 0;
+  }
+  else
+  {
+    batt_counter++;
+  }
 
   delay(1500);
 }

@@ -4,6 +4,9 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   amplify_db_common
+  cloud_firestore
+  firebase_auth
+  firebase_core
   permission_handler_windows
   url_launcher_windows
   webview_windows

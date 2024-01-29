@@ -3,7 +3,7 @@ import 'package:shopwise/models/product.dart';
 
 class AddedItem extends StatefulWidget {
   final Product product;
-  final List<Product> theList;
+  // final List<Product> theList;
 
 
   // final String title;
@@ -15,7 +15,7 @@ class AddedItem extends StatefulWidget {
   AddedItem({
     super.key,
     required this.product,
-      required this.theList,
+      // required this.theList,
 
     // required this.title,
     // required this.description,

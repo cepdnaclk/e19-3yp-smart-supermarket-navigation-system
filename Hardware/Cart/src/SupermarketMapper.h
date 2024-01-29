@@ -55,8 +55,8 @@ SupermarketMapper::SupermarketMapper()
 
   // Define landmarks in the supermarket (including item racks)
   landmarks["Entrance"] = {0, 0};
-  landmarks["BS1N"] = {16, 3};
-  landmarks["BS1S"] = {16, 6};
+  landmarks["BS1N"] = {9, 6};
+  landmarks["BS1S"] = {14, 6};
   landmarks["BS2N"] = {2, 2};
   landmarks["BS2S"] = {5, 2};
   landmarks["BS3N"] = {2, 4};
@@ -126,11 +126,11 @@ void SupermarketMapper::moveForward()
 {
 
   // Move forward one location point in the matrix based on the current direction
-  if (cart_direction >= 340 && cart_direction <= 360 || cart_direction >= 0 && cart_direction <= 20)
+  if (cart_direction >= 330 && cart_direction <= 360 || cart_direction >= 0 && cart_direction <= 30)
   {
     cart_location.first--; // Move to the up
   }
-  else if (cart_direction >= 40 && cart_direction <= 120)
+  else if (cart_direction >= 60 && cart_direction <= 120)
   {
     cart_location.second++; // Move to right
   }

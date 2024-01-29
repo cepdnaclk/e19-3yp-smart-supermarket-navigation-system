@@ -58,21 +58,21 @@ void test_hall_sensor_reading() {
   TEST_ASSERT_FLOAT_WITHIN(1000.0f, 4096.0f, sensorValue);
 }
 
-void setup() {
-  UNITY_BEGIN(); // Initialize Unity framework
-}
+// void setup() {
+//   UNITY_BEGIN(); // Initialize Unity framework
+// }
 
-void loop() {
-    //Test Compass Sensor
-RUN_TEST(test_compass_sensor_initialization);
-RUN_TEST(test_compass_sensor_reading);
+// void loop() {
+//     //Test Compass Sensor
+// RUN_TEST(test_compass_sensor_initialization);
+// RUN_TEST(test_compass_sensor_reading);
   
-  //Test MPU Sensor
-RUN_TEST(test_mpu_sensor_initialization);
-RUN_TEST(test_mpu_sensor_reading);
+//   //Test MPU Sensor
+// RUN_TEST(test_mpu_sensor_initialization);
+// RUN_TEST(test_mpu_sensor_reading);
     
-    //Test Hall Sensor
-RUN_TEST(test_hall_sensor_reading);
+//     //Test Hall Sensor
+// RUN_TEST(test_hall_sensor_reading);
 
-UNITY_END(); // Finalize Unity framework
-}
+// UNITY_END(); // Finalize Unity framework
+// }

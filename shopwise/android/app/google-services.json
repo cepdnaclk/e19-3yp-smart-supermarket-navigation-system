@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "237159518113",
-    "firebase_url": "https://shopwise-5987f-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "shopwise-5987f",
-    "storage_bucket": "shopwise-5987f.appspot.com"
+    "project_number": "1051084283871",
+    "project_id": "shop-wise-f9d93",
+    "storage_bucket": "shop-wise-f9d93.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:237159518113:android:6b5a2682836af8580805e0",
+        "mobilesdk_app_id": "1:1051084283871:android:a5c581c1e0a7de1f76ee6a",
         "android_client_info": {
           "package_name": "com.example.shopwise"
         }
@@ -16,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCNObaWeN1nAafQYz8t3Ls9W_rvKt7cy70"
+          "current_key": "AIzaSyAib9Wba7sdk6jhiiit1lfb4aPjKTDLKlA"
         }
       ],
       "services": {
