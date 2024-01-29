@@ -461,20 +461,20 @@ void loop()
   publishMessage(currentLocation);
   client.loop();
 
-  // // Print Battery Level
-  // if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
-  // {
-  //   prev_battLev = printBatteryLevel();
-  //   batt_counter = 0;
-  // }
-  // else
-  // {
-  //   batt_counter++;
-  // }
+  // Print Battery Level
+  if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
+  {
+    prev_battLev = printBatteryLevel();
+    batt_counter = 0;
+  }
+  else
+  {
+    batt_counter++;
+  }
 
   // Test Results
-  clearDisplay();
-  showTestData(direction, gyro, distance, currentLocation, currentStation, supermarketMapper.getLocationX(), supermarketMapper.getLocationY(),compass.getX(),compass.getY(),compass.getZ());
+  // clearDisplay();
+  // showTestData(direction, gyro, distance, currentLocation, currentStation, supermarketMapper.getLocationX(), supermarketMapper.getLocationY(),compass.getX(),compass.getY(),compass.getZ());
 
   delay(1500);
 }
