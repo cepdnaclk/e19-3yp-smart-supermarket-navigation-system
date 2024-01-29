@@ -137,13 +137,13 @@ int printBatteryLevel()
 }
 
 // Get Accelerometer and Gyroscope data  from MPU6050
-float getMPUSensorReadings()
+std::pair<float, float> getMPUSensorReadings()
 {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
-  Serial.print("Acceleration - Y: ");
-  Serial.println(a.acceleration.y);
+  Serial.print("Acceleration - Z: ");
+  Serial.println(a.acceleration.z);
 
   // Serial.print("Gyroscope - X: ");
   // Serial.print(g.gyro.x);
@@ -152,7 +152,7 @@ float getMPUSensorReadings()
   // Serial.print(", Z: ");
   // Serial.println(g.gyro.z);
 
-  return a.acceleration.z;
+  return {a.acceleration.z, g.gyro.z};
 }
 
 // Get Hall Effect Sensor data
@@ -230,8 +230,6 @@ int IrData()
   }
   return receivedCommand;
 }
-
-
 
 void messageHandler(char *topic, byte *payload, unsigned int length)
 {
@@ -312,7 +310,7 @@ void publishMessage(int position)
 void hallSensorInterrupt()
 {
 
-  distance += 31; // Add 10cm to the distance if the sensor value is high
+  distance += 30; // Add 10cm to the distance if the sensor value is high
 }
 
 // The following codes are for OTA implementation (server, biosMode)
@@ -388,10 +386,6 @@ void setup()
 
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, RISING);
 
-  // Initiate Indicate LEDs
-  pinMode(wifiInd, OUTPUT); // WiFi indicator
-  pinMode(awsInd, OUTPUT);  // AWS connection indicator
-
   // AWS Connect
   connectAWS();
 
@@ -436,8 +430,10 @@ void loop()
   int receivedCommand = IrData();
   int direction = getMAGSensorReadings();
   // hallEffectSensor();
-  float acceleration = getMPUSensorReadings();
+  std::pair<float, float> mpuReadings = getMPUSensorReadings();
 
+  float acceleration = mpuReadings.first;
+  float gyro = mpuReadings.second;
   int heading = 1;
   if (acceleration > 0)
   {
@@ -467,7 +463,7 @@ void loop()
 
   // Test Results
   clearDisplay();
-  showTestData(direction, acceleration, distance, currentLocation, currentStation, supermarketMapper.getLocationX(), supermarketMapper.getLocationY(),compass.getX(),compass.getY(),compass.getZ());
+  showTestData(direction, gyro, distance, currentLocation, currentStation, supermarketMapper.getLocationX(), supermarketMapper.getLocationY(),compass.getX(),compass.getY(),compass.getZ());
 
   delay(1500);
 }

@@ -51,8 +51,10 @@ private:
 
   int currentDistance;
   int imgNorth = 0; // ^ is the north
-  int tileLength = 31;
+  int tileLength = 30;
   int currentStation;
+  String currentPositon="NW";
+  int turnFlag = 0;
 };
 
 SupermarketMapper::SupermarketMapper()
@@ -136,10 +138,14 @@ void SupermarketMapper::updateLocation(int irSignal, float magnetometerReading, 
   {
     cart_direction += 360;
   }
-  if (distance != currentDistance && (distance - currentDistance > tileLength))
+  if (distance != currentDistance && (distance - currentDistance >= tileLength))
   {
     if (heading == 1)
     {
+      if(turnFlag == 1){
+        turnFlag = 0;
+        return;
+      }
       moveForward();
     }
     else
@@ -153,26 +159,74 @@ void SupermarketMapper::updateLocation(int irSignal, float magnetometerReading, 
 void SupermarketMapper::moveForward()
 {
 
+  String prevPosition = currentPositon;
   // Move forward one location point in the matrix based on the current direction
-  if (cart_direction >= 305 && cart_direction <= 360 || cart_direction >= 0 && cart_direction <= 64)
-  {
-    if(cart_location.first>0 && cart_location.first<(row-1))
-    cart_location.first--; 
-    // Move to the up
-  }
-  else if (cart_direction >= 65 && cart_direction <= 176)
-  {
-    if(cart_location.second>0 && cart_location.second<(col-1))
-    cart_location.second++; // Move to right
-  }
-  else if (cart_direction >= 232 && cart_direction <=304 )
-  {
-    cart_location.second--; // Move left
-  }
-  else if (cart_direction >= 176 && cart_direction <= 231)
-  {
-    if(cart_location.first>0 && cart_location.first<(row-1))
-    cart_location.first++; // Move downward
+      if (cart_direction >= 305 && cart_direction <= 360 || cart_direction >= 0 && cart_direction <= 64)
+    {
+      if(cart_location.first>0 && cart_location.first<(row-1))
+      cart_location.first--;  // Move to the up
+      currentPositon = "N";
+    
+    }
+    else if (cart_direction >= 65 && cart_direction <= 176)
+    {
+      if(cart_location.second>0 && cart_location.second<(col-1))
+      cart_location.second++; // Move to right
+      currentPositon = "E";
+
+    }
+    else if (cart_direction >= 232 && cart_direction <=304 )
+    {
+      if(cart_location.second>0 && cart_location.second<(col-1))
+      cart_location.second--; // Move left
+      currentPositon = "W";
+    }
+    else if (cart_direction >= 176 && cart_direction <= 231)
+    {
+      if(cart_location.first>0 && cart_location.first<(row-1))
+      cart_location.first++; // Move downward
+      currentPositon = "S";
+    }  
+  
+
+  if(prevPosition != currentPositon){
+
+    if(prevPosition == "N"){
+      if(cart_location.first>0 && cart_location.first<(row-1)){
+        cart_location.first++; 
+        currentDistance = 0; 
+        turnFlag = 1;
+      }
+      
+      
+    }
+    else if(prevPosition == "E"){
+      if(cart_location.second>0 && cart_location.second<(col-1)){
+        cart_location.second--; 
+        currentDistance = 0;
+         turnFlag = 1;
+      }
+      
+      
+    }
+    else if(prevPosition == "W"){
+      if(cart_location.second>0 && cart_location.second<(col-1)){
+          cart_location.second++; 
+          currentDistance=0;
+           turnFlag = 1;
+      }
+      
+      
+    }
+    else if(prevPosition == "S"){
+      if(cart_location.first>0 && cart_location.first<(row-1)){
+          cart_location.first--;
+          currentDistance = 0;
+           turnFlag = 1;
+      }
+      
+      
+    }
   }
 }
 
