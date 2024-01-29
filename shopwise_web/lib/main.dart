@@ -83,8 +83,8 @@ class _MyAppState extends State<MyApp> {
           // TestPage.routeName:(context) =>   TestPage(),
           LoginPage.routeName: (context) =>LoginPage(),
           RegisterPage.routeName: (context) =>
-              AuthenticatedView(child: RegisterPage()),
-          SideNavBar.routeName:(context) => AuthenticatedView(child: SideNavBar())
+              const AuthenticatedView(child: RegisterPage()),
+          SideNavBar.routeName:(context) => const AuthenticatedView(child: SideNavBar())
          }
       ),
     );
