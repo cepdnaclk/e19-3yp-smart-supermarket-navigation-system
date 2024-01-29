@@ -171,34 +171,32 @@ int getMAGSensorReadings()
   char myArray[3];
 
   compass.read();
-  //compass.calibrate();
+  // compass.calibrate();
   x = compass.getX();
   y = compass.getY();
   z = compass.getZ();
 
   // Calculate heading angle
 
-  //float heading = compass.getAzimuth();
+  // float heading = compass.getAzimuth();
 
   // Convert heading from radians to degrees
-  float headingDegrees = atan2( y, x ) * 180.0 / PI;
-  
+  float headingDegrees = atan2(y, x) * 180.0 / PI;
+
   // Ensure heading is in the range [0, 360)
-  if (headingDegrees < 0) {
+  if (headingDegrees < 0)
+  {
     headingDegrees += 360.0;
   }
-  
-  //Calibrate for Real Values
-   headingDegrees = 0.0000147207 * pow(headingDegrees, 3) - 0.0102583 * pow(headingDegrees, 2) + 2.7987 * headingDegrees + 36.2822;
-   if(headingDegrees > 360){
-    headingDegrees = headingDegrees - 360.0;
-   }
-        
 
+  // Calibrate for Real Values
+  headingDegrees = 0.0000147207 * pow(headingDegrees, 3) - 0.0102583 * pow(headingDegrees, 2) + 2.7987 * headingDegrees + 36.2822;
+  if (headingDegrees > 360)
+  {
+    headingDegrees = headingDegrees - 360.0;
+  }
 
   return headingDegrees;
-
- 
 }
 
 // Read IR sensor data
@@ -337,13 +335,31 @@ void biosMode()
   WiFi.SSID().toCharArray(ssidName, sizeof(ssidName));
   localIP.toString().toCharArray(ipAddressCharArray, sizeof(ipAddressCharArray));
 
+  // define endpoints
   server.on("/", []()
             { server.send(200, "text/plain", "Shopwise booted in recovery mode."); });
+
+  server.on("/accelerometer", []()
+            { 
+              char boolBuffer[20];
+              sprintf(boolBuffer, "%d", mpu.begin());
+              server.send(200, "text/plain", boolBuffer); });
+
+  server.on("/magnetometer", []()
+            {
+    char headingBuffer[20];
+    compass.init();
+    float heading = compass.getAzimuth();
+    sprintf(headingBuffer, "%f", heading);
+    server.send(200, "text/plain", headingBuffer); });
+
+  server.on("/restart", []()
+            { server.send(200, "text/plain", "Restarting device..."); ESP.restart(); });
 
   ElegantOTA.begin(&server); // Start ElegantOTA
   server.begin();
   Serial.println("Recovery server started");
-  
+
   // Set ip address info to display
   clearDisplay();
   displayText("   ~Recovery Mode~", 1, 0);
@@ -353,16 +369,15 @@ void biosMode()
   sprintf(versionBuffer, "firmware v%.2f", firmwareVersion);
   displayText(versionBuffer, 1, 6);
 
-//Accelerometer test 
-//mpu.begin(); //if it is working return true
+  // Accelerometer test
+  // mpu.begin(); //if it is working return true
 
-//magnetometer test
-//compass.init();
-//float heading = compass.getAzimuth(); //return azimuth value
+  // magnetometer test
+  // compass.init();
+  // float heading = compass.getAzimuth(); //return azimuth value
 
-//Hall effect sensor readings
-//int sensorValue = analogRead(hallSensorPin);
-
+  // Hall effect sensor readings
+  // int sensorValue = analogRead(hallSensorPin);
 
   while (1)
   {
