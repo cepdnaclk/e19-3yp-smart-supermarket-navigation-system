@@ -1,4 +1,4 @@
-# Welcome to MkDocs
+# Welcome to Design Manual
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 

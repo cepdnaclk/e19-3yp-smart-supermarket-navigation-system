@@ -1,0 +1,16 @@
+:root {
+    --md-primary-fg-color: #013f00;
+    --md-primary-bg-color: #12bd39;
+  }
+
+.md-typeset a {
+    color: #51cc72;
+}
+
+.md-nav__item .md-nav__link--active, .md-nav__item .md-nav__link--active {
+    color: #51cc72;
+}
+
+.md-header__button.md-logo img, .md-header__button.md-logo svg{
+    height: 2rem;
+}
