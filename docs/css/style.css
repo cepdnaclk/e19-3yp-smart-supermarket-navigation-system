@@ -628,7 +628,7 @@ a:focus {
 }
 
 .why_section .btn-box a:hover {
-  background-color: #1d8e3b;
+  background-color: #1d8e3b64;
 }
 
 /*team section */
@@ -706,6 +706,20 @@ a:focus {
 .team_section .team_container .box .social_box a:hover {
   color: #0ade3b;
 }
+
+.team_section .btn-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: 45px;
+  background-color: #1d8e3b;
+  color: white;
+  padding: 10px;
+}
+
 
 /*team section end*/
 /* client section start */

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/dashboard/dashboard.dart';
 import 'package:shopwise_web/pages/login/login.dart';
 import 'package:shopwise_web/pages/product_placement/product_placement.dart';
+import 'package:shopwise_web/pages/product_types/product_tables.dart';
 import 'package:shopwise_web/pages/product_types/products_home.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -84,12 +85,12 @@ class _SideNavBarState extends State<SideNavBar> {
                           _key.currentState?.closeDrawer();
                           return const Placement();
                         case 3:
-                          // _key.currentState?.closeDrawer();
-                        case 2:
-                          // _key.currentState?.closeDrawer();
-                          //log out
                           signOutCurrentUser();
                           return Text('');
+                          // _key.currentState?.closeDrawer();
+                        // case 2:
+                          // _key.currentState?.closeDrawer();
+                          //log out
 
 
                         default:

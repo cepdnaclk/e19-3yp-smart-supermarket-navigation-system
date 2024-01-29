@@ -18,7 +18,7 @@ Future<List<Product>> getProducts() async {
 class ProduceTable extends StatefulWidget {
   final int index;
 
-  const ProduceTable({Key? key, required this.index}) : super(key: key);
+  const ProduceTable({super.key, required this.index});
 
   @override
   State<ProduceTable> createState() => _ProduceTableState();
@@ -33,7 +33,7 @@ class _ProduceTableState extends State<ProduceTable> {
         if (snapshot.connectionState == ConnectionState.done) {
           return _buildDataTable();
         } else {
-          return CircularProgressIndicator(); // Show a loading indicator while data is being fetched
+          return const CircularProgressIndicator(); // Show a loading indicator while data is being fetched
         }
       },
     );
