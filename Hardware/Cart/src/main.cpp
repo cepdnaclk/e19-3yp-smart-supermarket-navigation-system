@@ -343,7 +343,7 @@ void biosMode()
   ElegantOTA.begin(&server); // Start ElegantOTA
   server.begin();
   Serial.println("Recovery server started");
-
+  
   // Set ip address info to display
   clearDisplay();
   displayText("   ~Recovery Mode~", 1, 0);
@@ -352,6 +352,17 @@ void biosMode()
   char versionBuffer[20];
   sprintf(versionBuffer, "firmware v%.2f", firmwareVersion);
   displayText(versionBuffer, 1, 6);
+
+//Accelerometer test 
+//mpu.begin(); //if it is working return true
+
+//magnetometer test
+//compass.init();
+//float heading = compass.getAzimuth(); //return azimuth value
+
+//Hall effect sensor readings
+//int sensorValue = analogRead(hallSensorPin);
+
 
   while (1)
   {
