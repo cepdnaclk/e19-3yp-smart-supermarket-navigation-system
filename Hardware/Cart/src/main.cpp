@@ -335,6 +335,8 @@ void biosMode()
   WiFi.SSID().toCharArray(ssidName, sizeof(ssidName));
   localIP.toString().toCharArray(ipAddressCharArray, sizeof(ipAddressCharArray));
 
+  compass.init();
+
   // define endpoints
   server.on("/", []()
             { server.send(200, "text/plain", "Shopwise booted in recovery mode."); });
@@ -348,13 +350,14 @@ void biosMode()
   server.on("/magnetometer", []()
             {
     char headingBuffer[20];
-    compass.init();
-    float heading = compass.getAzimuth();
-    sprintf(headingBuffer, "%f", heading);
+    sprintf(headingBuffer, "%d", getMAGSensorReadings());
     server.send(200, "text/plain", headingBuffer); });
 
   server.on("/restart", []()
-            { server.send(200, "text/plain", "Restarting device..."); ESP.restart(); });
+            { 
+            server.send(200, "text/plain", "Restarting device..."); 
+            delay(1000);
+            ESP.restart(); });
 
   ElegantOTA.begin(&server); // Start ElegantOTA
   server.begin();
