@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shopwise_web/pages/dashboard/dashboard.dart';
 import 'package:shopwise_web/pages/login/login.dart';
 import 'package:shopwise_web/pages/product_placement/product_placement.dart';
+import 'package:shopwise_web/pages/product_types/products_home.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class SideNavBar extends StatefulWidget {
@@ -26,7 +27,6 @@ class _SideNavBarState extends State<SideNavBar> {
     } else if (result is CognitoFailedSignOut) {
       safePrint('Error signing user out: ${result.exception.message}');
     }
-    
   }
 
   @override
@@ -71,18 +71,18 @@ class _SideNavBarState extends State<SideNavBar> {
                         case 0:
                           _key.currentState?.closeDrawer();
                           return const Dashboard();
-                        /* case 1:
-                          _key.currentState?.closeDrawer();
-                          return const ProductsHome(); */
                         case 1:
                           _key.currentState?.closeDrawer();
-                          return const Placement();
+                          return const ProductsHome();
                         case 2:
-                         // _key.currentState?.closeDrawer();
+                          _key.currentState?.closeDrawer();
+                          return const Placement();
+                        case 3:
+                          // _key.currentState?.closeDrawer();
                           //log out
                           signOutCurrentUser();
                           return Text('');
-                          
+
                         default:
                           return const Dashboard();
                       }
@@ -129,7 +129,7 @@ class SideBarXExample extends StatelessWidget {
           icon: Icons.dashboard_outlined,
           label: 'Dashboard',
         ),
-        // SidebarXItem(icon: Icons.shopping_bag_outlined, label: 'Products'),
+        SidebarXItem(icon: Icons.shopping_bag_outlined, label: 'Products'),
         SidebarXItem(icon: Icons.shopping_cart, label: 'Layout Update'),
         SidebarXItem(icon: Icons.logout, label: 'Sign Out'),
         //SidebarXItem(icon: Icons.settings, label: 'Settings'),
