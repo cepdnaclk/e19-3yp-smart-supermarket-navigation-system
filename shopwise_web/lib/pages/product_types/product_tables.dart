@@ -1,20 +1,45 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+Future<List<Product>> getProducts() async {
+  final QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection('products').get();
+  return querySnapshot.docs.map((doc) {
+    return Product(
+      doc['id'],
+      doc['title'],
+      doc['cell'],
+      doc['promotion'],
+      doc['price'].toDouble(),
+    );
+  }).toList();
+}
 
 class ProduceTable extends StatefulWidget {
   final int index;
 
-  
-  const ProduceTable({super.key, required this.index});
+  const ProduceTable({Key? key, required this.index}) : super(key: key);
 
   @override
   State<ProduceTable> createState() => _ProduceTableState();
 }
 
 class _ProduceTableState extends State<ProduceTable> {
-
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: ProductsTableDataSource().initializeData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return _buildDataTable();
+        } else {
+          return CircularProgressIndicator(); // Show a loading indicator while data is being fetched
+        }
+      },
+    );
+  }
 
+  Widget _buildDataTable() {
     return Center(
       child: Column(
         children: [
@@ -44,7 +69,7 @@ class _ProduceTableState extends State<ProduceTable> {
                   width: 200,
                   alignment: Alignment.center,
                   child: const Text(
-                    "Barcode",
+                    "Placed Cell",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -55,7 +80,7 @@ class _ProduceTableState extends State<ProduceTable> {
                       width: 200,
                       alignment: Alignment.center,
                       child: const Text(
-                        "Quantity",
+                        "Promotion cell",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       )),
                   numeric: true),
@@ -91,32 +116,35 @@ class _ProduceTableState extends State<ProduceTable> {
 class ProductsTableDataSource extends DataTableSource {
   List<Product> products = [];
 
-  final List<Product> produces = [
-    Product(1, "Apple", "12345", 100, 100.00),
-    Product(2, "Banana", "12346", 100, 100.00),
-    Product(3, "Orange", "12347", 100, 100.00),
-    Product(4, "Grapes", "12348", 100, 100.00),
-  ];
+  late List<Product> produces;
 
-  final List<Product> meats = [
+  ProductsTableDataSource() {
+    initializeData();
+  }
+
+  Future<void> initializeData() async {
+    products = await getProducts();
+  }
+
+  /* final List<Product> meats = [
     Product(5, "Beef", "12349", 100, 100.00),
     Product(6, "Chicken", "12350", 100, 100.00),
     Product(7, "Pork", "12351", 100, 100.00),
     Product(8, "Lamb", "12352", 100, 100.00),
     Product(9, "Fish", "12353", 100, 100.00),
-  ];
+  ]; */
 
   List<DataRow> getRows(int index) {
     switch (index) {
-    case 0:
-      products.addAll(produces);
-      break;
-    case 1:
+      case 0:
+        products.addAll(produces);
+        break;
+      /* case 1:
       products.addAll(meats);
-      break;
-    default:
-      products.addAll(produces);
-      break;
+      break; */
+      default:
+        products.addAll(produces);
+        break;
     }
 
     return products.map((product) {
