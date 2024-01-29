@@ -17,12 +17,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-// Insert your network credentials
-// #define WIFI_SSID "Dialog 4G 932"
-// #define WIFI_PASSWORD "B40a8EC1"
-
-// #define WIFI_SSID "PeraComStudents"
-// #define WIFI_PASSWORD "abcd1234"
+#define firmwareVersion 1.1
 
 #define AWS_IOT_PUBLISH_TOPIC "esp32/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/test"
@@ -61,9 +56,9 @@ uint8_t prev_battLev = 200;
 // Map
 
 // Wifi list
-const char *ssid[] = {"Dialog 4G 932", "dlg989", "Eng-Student", "PeraComStudents"}; // List of SSIDs to try
-const char *password[] = {"B40a8EC1", "coc200044", "3nG5tuDt", "abcd1234"};         // Corresponding passwords
-const int num_ssids = 4;
+const char *ssid[] = {"Dialog 4G 555", "Dialog 4G 932", "dlg989", "Eng-Student", "PeraComStudents"}; // List of SSIDs to try
+const char *password[] = {"5d56C7D3", "B40a8EC1", "coc200044", "3nG5tuDt", "abcd1234"};              // Corresponding passwords
+const int num_ssids = 5;
 int ssid_index = 0;
 
 // Try multiple wifi(s) and connect
@@ -75,23 +70,34 @@ void connectToWiFi()
   delay(500);
 
   int attempts = 0;
-  while (WiFi.status() != WL_CONNECTED && ssid_index < num_ssids)
+  for (int j = 0; j < 10; j++)
   {
-    Serial.print("Attempting connection to ");
-    Serial.println(ssid[ssid_index]);
-    clearDisplay();
-    displayText("Trying...", 2, 0);
-    displayText(ssid[ssid_index], 2, 2);
 
-    for (int i = 0; i < 5; i++)
+    while (WiFi.status() != WL_CONNECTED)
     {
-      WiFi.begin(ssid[ssid_index], password[ssid_index]);
-      delay(300);
-      if (WiFi.status() == WL_CONNECTED)
-        break;
-    }
+      Serial.print("Attempting connection to ");
+      Serial.println(ssid[ssid_index]);
+      clearDisplay();
+      displayText("Trying...", 2, 0);
+      displayText(ssid[ssid_index], 2, 2);
 
-    ssid_index++;
+      for (int i = 0; i < 2; i++)
+      {
+        WiFi.begin(ssid[ssid_index], password[ssid_index]);
+        delay(3000);
+        if (WiFi.status() == WL_CONNECTED)
+          break;
+      }
+
+      ssid_index++;
+
+      // infinite loop if no SSID is found
+      if (ssid_index >= num_ssids)
+      {
+        ssid_index = 0;
+      }
+    }
+    ssid_index = 0;
   }
 
   if (WiFi.status() == WL_CONNECTED)
@@ -102,7 +108,7 @@ void connectToWiFi()
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
     clearDisplay();
-    displayText("WiFi connected!", 2, 1);
+    displayText("WiFi      connected!", 2, 1);
     digitalWrite(wifiInd, HIGH);
   }
   else
@@ -110,6 +116,10 @@ void connectToWiFi()
     Serial.println("Could not connect to any available SSID");
     clearDisplay();
     displayText("WiFi connection failed!", 1, 1);
+    while (1)
+    {
+      displayText("Please Restart Device", 1, 1);
+    }
   }
   delay(1000);
 }
@@ -127,13 +137,13 @@ int printBatteryLevel()
 }
 
 // Get Accelerometer and Gyroscope data  from MPU6050
-int getMPUSensorReadings()
+std::pair<float, float> getMPUSensorReadings()
 {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
-  Serial.print("Acceleration - Y: ");
-  Serial.println(a.acceleration.y);
+  Serial.print("Acceleration - Z: ");
+  Serial.println(a.acceleration.z);
 
   // Serial.print("Gyroscope - X: ");
   // Serial.print(g.gyro.x);
@@ -142,7 +152,7 @@ int getMPUSensorReadings()
   // Serial.print(", Z: ");
   // Serial.println(g.gyro.z);
 
-  return a.acceleration.z;
+  return {a.acceleration.z, g.gyro.z};
 }
 
 // Get Hall Effect Sensor data
@@ -161,16 +171,34 @@ int getMAGSensorReadings()
   char myArray[3];
 
   compass.read();
-
+  //compass.calibrate();
   x = compass.getX();
   y = compass.getY();
   z = compass.getZ();
 
   // Calculate heading angle
 
-  float heading = compass.getAzimuth();
+  //float heading = compass.getAzimuth();
 
-  return heading;
+  // Convert heading from radians to degrees
+  float headingDegrees = atan2( y, x ) * 180.0 / PI;
+  
+  // Ensure heading is in the range [0, 360)
+  if (headingDegrees < 0) {
+    headingDegrees += 360.0;
+  }
+  
+  //Calibrate for Real Values
+   headingDegrees = 0.0000147207 * pow(headingDegrees, 3) - 0.0102583 * pow(headingDegrees, 2) + 2.7987 * headingDegrees + 36.2822;
+   if(headingDegrees > 360){
+    headingDegrees = headingDegrees - 360.0;
+   }
+        
+
+
+  return headingDegrees;
+
+ 
 }
 
 // Read IR sensor data
@@ -203,26 +231,6 @@ int IrData()
   return receivedCommand;
 }
 
-// Send Testing data to AWS
-void publishTestData()
-{
-  Serial.print("Publishing Test Data:");
-
-  StaticJsonDocument<200> doc;
-  doc["message"] = "This is Test Data , Connection was Successful";
-  doc["distance_Readings"] = distance;
-  doc["current_Station"] = currentStation;
-  doc["current_Location"] = currentLocation;
-  doc["current_Direction"] = getMAGSensorReadings();
-  doc["current_Acceleration"] = getMPUSensorReadings();
-  char jsonBuffer[512];
-  serializeJson(doc, jsonBuffer); // print to client
-
-  client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
-
-  Serial.print("Successfully Publlished Test Data");
-}
-
 void messageHandler(char *topic, byte *payload, unsigned int length)
 {
   Serial.print("incoming: ");
@@ -231,10 +239,6 @@ void messageHandler(char *topic, byte *payload, unsigned int length)
   StaticJsonDocument<200> doc;
   deserializeJson(doc, payload);
   const char *message = doc["message"];
-  if (message == "test")
-  {
-    publishTestData();
-  }
   Serial.println(message);
 }
 
@@ -295,6 +299,7 @@ void publishMessage(int position)
   doc["distance"] = distance;
   doc["current_Station"] = currentStation;
   doc["current_Location"] = position;
+  doc["current_Direction"] = getMAGSensorReadings();
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer); // print to client
 
@@ -305,7 +310,7 @@ void publishMessage(int position)
 void hallSensorInterrupt()
 {
 
-  distance += 15; // Add 10cm to the distance if the sensor value is high
+  distance += 30; // Add 10cm to the distance if the sensor value is high
 }
 
 // The following codes are for OTA implementation (server, biosMode)
@@ -344,6 +349,9 @@ void biosMode()
   displayText("   ~Recovery Mode~", 1, 0);
   displayText(ssidName, 1, 2);
   displayText(ipAddressCharArray, 1, 4);
+  char versionBuffer[20];
+  sprintf(versionBuffer, "firmware v%.2f", firmwareVersion);
+  displayText(versionBuffer, 1, 6);
 
   while (1)
   {
@@ -377,10 +385,6 @@ void setup()
   }
 
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorInterrupt, RISING);
-
-  // Initiate Indicate LEDs
-  pinMode(wifiInd, OUTPUT); // WiFi indicator
-  pinMode(awsInd, OUTPUT);  // AWS connection indicator
 
   // AWS Connect
   connectAWS();
@@ -426,8 +430,10 @@ void loop()
   int receivedCommand = IrData();
   int direction = getMAGSensorReadings();
   // hallEffectSensor();
-  int acceleration = getMPUSensorReadings();
+  std::pair<float, float> mpuReadings = getMPUSensorReadings();
 
+  float acceleration = mpuReadings.first;
+  float gyro = mpuReadings.second;
   int heading = 1;
   if (acceleration > 0)
   {
@@ -444,16 +450,20 @@ void loop()
   publishMessage(currentLocation);
   client.loop();
 
-  // Print Battery Level
-  if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
-  {
-    prev_battLev = printBatteryLevel();
-    batt_counter = 0;
-  }
-  else
-  {
-    batt_counter++;
-  }
+  // // Print Battery Level
+  // if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
+  // {
+  //   prev_battLev = printBatteryLevel();
+  //   batt_counter = 0;
+  // }
+  // else
+  // {
+  //   batt_counter++;
+  // }
+
+  // Test Results
+  clearDisplay();
+  showTestData(direction, gyro, distance, currentLocation, currentStation, supermarketMapper.getLocationX(), supermarketMapper.getLocationY(),compass.getX(),compass.getY(),compass.getZ());
 
   delay(1500);
 }

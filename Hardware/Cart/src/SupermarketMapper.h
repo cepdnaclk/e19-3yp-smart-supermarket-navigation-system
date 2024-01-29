@@ -15,12 +15,18 @@ public:
   int displayLocation();
   int getCurrentCell();
   void resetPosition();
+  int getLocationX();
+  int getLocationY();
+  std::pair<int, int> findCellLocation(int cellNumber);
+  
 
 private:
   std::pair<int, int> cart_location; // {row, col}
   float cart_direction;              // degrees
   std::map<String, std::pair<int, int>> landmarks;
-  int supermarketMatrix[18][11] = {
+  static const int row = 20;
+  static const int col = 11;
+  int supermarketMatrix[row][col] = {
       {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
         {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21},
         {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32},
@@ -38,32 +44,56 @@ private:
         {154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164},
         {165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175},
         {176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186},
-        {187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197}
+        {187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197},
+        {198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208},
+        {209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219}
       }; // Example 7x5 matrix, adjust the size as needed
 
   int currentDistance;
   int imgNorth = 0; // ^ is the north
   int tileLength = 30;
   int currentStation;
+  String currentPositon="NW";
+  int turnFlag = 0;
 };
 
 SupermarketMapper::SupermarketMapper()
 {
   // Initialize variables for cart location and direction
-  cart_location = {17, 3}; // Initial location at the top-left corner
+  cart_location = findCellLocation(200); // Initial location at the top-left corner
   cart_direction = 0;     // Initial direction (in degrees)
 
   // Define landmarks in the supermarket (including item racks)
-  landmarks["Entrance"] = {0, 0};
-  landmarks["BS1N"] = {9, 6};
-  landmarks["BS1S"] = {14, 6};
-  landmarks["BS2N"] = {2, 2};
-  landmarks["BS2S"] = {5, 2};
-  landmarks["BS3N"] = {2, 4};
-  landmarks["BS3S"] = {5, 4};
+  landmarks["206"] = findCellLocation(206);
+  landmarks["178"] = findCellLocation(178);
+  landmarks["101"] = findCellLocation(101);
+  landmarks["104"] = findCellLocation(104);
+  landmarks["181"] = findCellLocation(181);
+  landmarks["107"] = findCellLocation(107);
+  landmarks["184"] = findCellLocation(184);
 
   // Add more item racks and landmarks as needed
 }
+
+
+std::pair<int, int> SupermarketMapper::findCellLocation(int cellNumber)
+{
+  // Iterate through the supermarketMatrix to find the location (x, y) based on the cell number
+  for (int i = 0; i < 20; ++i)
+  {
+    for (int j = 0; j < 11; ++j)
+    {
+      if (supermarketMatrix[i][j] == cellNumber)
+      {
+        return {i, j};
+      }
+    }
+  }
+
+  // Return {-1, -1} if the cell number is not found
+  return {-1, -1};
+}
+
 
 void SupermarketMapper::updateLocation(int irSignal, float magnetometerReading, int distance, int heading)
 {
@@ -108,10 +138,14 @@ void SupermarketMapper::updateLocation(int irSignal, float magnetometerReading, 
   {
     cart_direction += 360;
   }
-  if (distance != currentDistance && (distance - currentDistance > tileLength))
+  if (distance != currentDistance && (distance - currentDistance >= tileLength))
   {
     if (heading == 1)
     {
+      if(turnFlag == 1){
+        turnFlag = 0;
+        return;
+      }
       moveForward();
     }
     else
@@ -125,44 +159,101 @@ void SupermarketMapper::updateLocation(int irSignal, float magnetometerReading, 
 void SupermarketMapper::moveForward()
 {
 
+  String prevPosition = currentPositon;
   // Move forward one location point in the matrix based on the current direction
-  if (cart_direction >= 330 && cart_direction <= 360 || cart_direction >= 0 && cart_direction <= 30)
-  {
-    cart_location.first--; // Move to the up
-  }
-  else if (cart_direction >= 60 && cart_direction <= 120)
-  {
-    cart_location.second++; // Move to right
-  }
-  else if (cart_direction >= 240 && cart_direction <= 300)
-  {
-    cart_location.second--; // Move left
-  }
-  else if (cart_direction >= 150 && cart_direction <= 210)
-  {
-    cart_location.first++; // Move downward
+      if (cart_direction >= 305 && cart_direction <= 360 || cart_direction >= 0 && cart_direction <= 64)
+    {
+      if(cart_location.first>0 && cart_location.first<(row-1))
+      cart_location.first--;  // Move to the up
+      currentPositon = "N";
+    
+    }
+    else if (cart_direction >= 65 && cart_direction <= 176)
+    {
+      if(cart_location.second>0 && cart_location.second<(col-1))
+      cart_location.second++; // Move to right
+      currentPositon = "E";
+
+    }
+    else if (cart_direction >= 232 && cart_direction <=304 )
+    {
+      if(cart_location.second>0 && cart_location.second<(col-1))
+      cart_location.second--; // Move left
+      currentPositon = "W";
+    }
+    else if (cart_direction >= 176 && cart_direction <= 231)
+    {
+      if(cart_location.first>0 && cart_location.first<(row-1))
+      cart_location.first++; // Move downward
+      currentPositon = "S";
+    }  
+  
+
+  if(prevPosition != currentPositon){
+
+    if(prevPosition == "N"){
+      if(cart_location.first>0 && cart_location.first<(row-1)){
+        cart_location.first++; 
+        currentDistance = 0; 
+        turnFlag = 1;
+      }
+      
+      
+    }
+    else if(prevPosition == "E"){
+      if(cart_location.second>0 && cart_location.second<(col-1)){
+        cart_location.second--; 
+        currentDistance = 0;
+         turnFlag = 1;
+      }
+      
+      
+    }
+    else if(prevPosition == "W"){
+      if(cart_location.second>0 && cart_location.second<(col-1)){
+          cart_location.second++; 
+          currentDistance=0;
+           turnFlag = 1;
+      }
+      
+      
+    }
+    else if(prevPosition == "S"){
+      if(cart_location.first>0 && cart_location.first<(row-1)){
+          cart_location.first--;
+          currentDistance = 0;
+           turnFlag = 1;
+      }
+      
+      
+    }
   }
 }
 
 void SupermarketMapper::moveBackward()
 {
   // Move backward one location point in the matrix based on the current direction
-  if (cart_direction >= 340 && cart_direction <= 360 || cart_direction >= 0 && cart_direction <= 20)
+ if(cart_direction >= 355 && cart_direction <= 360 || cart_direction >= 0 && cart_direction <= 33)
   {
+    if(cart_location.first>0 && cart_location.first<(row-1))
     cart_location.first++; // Move to the up
   }
-  else if (cart_direction >= 40 && cart_direction <= 120)
+  else if(cart_direction >= 95 && cart_direction <= 155)
   {
+    if(cart_location.second>0 && cart_location.second<(col-1))
     cart_location.second--; // Move to right
   }
-  else if (cart_direction >= 240 && cart_direction <= 300)
+  else if(cart_direction >= 235 && cart_direction <= 250)
   {
+    if(cart_location.second>0 && cart_location.second<(col-1))
     cart_location.second++; // Move left
   }
-  else if (cart_direction >= 150 && cart_direction <= 210)
+  else if(cart_direction >= 198 && cart_direction <= 224)
   {
+    if(cart_location.first>0 && cart_location.first<(row-1))
     cart_location.first--; // Move downward
   }
+  
 }
 
 void SupermarketMapper::turnLeft()
@@ -207,6 +298,17 @@ int SupermarketMapper::getCurrentCell()
 {
   // Get the current cell number based on the cart's location
   return supermarketMatrix[cart_location.first][cart_location.second];
+}
+int SupermarketMapper::getLocationX()
+{
+  
+  return cart_location.first;
+}
+
+int SupermarketMapper::getLocationY()
+{
+  
+  return cart_location.second;
 }
 
 void SupermarketMapper::resetPosition()
