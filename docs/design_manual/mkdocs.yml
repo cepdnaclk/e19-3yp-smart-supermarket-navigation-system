@@ -1,0 +1,53 @@
+site_name: Design Manual
+
+repo_url:  https://github.com/cepdnaclk/e19-3yp-smart-supermarket-navigation-system.git
+repo_name: cepdnaclk/e19-3yp-smart-supermarket-navigation-system
+
+extra_css:
+  - stylesheets\extra.css
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+  language: en
+  favicon: assets/logo.png
+  logo: assets/logo.png
+  palette:
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+extra:
+  homepage: https://cepdnaclk.github.io/e19-3yp-smart-supermarket-navigation-system/index.html
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/cepdnaclk/e19-3yp-smart-supermarket-navigation-system/tree/documentation
+    - icon: fontawesome/solid/globe
+      link: https://cepdnaclk.github.io/e19-3yp-smart-supermarket-navigation-system/index.html
+
+# plugins:
+    # - with-pdf
