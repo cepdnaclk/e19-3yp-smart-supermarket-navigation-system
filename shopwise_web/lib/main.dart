@@ -27,21 +27,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void dispose() {
-    signOutCurrentUser();
-    super.dispose();
-  }
-
-  Future<void> signOutCurrentUser() async {
-    final result = await Amplify.Auth.signOut();
-    if (result is CognitoCompleteSignOut) {
-      safePrint('Sign out completed successfully');
-      Navigator.pushReplacementNamed(context, LoginPage.routeName);
-    } else if (result is CognitoFailedSignOut) {
-      safePrint('Error signing user out: ${result.exception.message}');
-    }
-  }
+  
 
   @override
   void initState() {
