@@ -12,3 +12,13 @@ Scenario: Magnetometer is operating within valid value ranges
     Given the cart ip address
     When the magnetometer is polled
     Then the magnetometer should return a value within the valid range
+
+Scenario: Accelerometer is operating
+    Given the cart ip address
+    When the accelerometer is polled
+    Then the accelerometer status should return True
+
+Scenario: System is able to be rebooted
+    Given the cart ip address
+    When the system is rebooted
+    Then the system should indicate that it is rebooting
