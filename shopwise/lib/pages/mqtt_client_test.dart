@@ -131,34 +131,10 @@ class _MQTTClientTestState extends ConsumerState<MQTTClientTest> {
     return Scaffold(
       // appBar: AppBar(title: Text("Start Shopping")),
       body: SafeArea(
-        child: Expanded(
-          child: Column(
-            children: [
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              //   child: TextFormField(
-              //       enabled: !isConnected,
-              //       controller: idTextController,
-              //       decoration: InputDecoration(
-              //           border: UnderlineInputBorder(),
-              //           labelText: 'MQTT Client Id',
-              //           labelStyle: TextStyle(fontSize: 10),
-              //           suffixIcon: IconButton(
-              //             icon: Icon(Icons.subdirectory_arrow_left),
-              //             onPressed: _connect,
-              //           ))),
-              // ),
-              // isConnected
-              //     ? TextButton(
-              //         onPressed: _disconnect, child: Text('Disconnect'))
-              //     : Container(),
-              // Text(statusText),
-              // Text(location),
-              TheMap(directionStream: MQTT_Service.streamController.stream),
-              // BarcodeReader()
-            ],
-          ),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          color: const Color.fromRGBO(158, 158, 158, 1),
+          child: TheMap(directionStream: MQTT_Service.streamController.stream),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -203,7 +179,7 @@ class _MQTTClientTestState extends ConsumerState<MQTTClientTest> {
                 ),
               )),
         ),
-        child: Text("List"),
+        child: Icon(Icons.list),
       ),
     );
   }

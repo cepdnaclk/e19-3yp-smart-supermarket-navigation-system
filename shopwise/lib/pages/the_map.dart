@@ -21,6 +21,8 @@ class TheMap extends ConsumerStatefulWidget {
   final Stream<String> directionStream;
   List<Product> shoppingList = [];
 
+  String glassText = "Tap to Start!";
+
   TheMap({Key? key, required this.directionStream}) : super(key: key);
 
   @override
@@ -281,14 +283,18 @@ class _TheMapState extends ConsumerState<TheMap> {
           // You can call movePlayer here if you need additional logic
         }
 
-        return Expanded(
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.96,
           child: Stack(
+            fit: StackFit.loose,
+            alignment: Alignment.bottomCenter,
             children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Expanded(
-                      // flex: 4,
+              Column(
+                children: [
+                  BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.95,
                       child: GridView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: numberOfSquares,
@@ -337,26 +343,26 @@ class _TheMapState extends ConsumerState<TheMap> {
 
                             //listing the shopping list numbers
                             return MyPixel(
-                              color: Colors.grey,
+                              color: Colors.grey.shade400,
                               child: Image.network(
                                   widget.shoppingList[productCount++].image),
                               // child: Text((products.indexOf(index) + 1).toString()),
                             );
                           } else if (barriers.contains(index)) {
                             return MyPixel(
-                              color: Colors.blue[700],
+                              color: Color.fromARGB(255, 110, 187, 114),
                               child: Text(""),
                               // child: Text(index.toString()),
                             );
                           } else if (pathcells.contains(index)) {
                             return MyPixel(
-                              color: Colors.yellow,
+                              color: Colors.blue.shade400,
                               child: Text(""),
                               // child: Text(index.toString()),
                             );
                           } else {
                             return MyPixel(
-                              color: Colors.grey,
+                              color: Colors.grey.shade400,
                               child: Text(""),
                               // child: Text(index.toString()),
                             );
@@ -364,135 +370,8 @@ class _TheMapState extends ConsumerState<TheMap> {
                         },
                       ),
                     ),
-
-                    /////////////////////////Mapping ends here!/////////////////////////
-
-                    //  Expanded(
-                    //     child: Container(
-                    //       child: Column(
-                    //         children: [
-                    //           Center(
-                    //             child: Row(
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               children: <Widget>[
-                    //                 SizedBox(
-                    //                   width: 120,
-                    //                   height: 120,
-                    //                   child: ElevatedButton(
-                    //                     onPressed: scanBarcode,
-                    //                     child: Text('Scan Item'),
-                    //                     style: ElevatedButton.styleFrom(
-                    //                       shape: RoundedRectangleBorder(
-                    //                         borderRadius: BorderRadius.circular(10),
-                    //                       ),
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //                 SizedBox(width: 20),
-                    //                 SizedBox(
-                    //                   width: 120,
-                    //                   height: 120,
-                    //                   child: ElevatedButton(
-                    //                     onPressed: () {},
-                    //                     child: Text('Finish Shopping'),
-                    //                     style: ElevatedButton.styleFrom(
-                    //                       shape: RoundedRectangleBorder(
-                    //                         borderRadius: BorderRadius.circular(10),
-                    //                       ),
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           ),
-                    //           Text("Barcode Result : $_scanBarcodeResult",
-                    //               style: TextStyle(fontSize: 20, color: Colors.black)),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    Container(
-                      color: Colors.grey.withOpacity(0.7),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                // color: Colors.black.withOpacity(0.5),
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      elevation: 0.5,
-                                      backgroundColor: Colors.grey.shade300,
-                                      foregroundColor: Colors.green,
-                                      side: BorderSide(
-                                        color: Colors.green,
-                                      ),
-                                      // foregroundColor: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      print(
-                                          "Printing order id ........................................");
-                                      print("Order Id is: " +
-                                          ref
-                                              .read(customerNotifierProvider)
-                                              .order_id);
-                                      fetchData();
-
-                                      scanBarcode();
-
-                                      Future.delayed(Duration(seconds: 2), () {
-                                        widget.shoppingList.removeAt(0);
-                                        // Your code here will execute after a 2 second delay.
-                                        setState(() {
-                                          // productCount = productCount - 1;
-                                          callback(widget.shoppingList);
-                                        });
-                                      });
-
-                                      // Navigator.pushNamed(context, BarcodeReader.routeName);
-                                    },
-                                    child: Text(
-                                      "Scan Barcode",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                // color: Colors.black.withOpacity(0.5),
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      side: BorderSide(
-                                        color: Colors.red,
-                                      ),
-                                      foregroundColor: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      _showExitConfirmationDialog(context);
-                                    },
-                                    child: Text("End Shopping")),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
               isStarting
                   ? Center(
@@ -500,11 +379,22 @@ class _TheMapState extends ConsumerState<TheMap> {
                         onTap: () => {
                           print("Glass tapped"),
                           fetchthelist(),
-                          setState(
-                            () {
+
+                          setState(() {
+                            widget.glassText = "Crunching latest...";
+                          }),
+
+                          Future.delayed(Duration(seconds: 2), () {
+                            // Your code here will execute after a 2 second delay.
+                            setState(() {
                               isStarting = false;
-                            },
-                          )
+                            });
+                          }),
+                          // setState(
+                          //   () {
+                          //     isStarting = false;
+                          //   },
+                          // )
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(25),
@@ -512,7 +402,7 @@ class _TheMapState extends ConsumerState<TheMap> {
                             filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              height: 150,
+                              height: 300,
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                     begin: Alignment.topLeft,
@@ -522,13 +412,121 @@ class _TheMapState extends ConsumerState<TheMap> {
                                 border:
                                     Border.all(color: Colors.white30, width: 2),
                               ), // Replace with your desired color
-                              child: Center(child: Text("Tap to Start!")),
+                              child: Center(
+                                  child: Text(
+                                widget.glassText,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                              )),
                             ),
                           ),
                         ),
                       ),
                     )
                   : Container(),
+              Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.white, Colors.white]),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  border: Border.all(color: Colors.white30, width: 2),
+                ),
+                child: Container(
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20))),
+                            // color: Colors.black.withOpacity(0.5),
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.green,
+                                  side: BorderSide(
+                                    width: 2,
+                                    color: Colors.green,
+                                  ),
+                                  // foregroundColor: Colors.white,
+                                ),
+                                onPressed: () {
+                                  print(
+                                      "Printing order id ........................................");
+                                  print("Order Id is: " +
+                                      ref
+                                          .read(customerNotifierProvider)
+                                          .order_id);
+                                  fetchData();
+
+                                  scanBarcode();
+
+                                  Future.delayed(Duration(seconds: 2), () {
+                                    widget.shoppingList.removeAt(0);
+                                    // Your code here will execute after a 2 second delay.
+                                    setState(() {
+                                      // productCount = productCount - 1;
+                                      callback(widget.shoppingList);
+                                    });
+                                  });
+
+                                  // Navigator.pushNamed(context, BarcodeReader.routeName);
+                                },
+                                child: Text(
+                                  "Scan Barcode",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            // color: Colors.black.withOpacity(0.5),
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  side: BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                  foregroundColor: Colors.red,
+                                ),
+                                onPressed: () {
+                                  _showExitConfirmationDialog(context);
+                                },
+                                child: Text("End Shopping")),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         );
