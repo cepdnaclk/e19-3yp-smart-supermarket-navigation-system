@@ -977,4 +977,72 @@ a:focus {
   color: inherit;
 }
 
+.hardware_section {
+  position: relative;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.hardware_box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 45px;
+  background-color: #bacdbd;
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 450px;
+}
+
+.hardware_box .img-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  width: 225px;
+  min-width: 100px;
+  height: 225px;
+  /* margin-bottom: 10px; */
+}
+
+.hardware_box .img-box img {
+  max-width: 125%;
+  max-height: 125%;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.hardware_box .detail-box h5 {
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.hardware_box .detail-box a {
+  color: #054c1f;
+  font-weight: 600;
+}
+
+.hardware_box .detail-box a:hover {
+  color: #0ade3b;
+}
+
+
+
+
 /*# sourceMappingURL=style.css.map */
