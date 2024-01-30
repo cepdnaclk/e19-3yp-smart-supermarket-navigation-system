@@ -142,23 +142,23 @@ class _ScanBarcodeState extends ConsumerState<ScanBarcode> {
                         }
                       : () {
 // Remove this part
-                          ref
-                              .read(customerNotifierProvider.notifier)
-                              .updateHashcode(widget._scanBarcodeResult);
-                          ref
-                              .read(customerNotifierProvider.notifier)
-                              .saveCustomer();
-                          Navigator.pushNamed(
-                              context, MQTTClientTest.routeName);
+                          // ref
+                          //     .read(customerNotifierProvider.notifier)
+                          //     .updateHashcode(widget._scanBarcodeResult);
+                          // ref
+                          //     .read(customerNotifierProvider.notifier)
+                          //     .saveCustomer();
+                          // Navigator.pushNamed(
+                          //     context, MQTTClientTest.routeName);
 
-                          // Fluttertoast.showToast(
-                          //     msg: "Please scan the QR code first!",
-                          //     toastLength: Toast.LENGTH_SHORT,
-                          //     gravity: ToastGravity.BOTTOM,
-                          //     timeInSecForIosWeb: 1,
-                          //     backgroundColor: Colors.red,
-                          //     textColor: Colors.white,
-                          //     fontSize: 16.0);
+                          Fluttertoast.showToast(
+                              msg: "Please scan the QR code first!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
                         },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 15),
