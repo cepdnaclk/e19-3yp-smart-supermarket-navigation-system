@@ -143,7 +143,10 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
     final ordersCollection = FirebaseFirestore.instance.collection('orders');
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shopping List'),
+        title: Hero(
+          tag: "logo",
+          child: Text('Shopping List'),
+        ),
       ),
       body: Container(
         child: Column(
@@ -188,99 +191,105 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
                       },
                     ),
                   ),
-            Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: OutlinedButton(
-                key: ValueKey("Add item"),
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1.0, color: Colors.green),
-                    // backgroundColor: Colors.green, // background
-                    foregroundColor: Colors.green // foreground
-                    ),
-                onPressed: () {
-                  final Future<dynamic?> item = Navigator.pushNamed(
-                      context, SelectItems.routeName,
-                      arguments: {'shoppingList': widget.shoppingList});
-                  item.then((result) {
-                    if (result is Product) {
-                      Product theProduct = result;
-                      setState(() {
-                        widget.shoppingList.add(theProduct);
-                      });
-                      print(result != null ? result.title : "No result");
-                    } else {
-                      print("Not a product");
-                      print(widget.shoppingList.length);
-                      setState(() {});
-                    }
-                    // MongoDB_Service.initiateConnection();
-                    // MongoDB_Service.insertData("products", {"title": "test"});
-                    // MongoDB_Service.closeConnection();
-
-                    // if (result != null && result is Product) {
-                    //   String newItem = result;
-                    //   // Do something with the newItem string here
-                    //   setState(() {
-                    //     widget.shoppingList.add(newItem);
-                    //   });
-                    //   print(newItem);
-                    // }
-                  });
-                  print(item);
-                },
-                child: Text(
-                  "Add Item",
-                  style: TextStyle(fontSize: 16),
+            Hero(
+              tag: "outlinedButton",
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: OutlinedButton(
+                  key: ValueKey("Add item"),
+                  style: OutlinedButton.styleFrom(
+                      side: BorderSide(width: 1.0, color: Colors.green),
+                      // backgroundColor: Colors.green, // background
+                      foregroundColor: Colors.green // foreground
+                      ),
+                  onPressed: () {
+                    final Future<dynamic?> item = Navigator.pushNamed(
+                        context, SelectItems.routeName,
+                        arguments: {'shoppingList': widget.shoppingList});
+                    item.then((result) {
+                      if (result is Product) {
+                        Product theProduct = result;
+                        setState(() {
+                          widget.shoppingList.add(theProduct);
+                        });
+                        print(result != null ? result.title : "No result");
+                      } else {
+                        print("Not a product");
+                        print(widget.shoppingList.length);
+                        setState(() {});
+                      }
+                      // MongoDB_Service.initiateConnection();
+                      // MongoDB_Service.insertData("products", {"title": "test"});
+                      // MongoDB_Service.closeConnection();
+            
+                      // if (result != null && result is Product) {
+                      //   String newItem = result;
+                      //   // Do something with the newItem string here
+                      //   setState(() {
+                      //     widget.shoppingList.add(newItem);
+                      //   });
+                      //   print(newItem);
+                      // }
+                    });
+                    print(item);
+                  },
+                  child: Text(
+                    "Add Item",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 10),
-            Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green, // background
-                    foregroundColor: Colors.white // foreground
-                    ),
-                onPressed: () => {
-                  if (widget.shoppingList.length > 0)
-                    {
-                      // ref
-                      //     .read(customerNotifierProvider.notifier)
-                      //     .updateOrderId("5"),
-                      // ordersCollection.add({
-                      //   'id': '5',
-                      //   'products': widget.shoppingList
-                      //       .map((element) => element.id)
-                      //       .toList()
-                      // }),
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ScanBarcode(),
-                        ),
-                      )
-                    }
-                  else
-                    {
-                      Fluttertoast.cancel(),
-                      Fluttertoast.showToast(
-                          msg:
-                              "Please add atleast one item to your shopping list",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity
-                              .TOP, // Change this to ToastGravity.BOTTOM for a bottom toast
-                          timeInSecForIosWeb: 1,
-                          // webBgColor: Colors.red,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0),
-                    }
-                },
-                child: Text(
-                  "Start Navigation",
-                  style: TextStyle(fontSize: 16),
+            Hero(
+              tag: "greenButton",
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green, // background
+                      foregroundColor: Colors.white // foreground
+                      ),
+                  onPressed: () => {
+                    if (widget.shoppingList.length > 0)
+                      {
+                        // ref
+                        //     .read(customerNotifierProvider.notifier)
+                        //     .updateOrderId("5"),
+                        // ordersCollection.add({
+                        //   'id': '5',
+                        //   'products': widget.shoppingList
+                        //       .map((element) => element.id)
+                        //       .toList()
+                        // }),
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ScanBarcode(),
+                          ),
+                        )
+                      }
+                    else
+                      {
+                        Fluttertoast.cancel(),
+                        Fluttertoast.showToast(
+                            msg:
+                                "Please add atleast one item to your shopping list",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity
+                                .TOP, // Change this to ToastGravity.BOTTOM for a bottom toast
+                            timeInSecForIosWeb: 1,
+                            // webBgColor: Colors.red,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0),
+                      }
+                  },
+                  child: Text(
+                    "Start Navigation",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ),

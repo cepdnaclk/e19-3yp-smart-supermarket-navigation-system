@@ -57,6 +57,7 @@ class _SelectItemsState extends ConsumerState<SelectItems> {
       String image = documentSnapshot['image'] != null ? documentSnapshot['image'] as String : "";
       String price = documentSnapshot['price'] != null ? documentSnapshot['price'] as String : "";
       String description = documentSnapshot['description'] != null ? documentSnapshot['description'] as String : "";
+      String side = documentSnapshot['side'] != null ? documentSnapshot['side'] as String : "";
       String brand = documentSnapshot['brand'] != null ? documentSnapshot['brand']  as String : "";
       String promo_details = documentSnapshot['promo_details'] != null ? documentSnapshot['promo_details'] as String : "";
       String cell = documentSnapshot['cell'] != null ? documentSnapshot['cell']  as String : "";
@@ -67,6 +68,7 @@ class _SelectItemsState extends ConsumerState<SelectItems> {
         image: image,
         price: price,
         description: description,
+        side: side,
         brand: brand,
         promo_details: promo_details,
         cell: cell,

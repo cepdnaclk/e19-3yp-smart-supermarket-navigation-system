@@ -10,11 +10,41 @@ class ShoppingListNotifier extends StateNotifier<List<Product>> {
   //   state = shoppingList;
   // }
 
+  List<Product> getShoppingProducts(email) {
+    final ordersCollection = FirebaseFirestore.instance.collection('orders');
+     ordersCollection.get().then((value) {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> curentOrder = value.docs
+        .where((element) => element.data()['email'] == email)
+        .toList();
+
+        
+     });
+    print("state: ${state}");
+    return state;
+  }
+
   void addItem(Product product) {
     state = [...state, product];
   }
 
+  List<int> getShoppingIDsFromDB(String email){
+    final ordersCollection = FirebaseFirestore.instance.collection('orders');
+    List<int> ids = [];
+    ordersCollection.get().then((value) {
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> curentOrder = value.docs
+          .where((element) => element.data()['email'] == email)
+          .toList();
+      if(curentOrder.isNotEmpty){
+        ids = (curentOrder[0].data()['products'] as List)
+            .map((e) => int.parse(e.toString()))
+            .toList();
+      }
+    });
+    return ids;
+  }
+
   List<int> getShoppingListIDS() {
+    print("state: ${state}");
     return state.map((e) => int.parse(e.id)).toList();
   }
 

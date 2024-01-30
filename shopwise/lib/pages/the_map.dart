@@ -11,6 +11,7 @@ import 'package:shopwise/pages/player.dart';
 import 'package:shopwise/pages/product.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/the_bill.dart';
 import 'package:shopwise/providers/customer_provider.dart';
 import 'package:shopwise/services/fetch_shoppinglist_products.dart';
@@ -31,7 +32,7 @@ class _TheMapState extends ConsumerState<TheMap> {
   int numberOfSquares = numberInRow * 19;
 
   //palyer position
-  int player = 167;
+  int player = 156;
 
   List<int> cell_list = [];
   List<int> idList = [];
@@ -163,7 +164,11 @@ class _TheMapState extends ConsumerState<TheMap> {
 
   List<int> products = [147, 115];
 
+  int productCount = 0;
+
   List<int> promotions = [125];
+
+  List<int> locations = [];
 
   String _scanBarcodeResult = '';
 
@@ -183,12 +188,55 @@ class _TheMapState extends ConsumerState<TheMap> {
       idList = widget.shoppingList.map((e) => int.parse(e.id)).toList();
 
       print("idList: $idList");
+      void settingTheDirections() {
+        locations = List.from(cell_list);
 
+        widget.shoppingList.asMap().forEach((index, element) {
+          var direction = element.side;
+          if (direction == "left") {
+            setState(() {
+              print("left");
+              print("locations[index]: ${locations[index]}");
+              locations[index] = locations[index] - 1;
+              print("locations[index]: ${locations[index]}");
+            });
+          } else if (direction == "right") {
+            setState(() {
+              print("right");
+              print("locations[index]: ${locations[index]}");
+              locations[index] = locations[index] + 1;
+              print("locations[index]: ${locations[index]}");
+            });
+          }
+        });
+      }
+
+      idList.add(50);
+      cell_list.add(192);
+      widget.shoppingList.add(Product(
+        title: "Exit",
+        image:
+            "https://t4.ftcdn.net/jpg/03/38/09/99/360_F_338099978_AI1TZ520242U90ucQDuBs9ZUUFW0GIHH.jpg",
+        price: "0",
+        description: "Exit",
+        side: "right",
+        brand: "Exit",
+        promo_details: "Exit",
+        cell: "203",
+        promotion: "Exit",
+        id: "50",
+      ));
       PathFinder pathFinder =
           PathFinder(shopping_list: idList, cell_list: cell_list);
+      settingTheDirections();
+
+      if (widget.shoppingList.isEmpty) {
+        _showExitConfirmationDialog(context);
+      }
+
       setState(() {
         pathcells = pathFinder.findPath();
-        products = cell_list;
+        products = locations;
       });
 
       return widget.shoppingList;
@@ -226,6 +274,7 @@ class _TheMapState extends ConsumerState<TheMap> {
     return StreamBuilder<String>(
       stream: widget.directionStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        productCount = 0;
         if (snapshot.hasData) {
           // Update the class-level player variable directly
           player = int.parse(snapshot.data ?? '0');
@@ -239,7 +288,7 @@ class _TheMapState extends ConsumerState<TheMap> {
                 child: Column(
                   children: [
                     Expanded(
-                      flex: 4,
+                      // flex: 4,
                       child: GridView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: numberOfSquares,
@@ -264,10 +313,11 @@ class _TheMapState extends ConsumerState<TheMap> {
                                   contentType: ContentType.success,
                                 ),
                               );
-
-                              ScaffoldMessenger.of(context)
-                                ..hideCurrentSnackBar()
-                                ..showSnackBar(snackBar);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(snackBar);
+                              });
                             }
                             return Container(
                               color: Colors
@@ -275,10 +325,21 @@ class _TheMapState extends ConsumerState<TheMap> {
                               child: MyPlayer(),
                             );
                           } else if (products.contains(index)) {
+                            print(
+                                "the product: ${widget.shoppingList[productCount].title}");
+
+                            // if (widget.shoppingList[productCount].cell ==
+                            //     player.toString()) {
+                            //   Future.delayed(Duration(seconds: 2), () {
+                            //     // Your code here will execute after a 2 second delay.
+                            //   });
+                            // }
+
                             //listing the shopping list numbers
                             return MyPixel(
-                              color: Colors.green,
-                              child: Text(""),
+                              color: Colors.grey,
+                              child: Image.network(
+                                  widget.shoppingList[productCount++].image),
                               // child: Text((products.indexOf(index) + 1).toString()),
                             );
                           } else if (barriers.contains(index)) {
@@ -351,40 +412,85 @@ class _TheMapState extends ConsumerState<TheMap> {
                     //     ),
                     //   ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            foregroundColor: Colors.white,
-                          ),
-                          onPressed: () {
-                            print(
-                                "Printing order id ........................................");
-                            print("Order Id is: " +
-                                ref.read(customerNotifierProvider).order_id);
-                            fetchData();
+                      color: Colors.grey.withOpacity(0.7),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                // color: Colors.black.withOpacity(0.5),
+                                width: MediaQuery.of(context).size.width * 0.7,
+                                child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      elevation: 0.5,
+                                      backgroundColor: Colors.grey.shade300,
+                                      foregroundColor: Colors.green,
+                                      side: BorderSide(
+                                        color: Colors.green,
+                                      ),
+                                      // foregroundColor: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      print(
+                                          "Printing order id ........................................");
+                                      print("Order Id is: " +
+                                          ref
+                                              .read(customerNotifierProvider)
+                                              .order_id);
+                                      fetchData();
 
-                            scanBarcode();
+                                      scanBarcode();
 
-                            // Navigator.pushNamed(context, BarcodeReader.routeName);
-                          },
-                          child: Text("Scan Barcode")),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                              color: Colors.red,
-                            ),
-                            foregroundColor: Colors.red,
+                                      Future.delayed(Duration(seconds: 2), () {
+                                        widget.shoppingList.removeAt(0);
+                                        // Your code here will execute after a 2 second delay.
+                                        setState(() {
+                                          // productCount = productCount - 1;
+                                          callback(widget.shoppingList);
+                                        });
+                                      });
+
+                                      // Navigator.pushNamed(context, BarcodeReader.routeName);
+                                    },
+                                    child: Text(
+                                      "Scan Barcode",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                              ),
+                            ],
                           ),
-                          onPressed: () {
-                         
-                            _showExitConfirmationDialog(context);
-                          },
-                          child: Text("End Shopping")),
-                    ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                // color: Colors.black.withOpacity(0.5),
+                                width: MediaQuery.of(context).size.width * 0.7,
+                                child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      side: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                      foregroundColor: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      _showExitConfirmationDialog(context);
+                                    },
+                                    child: Text("End Shopping")),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -393,7 +499,7 @@ class _TheMapState extends ConsumerState<TheMap> {
                       child: GestureDetector(
                         onTap: () => {
                           print("Glass tapped"),
-                             fetchthelist(),
+                          fetchthelist(),
                           setState(
                             () {
                               isStarting = false;

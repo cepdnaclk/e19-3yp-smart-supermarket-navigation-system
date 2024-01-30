@@ -41,26 +41,30 @@ class Choose extends ConsumerWidget {
               // const SizedBox(height: 60),
               Container(
                 height: MediaQuery.of(context).size.height * 0.3,
-                child: const Image(
+                child: Image(
                   image: AssetImage("assets/images/secondary.png"),
                 ),
               ),
+
               const SizedBox(height: 300),
-              Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: ElevatedButton(
-                  key: ValueKey("starts"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).secondaryHeaderColor,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, ShoppingList.routeName);
-                  },
-                  child: Text(
-                    "Create the shopping list",
-                    style: TextStyle(fontSize: 17),
+              Hero(
+                tag: "greenButton",
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: ElevatedButton(
+                    key: ValueKey("starts"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).secondaryHeaderColor,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, ShoppingList.routeName);
+                    },
+                    child: Text(
+                      "Create the shopping list",
+                      style: TextStyle(fontSize: 17),
+                    ),
                   ),
                 ),
               ),
@@ -102,18 +106,21 @@ class Choose extends ConsumerWidget {
               //   ),
               // ),
               SizedBox(height: 10),
-              Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: OutlinedButton(
-                  child: Text(
-                    "Log out",
-                    style: TextStyle(fontSize: 17),
+              Hero(
+                tag: "outlinedButton",
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: OutlinedButton(
+                    child: Text(
+                      "Log out",
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    onPressed: () => {logoutStep(context)},
+                    style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.green,
+                        side: BorderSide(color: Colors.green)),
                   ),
-                  onPressed: () => {logoutStep(context)},
-                  style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.green,
-                      side: BorderSide(color: Colors.green)),
                 ),
               ),
               // Container(

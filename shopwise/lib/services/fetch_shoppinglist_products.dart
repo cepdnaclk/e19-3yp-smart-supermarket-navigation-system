@@ -57,6 +57,7 @@ class ShoppingListFetcher {
                         image: element.data()['image'],
                         price: element.data()['price'],
                         description: element.data()['description'],
+                        side: element.data()['side'],
                         brand: element.data()['brand'],
                         promo_details: element.data()['promo_details'],
                         cell: element.data()['cell'],

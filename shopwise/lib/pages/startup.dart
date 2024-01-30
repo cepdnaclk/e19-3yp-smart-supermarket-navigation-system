@@ -15,7 +15,8 @@ class StartupPage extends StatefulWidget {
 }
 
 class _StartupPageState extends State<StartupPage> {
-  PathFinder pathFinder = PathFinder(shopping_list: [1, 2, 3, 4], cell_list: [178, 101, 104, 159]);
+  PathFinder pathFinder =
+      PathFinder(shopping_list: [1, 2, 3, 4], cell_list: [178, 101, 104, 159]);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +30,7 @@ class _StartupPageState extends State<StartupPage> {
             width: 350,
             height: 350,
           ),
+
           const Text(
             "Let us make your day!",
             style: TextStyle(

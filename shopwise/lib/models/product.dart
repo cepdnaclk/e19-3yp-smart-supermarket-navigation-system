@@ -3,6 +3,7 @@ class Product {
   final String image;
   final String price;
   final String description;
+  String side;
   final String brand;
   final String promo_details;
   final String cell;
@@ -14,6 +15,7 @@ class Product {
     required this.image,
     required this.price,
     required this.description,
+    required this.side,
     required this.brand,
     required this.promo_details,
     required this.cell,
