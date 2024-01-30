@@ -8,6 +8,7 @@ class MyPixel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("MyPixel urlLink......: $child");
     return Container(
       color: color,
       child: child,

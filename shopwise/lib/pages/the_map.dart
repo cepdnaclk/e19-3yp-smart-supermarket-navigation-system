@@ -22,6 +22,9 @@ class TheMap extends ConsumerStatefulWidget {
   List<Product> shoppingList = [];
 
   String glassText = "Tap to Start!";
+  int boughtProductIndex = 0;
+
+  int createdCell = 0;
 
   TheMap({Key? key, required this.directionStream}) : super(key: key);
 
@@ -228,6 +231,12 @@ class _TheMapState extends ConsumerState<TheMap> {
         promotion: "Exit",
         id: "50",
       ));
+
+      debugPrint("Printing....................");
+
+      debugPrint(idList.toString());
+      debugPrint(cell_list.toString());
+      debugPrint(widget.shoppingList.toString());
       PathFinder pathFinder =
           PathFinder(shopping_list: idList, cell_list: cell_list);
       settingTheDirections();
@@ -326,8 +335,8 @@ class _TheMapState extends ConsumerState<TheMap> {
                               });
                             }
                             return Container(
-                              color: Colors
-                                  .grey, // Replace with your desired background color
+                              color: Colors.blue
+                                  .shade400, // Replace with your desired background color
                               child: MyPlayer(),
                             );
                           } else if (products.contains(index)) {
@@ -349,6 +358,7 @@ class _TheMapState extends ConsumerState<TheMap> {
                               // child: Text((products.indexOf(index) + 1).toString()),
                             );
                           } else if (barriers.contains(index)) {
+                           
                             return MyPixel(
                               color: Color.fromARGB(255, 110, 187, 114),
                               child: Text(""),
@@ -479,14 +489,19 @@ class _TheMapState extends ConsumerState<TheMap> {
 
                                   scanBarcode();
 
-                                  Future.delayed(Duration(seconds: 2), () {
-                                    widget.shoppingList.removeAt(0);
-                                    // Your code here will execute after a 2 second delay.
-                                    setState(() {
-                                      // productCount = productCount - 1;
-                                      callback(widget.shoppingList);
-                                    });
-                                  });
+                                  // Future.delayed(Duration(seconds: 2), () {
+                                  //   // Your code here will execute after a 2 second delay.
+                                  //   setState(() {
+                                  //     productCount = 0;
+                                  //     widget
+                                  //         .shoppingList[
+                                  //             widget.boughtProductIndex++]
+                                  //         .image = "";
+
+                                  //     // productCount = productCount - 1;
+                                  //     // callback(widget.shoppingList);
+                                  //   });
+                                  // });
 
                                   // Navigator.pushNamed(context, BarcodeReader.routeName);
                                 },

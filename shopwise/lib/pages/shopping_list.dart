@@ -18,6 +18,8 @@ class ShoppingList extends ConsumerStatefulWidget {
   ShoppingList({super.key});
   List<Product> shoppingList = <Product>[];
 
+  String stateString = "Crunching latest...";
+
   @override
   ConsumerState<ShoppingList> createState() => _ShoppingListState();
 }
@@ -140,6 +142,11 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed( Duration(seconds: 3), () {
+      setState(() {
+        widget.stateString = "No items in your shopping list";
+      });
+    });
     final ordersCollection = FirebaseFirestore.instance.collection('orders');
     return Scaffold(
       appBar: AppBar(
@@ -157,7 +164,7 @@ class _ShoppingListState extends ConsumerState<ShoppingList> {
                     height: MediaQuery.of(context).size.height * 0.6,
                     child: Center(
                       child: Text(
-                        "No items added",
+                        widget.stateString,
                         style: TextStyle(fontSize: 20),
                       ),
                     ),

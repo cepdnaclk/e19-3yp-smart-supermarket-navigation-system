@@ -1,6 +1,6 @@
 class Product {
   final String title;
-  final String image;
+  String image;
   final String price;
   final String description;
   String side;
@@ -26,7 +26,7 @@ class Product {
   // factory Product.fromJson(Map<String, dynamic> json) {
   //   return Product(
   //     name: json['name'],
-  //     image: json['image'], 
+  //     image: json['image'],
   //     price: json['price'],
   //     description: json['description'],
   //     category: json['category'],
