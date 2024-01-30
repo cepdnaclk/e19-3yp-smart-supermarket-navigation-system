@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include <ElegantOTA.h>
 #include "PinDefinitionsAndMore.h"
@@ -14,8 +13,6 @@
 #include <WiFi.h>
 #include <Wire.h>
 #include <QMC5883LCompass.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 
 #define firmwareVersion 1.1
 
@@ -132,6 +129,10 @@ int printBatteryLevel()
   int battPercent = (battv - BATTV_MIN) / (BATTV_MAX - BATTV_MIN) * 100;
   Serial.print("Battery:");
   Serial.println(battPercent);
+  clearDisplay();
+  displayHeader();
+  displayText("Enjoy", 2, 1);
+  displayText("Shopping", 2, 2);
   batteryLevel(battPercent);
   return battPercent;
 }
@@ -218,7 +219,7 @@ int IrData()
 
       receivedCommand = IrReceiver.decodedIRData.command;
 
-      if (currentStation != receivedCommand)
+      if (currentStation != receivedCommand && receivedCommand != 64)
       {
         currentStation = receivedCommand;
         distance = 0;
@@ -282,9 +283,7 @@ void connectAWS()
   clearDisplay();
   displayText("Connected To Server", 2, 1);
   clearDisplay();
-  displayText("Enjoy", 2, 1);
-  displayText("Shopping", 2, 2);
-  displayHeader();
+  
 }
 
 void publishMessage(int position)
@@ -479,9 +478,10 @@ void loop()
   publishMessage(currentLocation);
   client.loop();
 
-  // Print Battery Level
+  //Print Battery Level
+  
   if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
-  {
+  { 
     prev_battLev = printBatteryLevel();
     batt_counter = 0;
   }
