@@ -11,6 +11,7 @@ import 'package:shopwise/pages/player.dart';
 import 'package:shopwise/pages/product.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:shopwise/pages/product_pixel.dart';
 import 'package:shopwise/pages/shopping_list.dart';
 import 'package:shopwise/pages/the_bill.dart';
 import 'package:shopwise/providers/customer_provider.dart';
@@ -26,6 +27,8 @@ class TheMap extends ConsumerStatefulWidget {
 
   int createdCell = 0;
 
+  Map<int, Product> productMap = {};
+
   TheMap({Key? key, required this.directionStream}) : super(key: key);
 
   @override
@@ -37,7 +40,7 @@ class _TheMapState extends ConsumerState<TheMap> {
   int numberOfSquares = numberInRow * 19;
 
   //palyer position
-  int player = 156;
+  int player = 178;
 
   List<int> cell_list = [];
   List<int> idList = [];
@@ -227,7 +230,7 @@ class _TheMapState extends ConsumerState<TheMap> {
         side: "right",
         brand: "Exit",
         promo_details: "Exit",
-        cell: "203",
+        cell: "192",
         promotion: "Exit",
         id: "50",
       ));
@@ -241,9 +244,9 @@ class _TheMapState extends ConsumerState<TheMap> {
           PathFinder(shopping_list: idList, cell_list: cell_list);
       settingTheDirections();
 
-      if (widget.shoppingList.isEmpty) {
-        _showExitConfirmationDialog(context);
-      }
+      // if (widget.shoppingList.isEmpty) {
+      //   _showExitConfirmationDialog(context);
+      // }
 
       setState(() {
         pathcells = pathFinder.findPath();
@@ -281,6 +284,12 @@ class _TheMapState extends ConsumerState<TheMap> {
       //         .order_id)
       //     .toList();
     }
+
+    List<Product> myProducts = widget.shoppingList;
+
+    widget.productMap = {
+      for (var product in myProducts) int.parse(product.cell): product
+    };
 
     return StreamBuilder<String>(
       stream: widget.directionStream,
@@ -339,9 +348,9 @@ class _TheMapState extends ConsumerState<TheMap> {
                                   .shade400, // Replace with your desired background color
                               child: MyPlayer(),
                             );
-                          } else if (products.contains(index)) {
+                          } else if (widget.productMap.containsKey(index - 1)) {
                             print(
-                                "the product: ${widget.shoppingList[productCount].title}");
+                                "the product: ${widget.productMap[index - 1]}");
 
                             // if (widget.shoppingList[productCount].cell ==
                             //     player.toString()) {
@@ -351,14 +360,16 @@ class _TheMapState extends ConsumerState<TheMap> {
                             // }
 
                             //listing the shopping list numbers
-                            return MyPixel(
+                            return ProductPixel(
                               color: Colors.grey.shade400,
                               child: Image.network(
-                                  widget.shoppingList[productCount++].image),
+                                widget.productMap[index - 1]!.image == ""
+                                    ? "https://thumbs.dreamstime.com/b/check-mark-icon-circle-isolated-green-background-vector-illustration-eps-111178423.jpg"
+                                    : widget.productMap[index - 1]!.image,
+                              ),
                               // child: Text((products.indexOf(index) + 1).toString()),
                             );
                           } else if (barriers.contains(index)) {
-                           
                             return MyPixel(
                               color: Color.fromARGB(255, 110, 187, 114),
                               child: Text(""),
@@ -370,6 +381,8 @@ class _TheMapState extends ConsumerState<TheMap> {
                               child: Text(""),
                               // child: Text(index.toString()),
                             );
+                          } else if (player == 181) {
+                            _showExitConfirmationDialog(context);
                           } else {
                             return MyPixel(
                               color: Colors.grey.shade400,
@@ -489,19 +502,19 @@ class _TheMapState extends ConsumerState<TheMap> {
 
                                   scanBarcode();
 
-                                  // Future.delayed(Duration(seconds: 2), () {
-                                  //   // Your code here will execute after a 2 second delay.
-                                  //   setState(() {
-                                  //     productCount = 0;
-                                  //     widget
-                                  //         .shoppingList[
-                                  //             widget.boughtProductIndex++]
-                                  //         .image = "";
+                                  Future.delayed(Duration(seconds: 2), () {
+                                    // Your code here will execute after a 2 second delay.
+                                    setState(() {
+                                      productCount = 0;
+                                      widget
+                                          .shoppingList[
+                                              widget.boughtProductIndex++]
+                                          .image = "";
 
-                                  //     // productCount = productCount - 1;
-                                  //     // callback(widget.shoppingList);
-                                  //   });
-                                  // });
+                                      // productCount = productCount - 1;
+                                      // callback(widget.shoppingList);
+                                    });
+                                  });
 
                                   // Navigator.pushNamed(context, BarcodeReader.routeName);
                                 },

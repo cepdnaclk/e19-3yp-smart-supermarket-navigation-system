@@ -166,14 +166,17 @@ class _MQTTClientTestState extends ConsumerState<MQTTClientTest> {
                           for (var product in widget.shoppingList)
                             Card(
                               color: Colors.white,
-                              margin: EdgeInsets.symmetric(vertical: 3),
-                              child: ListTile(
-                                leading: Image.network(product.image),
-                                title: Text(
-                                  product.title,
-                                  style: TextStyle(color: Colors.black),
+                              margin: EdgeInsets.symmetric(vertical: 7),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  leading: Image.network(product.image),
+                                  title: Text(
+                                    product.title,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  onTap: () {},
                                 ),
-                                onTap: () {},
                               ),
                             ),
                         ],

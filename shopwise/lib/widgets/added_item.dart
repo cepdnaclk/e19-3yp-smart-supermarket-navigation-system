@@ -5,7 +5,6 @@ class AddedItem extends StatefulWidget {
   final Product product;
   // final List<Product> theList;
 
-
   // final String title;
   // final String description;
   // final String price;
@@ -15,7 +14,7 @@ class AddedItem extends StatefulWidget {
   AddedItem({
     super.key,
     required this.product,
-      // required this.theList,
+    // required this.theList,
 
     // required this.title,
     // required this.description,
@@ -41,11 +40,14 @@ class _AddedItemState extends State<AddedItem> {
             leading: Image.network(widget.product.image, fit: BoxFit.fitHeight),
             title: Text(widget.product.title),
             subtitle: Text(widget.product.description),
-            trailing: const SizedBox(
+            trailing: SizedBox(
               width: 100,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [Text("Rs.100.00"), Text("Anchor")]),
+                  children: [
+                    Text("Rs.${widget.product.price}"),
+                    Text(widget.product.brand)
+                  ]),
             ),
             onTap: () {},
           ),

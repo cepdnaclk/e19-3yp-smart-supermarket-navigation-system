@@ -43,11 +43,14 @@ class _ProductListItemState extends ConsumerState<ProductListItem> {
             leading: Image.network(widget.product.image, fit: BoxFit.fitHeight),
             title: Text(widget.product.title),
             subtitle: Text(widget.product.description),
-            trailing: const SizedBox(
+            trailing: SizedBox(
               width: 100,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [Text("Rs.100.00"), Text("Anchor")]),
+                  children: [
+                    Text("Rs.${widget.product.price}"),
+                    Text(widget.product.brand)
+                  ]),
             ),
             onTap: () {},
           ),
