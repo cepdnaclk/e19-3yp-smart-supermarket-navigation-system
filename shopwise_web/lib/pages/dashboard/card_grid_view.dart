@@ -167,8 +167,10 @@ class _CardGridViewState extends State<CardGridView> {
                                           child: AlertDialog(
                                             title: const Text(
                                               'Add Item',
-                                              style:
-                                                  TextStyle(fontSize:25, color: Color.fromARGB(255, 41, 105, 49)),
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  color: Color.fromARGB(
+                                                      255, 41, 105, 49)),
                                             ),
                                             content: Column(
                                               children: <Widget>[
@@ -221,38 +223,44 @@ class _CardGridViewState extends State<CardGridView> {
                                                   'Submit',
                                                   style: TextStyle(
                                                       fontSize: 15,
-                                                      color: Color.fromARGB(255, 41, 105, 49)),
+                                                      color: Color.fromARGB(
+                                                          255, 41, 105, 49)),
                                                 ),
                                                 onPressed: () {
                                                   // Handle the form submission logic here
                                                   // Get a reference to the Firestore collection
                                                   CollectionReference products =
                                                       FirebaseFirestore.instance
-                                                          .collection('products');
-                                          
+                                                          .collection(
+                                                              'products');
+
                                                   // Create a new document with the 'id' as the document ID
                                                   DocumentReference newProduct =
                                                       products.doc(
                                                           _textFieldController1
                                                               .text);
-                                          
+
                                                   // Add a new document with the form data and default values
                                                   newProduct.set({
                                                     'id': _textFieldController1
                                                         .text,
-                                                    'title': _textFieldController2
-                                                        .text,
+                                                    'title':
+                                                        _textFieldController2
+                                                            .text,
                                                     'description':
                                                         _textFieldController3
                                                             .text,
-                                                    'price': _textFieldController4
-                                                        .text,
-                                                    'brand': _textFieldController5
-                                                        .text,
-                                                    'cell': null,
-                                                    'image': null,
-                                                    'promo_details': null,
-                                                    'promotion': null,
+                                                    'price':
+                                                        _textFieldController4
+                                                            .text,
+                                                    'brand':
+                                                        _textFieldController5
+                                                            .text,
+                                                    'cell': " ",
+                                                    'image': "abc",
+                                                    'promo_details': "abc",
+                                                    'promotion': " ",
+                                                    'side': 'left'
                                                   });
                                                   Navigator.of(context).pop();
                                                 },
@@ -265,11 +273,15 @@ class _CardGridViewState extends State<CardGridView> {
                                   },
                                 );
                               },
-                              child: Text('Add Items', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
+                              child: Text(
+                                'Add Items',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255)),
+                              ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 190, 138, 138),
-                              )
-                            )
+                                backgroundColor:
+                                    Color.fromARGB(255, 190, 138, 138),
+                              ))
                           : null,
                     ),
                   ),
