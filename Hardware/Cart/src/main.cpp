@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include <ElegantOTA.h>
 #include "PinDefinitionsAndMore.h"
@@ -14,8 +13,6 @@
 #include <WiFi.h>
 #include <Wire.h>
 #include <QMC5883LCompass.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 
 #define firmwareVersion 1.1
 
@@ -132,6 +129,10 @@ int printBatteryLevel()
   int battPercent = (battv - BATTV_MIN) / (BATTV_MAX - BATTV_MIN) * 100;
   Serial.print("Battery:");
   Serial.println(battPercent);
+  clearDisplay();
+  displayHeader();
+  displayText("Enjoy", 2, 1);
+  displayText("Shopping", 2, 2);
   batteryLevel(battPercent);
   return battPercent;
 }
@@ -171,34 +172,32 @@ int getMAGSensorReadings()
   char myArray[3];
 
   compass.read();
-  //compass.calibrate();
+  // compass.calibrate();
   x = compass.getX();
   y = compass.getY();
   z = compass.getZ();
 
   // Calculate heading angle
 
-  //float heading = compass.getAzimuth();
+  // float heading = compass.getAzimuth();
 
   // Convert heading from radians to degrees
-  float headingDegrees = atan2( y, x ) * 180.0 / PI;
-  
+  float headingDegrees = atan2(y, x) * 180.0 / PI;
+
   // Ensure heading is in the range [0, 360)
-  if (headingDegrees < 0) {
+  if (headingDegrees < 0)
+  {
     headingDegrees += 360.0;
   }
-  
-  //Calibrate for Real Values
-   headingDegrees = 0.0000147207 * pow(headingDegrees, 3) - 0.0102583 * pow(headingDegrees, 2) + 2.7987 * headingDegrees + 36.2822;
-   if(headingDegrees > 360){
-    headingDegrees = headingDegrees - 360.0;
-   }
-        
 
+  // Calibrate for Real Values
+  headingDegrees = 0.0000147207 * pow(headingDegrees, 3) - 0.0102583 * pow(headingDegrees, 2) + 2.7987 * headingDegrees + 36.2822;
+  if (headingDegrees > 360)
+  {
+    headingDegrees = headingDegrees - 360.0;
+  }
 
   return headingDegrees;
-
- 
 }
 
 // Read IR sensor data
@@ -220,7 +219,7 @@ int IrData()
 
       receivedCommand = IrReceiver.decodedIRData.command;
 
-      if (currentStation != receivedCommand)
+      if (currentStation != receivedCommand && receivedCommand != 64)
       {
         currentStation = receivedCommand;
         distance = 0;
@@ -284,9 +283,7 @@ void connectAWS()
   clearDisplay();
   displayText("Connected To Server", 2, 1);
   clearDisplay();
-  displayText("Enjoy", 2, 1);
-  displayText("Shopping", 2, 2);
-  displayHeader();
+  
 }
 
 void publishMessage(int position)
@@ -337,8 +334,29 @@ void biosMode()
   WiFi.SSID().toCharArray(ssidName, sizeof(ssidName));
   localIP.toString().toCharArray(ipAddressCharArray, sizeof(ipAddressCharArray));
 
+  compass.init();
+
+  // define endpoints
   server.on("/", []()
             { server.send(200, "text/plain", "Shopwise booted in recovery mode."); });
+
+  server.on("/accelerometer", []()
+            { 
+              char boolBuffer[20];
+              sprintf(boolBuffer, "%d", mpu.begin());
+              server.send(200, "text/plain", boolBuffer); });
+
+  server.on("/magnetometer", []()
+            {
+    char headingBuffer[20];
+    sprintf(headingBuffer, "%d", getMAGSensorReadings());
+    server.send(200, "text/plain", headingBuffer); });
+
+  server.on("/restart", []()
+            { 
+            server.send(200, "text/plain", "Restarting device..."); 
+            delay(1000);
+            ESP.restart(); });
 
   ElegantOTA.begin(&server); // Start ElegantOTA
   server.begin();
@@ -352,6 +370,16 @@ void biosMode()
   char versionBuffer[20];
   sprintf(versionBuffer, "firmware v%.2f", firmwareVersion);
   displayText(versionBuffer, 1, 6);
+
+  // Accelerometer test
+  // mpu.begin(); //if it is working return true
+
+  // magnetometer test
+  // compass.init();
+  // float heading = compass.getAzimuth(); //return azimuth value
+
+  // Hall effect sensor readings
+  // int sensorValue = analogRead(hallSensorPin);
 
   while (1)
   {
@@ -450,20 +478,21 @@ void loop()
   publishMessage(currentLocation);
   client.loop();
 
-  // // Print Battery Level
-  // if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
-  // {
-  //   prev_battLev = printBatteryLevel();
-  //   batt_counter = 0;
-  // }
-  // else
-  // {
-  //   batt_counter++;
-  // }
+  //Print Battery Level
+  
+  if (batt_counter >= 200 && prev_battLev >= printBatteryLevel())
+  { 
+    prev_battLev = printBatteryLevel();
+    batt_counter = 0;
+  }
+  else
+  {
+    batt_counter++;
+  }
 
   // Test Results
-  clearDisplay();
-  showTestData(direction, gyro, distance, currentLocation, currentStation, supermarketMapper.getLocationX(), supermarketMapper.getLocationY(),compass.getX(),compass.getY(),compass.getZ());
+  // clearDisplay();
+  // showTestData(direction, gyro, distance, currentLocation, currentStation, supermarketMapper.getLocationX(), supermarketMapper.getLocationY(),compass.getX(),compass.getY(),compass.getZ());
 
   delay(1500);
 }
