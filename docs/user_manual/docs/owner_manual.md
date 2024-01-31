@@ -125,3 +125,21 @@ Check Wi-Fi Connection:
 > If the system experiences any other issues not listed above, try restarting both the Sensor Module and the Display Module.
 
 > If the problem persists, contact customer support for troubleshooting assistance or to arrange for repair or replacement.
+
+### 3 Admin Interface
+
+#### PURPOSE
+
+The admin interface serves as a comprehensive management tool tailored for supermarket owners. Its primary objective is to enable meticulous tracking and oversight of essential details pertaining to the supermarket's operation. Through this interface, supermarket owners can access critical information and manage the layout of the supermarket.
+
+#### Login
+
+The individuals with admin-level access to supermarket data, such as supermarket owners and managers, will be able to log in to the system from this interface. Authorization for access will be granted through this login process.
+
+#### Navigation bar
+
+The navigation bar contains four separate sections, allowing shop owners to navigate to the relevant section easily.
+
+#### Dashboard
+
+#### Product Placement
