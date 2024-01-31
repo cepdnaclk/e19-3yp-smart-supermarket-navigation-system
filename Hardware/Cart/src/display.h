@@ -52,9 +52,9 @@ void scrollString(const char* text, int16_t startPoint) {
 
 void batteryLevel(int16_t lev){
   int BATT_X = 0;
-  int BATT_Y = 48;
-  int BATT_W = 85;
-  int LINE_HEIGHT_1 = 15;
+  int BATT_Y = 50;
+  int BATT_W = 60;
+  int LINE_HEIGHT_1 = 13;
   
 
   display.setTextSize(2);
